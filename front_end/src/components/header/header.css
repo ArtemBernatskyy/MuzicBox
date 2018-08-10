@@ -1,0 +1,155 @@
+/* ----------------------------- */
+
+/*# HEADER STYLES */
+
+/* -------------------------------*/
+
+.header {
+  position: absolute;
+  top: 0;
+  display: flex;
+  padding-right: 24px;
+  padding-left: 24px;
+  width: 100%;
+  height: 42px;
+  background-color: #282828;
+  color: #fff;
+  z-index: 1400;
+}
+
+.header__wrapper {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.logo-container {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+}
+
+.logo {
+  display: flex;
+  flex-flow: row nowrap;
+  max-height: 42px;
+  height: 42px;
+}
+
+.logo__icon {
+  height: 38px;
+  padding-top: 2px;
+  cursor: pointer;
+  align-self: center;
+  user-select: none;
+}
+
+.logo__icon:hover {
+  opacity: 0.8;
+}
+
+.auth {
+  align-self: center;
+  display: none;
+}
+
+.auth__links-container {
+  display: inline-flex;
+}
+
+.auth--white-link {
+  align-self: center;
+  color: #fff;
+  font-size: 16px;
+  font-family: "Roboto", sans-serif;
+}
+
+.auth--transition {
+  transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+}
+
+.auth__link {
+  text-decoration: none;
+}
+
+.auth-links__divider {
+  color: #fff;
+  margin-right: 12px;
+  margin-left: 12px;
+}
+
+.sidebar {
+  padding: 5px;
+  align-self: center;
+  cursor: pointer;
+}
+
+.sidebar__icon {
+  width: 18px;
+  height: 14px;
+  font-size: 19px;
+  display: inline-block;
+}
+
+.sidebar__icon .icon-bar {
+  margin: 0;
+  opacity: 1;
+  height: 2px;
+  display: block;
+  background: #ffffff;
+  transform-origin: 50% 50%;
+  transition: transform 0.1s ease-in;
+}
+
+.sidebar__icon .icon-bar:nth-child(2) {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+/* sidebar is open */
+.sidebar__icon.open .icon-bar:nth-child(1) {
+  transform: translate3d(0, 6px, 0) rotate(45deg);
+}
+
+.sidebar__icon.open .icon-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.sidebar__icon.open .icon-bar:nth-child(3) {
+  transform: translate3d(0, -6px, 0) rotate(-45deg);
+}
+
+/* media queries*/
+
+@media (min-width: 415px) {
+  .logo-container {
+    justify-content: flex-start;
+  }
+
+  .logo__icon {
+    margin-left: 19px;
+  }
+}
+
+@media (min-width: 768px) {
+  .header {
+    padding-left: 12px;
+  }
+
+  .auth {
+    display: flex;
+  }
+}
+
+@media (min-width: 992px) {
+  .sidebar {
+    display: none;
+  }
+}
+
+@media (max-width: 992px) {
+  .app__left {
+    display: none;
+  }
+}

@@ -1,0 +1,11 @@
+[program:celery_worker_{{ project_name }}]
+environment=LANG="en_US.utf8", LC_ALL="en_US.UTF-8", LC_LANG="en_US.UTF-8"
+directory = {{ project_root }}/code
+command={{ project_root }}/env/bin/celery --purge -n celery_worker_{{ project_name }} --app={{ project_name }}.celery:app worker --loglevel=INFO
+user={{ project_user }}
+numprocs=1
+stdout_logfile={{ project_root }}/logs/celery-worker.log
+stderr_logfile={{ project_root }}/logs/celery-worker_err.log
+autostart=true
+autorestart=true
+redirect_stderr = true

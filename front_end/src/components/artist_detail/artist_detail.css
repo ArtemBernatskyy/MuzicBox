@@ -1,0 +1,66 @@
+.artist__background {
+  background-size: cover;
+  height: 192px;
+  background-position: center 20%;
+  position: absolute;
+  width: 100%;
+  background-repeat: no-repeat;
+  background-color: #2c2c2c;
+  border-top: 4px solid #2c494a;
+}
+
+.artist__background:before {
+  background-image: url(/static/img/artist_background.png);
+  content: "";
+  background-position: top;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.artist__info {
+  height: inherit;
+  padding: 30px;
+  padding-bottom: 0px;
+  padding-left: 19px;
+  position: relative;
+  display: flex;
+}
+
+.artist__image {
+  width: 146px;
+  height: 146px;
+  margin-right: 23px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.artist__description {
+  flex: 1;
+}
+
+.artist__description h2 {
+  font-size: 44px;
+  margin-top: 80px;
+  color: white;
+  font-weight: 400;
+}
+
+@media (max-width: 640px) {
+  .artist__background {
+    height: 150px;
+  }
+  .artist__info {
+    padding: 4px;
+    padding-left: 0px;
+  }
+  .artist__description {
+    align-self: center;
+    justify-content: center;
+  }
+  .artist__description h2 {
+    font-size: 21px;
+    margin-top: inherit;
+  }
+}

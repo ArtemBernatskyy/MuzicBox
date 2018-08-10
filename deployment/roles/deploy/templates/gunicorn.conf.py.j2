@@ -1,0 +1,8 @@
+proc_name = '{{ project_name }}'
+bind = '{{ process_bind }}'
+workers = 3 
+user = '{{ project_user }}'
+group = '{{ project_group }}'
+loglevel = 'info'
+errorlog = '{{ project_root }}/logs/gunicorn.error.log'
+accesslog = '{{ project_root }}/logs/gunicorn.access.log'

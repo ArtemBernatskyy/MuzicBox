@@ -1,0 +1,11 @@
+[program:{{ project_name }}]
+environment=LANG="en_US.utf8", LC_ALL="en_US.UTF-8", LC_LANG="en_US.UTF-8"
+directory = {{ project_root }}/code
+command = {{ project_root }}/env/bin/gunicorn {{ project_name }}.wsgi:application -c {{ project_root }}/conf/gunicorn.conf.py
+user = {{ project_user }}
+loglevel = debug
+stdout_logfile = {{ project_root }}/logs/supervisor.log
+stderr_logfile = {{ project_root }}/logs/supervisor.error.log
+autostart = true
+autorestart = true
+redirect_stderr = true

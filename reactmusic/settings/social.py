@@ -1,0 +1,7 @@
+from .env import env
+
+LAST_FM_KEY = env.str('LAST_FM_KEY')
+
+
+SOCIAL_AUTH_FACEBOOK_KEY = env.str('SOCIAL_AUTH_FACEBOOK_KEY')  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = env.str('SOCIAL_AUTH_FACEBOOK_SECRET')  # App Secret

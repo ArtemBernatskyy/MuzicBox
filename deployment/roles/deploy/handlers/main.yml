@@ -1,0 +1,21 @@
+---
+
+- name: restart nginx
+  become: yes
+  service: name=nginx state=restarted enabled=yes
+
+- name: supervisorctrl add celery program
+  become: yes
+  supervisorctl: name="celery_worker_{{ project_name }}" state=present
+
+- name: supervisorctrl restart celery program
+  become: yes
+  supervisorctl: name="celery_worker_{{ project_name }}" state=restarted
+
+- name: supervisorctrl add program
+  become: yes
+  supervisorctl: name="{{ project_name }}" state=present
+
+- name: supervisorctrl restart program
+  become: yes
+  supervisorctl: name="{{ project_name }}" state=restarted

@@ -1,0 +1,31 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/soundmanager/360-player/360player.css' %}" />
+<style type="text/css">
+.ui360 .sm2-360ui.sm2_playing .sm2-timing {
+    visibility: hidden;
+}
+
+.ui360 .sm2-360ui.sm2_playing .sm2-360btn,
+.ui360 .sm2-360btn-playing {
+    background: transparent url(/static/plugins/soundmanager/360-player/360-button-pause-light.png) no-repeat 50% 50%;
+    background-image: none, url(/static/plugins/soundmanager/360-player/360-button-pause-light-2x.png);
+    background-size: 22px 22px;
+    _background: transparent url(/static/plugins/soundmanager/360-player/360-button-pause-light.gif) no-repeat 50% 50%;
+    cursor: pointer;
+}
+</style>
+<!-- soundManager.useFlashBlock: related CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'plugins/soundmanager/flashblock/flashblock.css' %}" />
+<script type="text/javascript" src="{% static 'plugins/soundmanager/script/soundmanager2.js' %}"></script>
+<script>
+    soundManager.flashVersion = 9;
+    soundManager.preferFlash = false; // for visualization effects
+    soundManager.useHighPerformance = true; // keep flash on screen, boost performance
+    soundManager.wmode = 'transparent'; // transparent SWF, if possible
+    soundManager.useFastPolling = true; // increased JS callback frequency
+    soundManager.debugFlash = false;
+    soundManager.debugMode = false;
+</script>
+<script type="text/javascript" src="{% static 'plugins/soundmanager/360-player/script/berniecode-animator.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/soundmanager/360-player/script/360player.js' %}"></script>

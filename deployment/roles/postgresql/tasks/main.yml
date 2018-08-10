@@ -1,0 +1,35 @@
+---
+
+- name: Ensure postgresql is at the latest version
+  become: yes
+  apt: name=postgresql state=latest
+  tags: 
+    - database 
+
+- name: Ensure that postgresql is started
+  become: yes
+  service: name=postgresql state=started
+  tags: 
+    - database 
+
+- name: Create database user
+  become: yes
+  become_user: postgres
+  postgresql_user: >
+    name="{{ project_database_user }}"
+    password="{{ project_database_user_pass }}"
+  tags: 
+    - database 
+
+- name: Create database
+  become: yes
+  become_user: postgres
+  postgresql_db: >
+    owner="{{ project_database_user }}"
+    name="{{ project_database }}"
+    encoding='UTF-8' 
+    lc_collate='en_US.UTF-8' 
+    lc_ctype='en_US.UTF-8' 
+    template='template0'
+  tags: 
+    - database

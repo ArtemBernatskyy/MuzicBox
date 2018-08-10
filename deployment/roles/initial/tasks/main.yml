@@ -1,0 +1,43 @@
+---
+
+
+- name: Create superuser
+  become: yes
+  user: >
+    name="{{ super_user_name }}" 
+    password="{{ super_user_password_crypted }}" state=present
+    groups="sudo"
+    shell="/bin/bash"
+    generate_ssh_key=yes
+    ssh_key_bits=2048
+
+- name: Superuser bash_profile file update
+  become: yes
+  blockinfile: >
+    path="/home/{{ super_user_name }}/.profile" 
+    block="LANGUAGE=en_US.utf8
+      LC_ALL=en_US.utf8
+      LC_CTYPE=en_US.utf8
+      LC_COLLATE=en_US.utf8
+      export LANGUAGE LC_ALL LC_CTYPE LC_COLLATE"
+  tags:
+    - superuser
+
+- name: Add authorized key
+  # allows current user to login to webserver
+  # as we are going to disable root login and allow login only via {super_user_name}
+  become: yes
+  authorized_key: >
+    user="{{ super_user_name }}" 
+    key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+- name: SSH configuration file update
+  become: yes
+  template: >
+    src="sshd_config.j2" 
+    dest="/etc/ssh/sshd_config" 
+    backup=yes 
+    owner=0 
+    group=0 
+    mode=0644
+  notify: restart ssh

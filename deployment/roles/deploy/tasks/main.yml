@@ -1,0 +1,85 @@
+---
+
+- name: Print SSH key
+  become: yes
+  become_user: "{{ project_user }}"
+  shell: cat ~/.ssh/id_rsa.pub
+  register: data
+  when: vagrant == 0
+  changed_when: False
+
+- name: Add ssh key to github
+  pause: prompt="\n\n{{ data.stdout }}\n\n\n*** Add this key to GitHub and PRESS ENTER ***"
+  when: vagrant == 0
+  changed_when: False
+
+- name: Pull sources from repository
+  become: yes
+  become_user: "{{ project_user }}"
+  git: repo="{{ project_repo }}" dest="{{ project_root }}/code/" version="{{ branch }}" force=yes
+  notify: supervisorctrl restart program
+  when: vagrant == 0
+
+- name: Manually create the initial virtualenv
+  become: yes
+  become_user: "{{ project_user }}"
+  command: virtualenv {{ project_root }}/env/ -p python3 creates="{{ project_root }}/env/"
+
+- name: Install python requirements
+  become: yes
+  become_user: "{{ project_user }}"
+  pip: requirements="{{ project_root }}/code/requirements/{{ project_settings }}.txt" virtualenv="{{ project_root }}/env/"
+  notify: supervisorctrl restart program
+
+- name: Copy environment file to remote
+  become: yes
+  become_user: "{{ project_user }}"
+  template: src="environment.j2" dest="{{ project_root }}/code/environment" mode="0644"
+
+- import_tasks: "lets_encrypt.yml"
+
+- name: Install supervisor configuration file
+  become: yes
+  template: src="supervisor.conf.j2" dest="/etc/supervisor/conf.d/{{ project_name }}.conf" mode="0644"
+  notify: 
+    - supervisorctrl add program
+    - supervisorctrl restart program
+
+- name: Install celery configuration file
+  become: yes
+  template: src="supervisor_celery.conf.j2" dest="/etc/supervisor/conf.d/celery_{{ project_name }}.conf" mode="0644"
+  notify: 
+    - supervisorctrl add celery program
+    - supervisorctrl restart celery program
+  tags:
+    - celery
+
+- name: Install gunicorn configuration file
+  become: yes
+  become_user: "{{ project_user }}"
+  template: src="gunicorn.conf.py.j2" dest="{{ project_root }}/conf/gunicorn.conf.py" owner="{{ project_user }}" group="{{ project_group }}" mode="0644"
+  notify:
+    - supervisorctrl restart program
+    - restart nginx
+
+- name: Sync Django database
+  become: yes
+  become_user: "{{ project_user }}"
+  shell: "{{ project_root }}/env/bin/python {{ project_root }}/code/manage.py migrate"
+  args:
+    chdir: "{{ project_root }}/code"
+  tags:
+    - database
+
+- name: Collect static files
+  become: yes
+  become_user: "{{ project_user }}"
+  shell: "{{ project_root }}/env/bin/python {{ project_root }}/code/manage.py collectstatic --clear --noinput"
+  args:
+    chdir: "{{ project_root }}/code"
+
+- name: Ensure services running
+  service: name={{ item }} state=started
+  with_items:
+    - nginx
+    - supervisor

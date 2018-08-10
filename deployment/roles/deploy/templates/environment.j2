@@ -1,0 +1,15 @@
+ALLOWED_HOSTS={{ server_hostname }}
+STATIC_ROOT={{ static_root }}
+CACHE_URL={{ cache_url }}
+DATABASE_URL=psql://{{ project_database_user }}:{{ project_database_user_pass }}@{{ project_database_url }}/{{ project_database }}
+MEDIA_ROOT={{ media_root }}
+DEBUG={{ debug }}
+BROKER_URL={{ broker_url }}
+CELERY_ACCEPT_CONTENT={{ celery_accept_content }}
+CELERY_TASK_SERIALIZER={{ celery_task_serializer }}
+CELERY_RESULT_SERIALIZER={{ celery_result_serializer }}
+CELERY_RESULT_BACKEND={{ celery_result_backend }}
+SENTRY_DSN={{ sentry_dsn }}
+LAST_FM_KEY={{ last_fm_key }}
+SOCIAL_AUTH_FACEBOOK_KEY={{ social_auth_facebook_key }}
+SOCIAL_AUTH_FACEBOOK_SECRET={{ social_auth_facebook_secret }}

@@ -1,0 +1,68 @@
+---
+
+
+- block:
+
+  - name: Install letsencrypt
+    apt: name=letsencrypt
+
+  - name: Check if letsencrypt certs already exist
+    stat: path="/etc/letsencrypt/live/{{ server_hostname }}/fullchain.pem"
+    register: letsencrypt_certs_stat
+
+  - block:
+
+    - name: Install nginx configuration file
+      template: src="nginx.conf.j2" dest="/etc/nginx/sites-enabled/{{ project_name }}" mode="0644"
+      vars:
+        nginx_use_https: false
+
+    - name: Restart nginx
+      service: name=nginx state=restarted enabled=yes
+
+    - name: Create dir for letsencrypt
+      file: path={{ letsencrypt_dir }} state=directory owner={{ project_user }} group={{ project_group }} mode=777
+      when: nginx_use_https
+
+    - name: Start letsencrypt
+      shell: "letsencrypt certonly -a webroot --webroot-path={{ letsencrypt_dir }} -d {{ server_hostname }}
+            --email {{ letsencrypt_email }} --text --agree-tos --expand --keep-until-expiring"
+      when: nginx_use_https
+
+    when: not letsencrypt_certs_stat.stat.exists
+
+  - name: Check if dhparam already exist
+    stat: path=/etc/ssl/certs/dhparam.pem
+    register: dhparam_stat
+
+  - name: Generate dhparam
+    shell: "openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048"
+    when: not dhparam_stat.stat.exists
+
+  - name: Crontab renew certificate
+    cron: name="crontab renew certificate" minute="30" hour="2" weekday="1" job="letsencrypt renew >> /var/log/le-renew.log"
+
+  - name: Crontab nginx reload
+    cron: name="crontab nginx reload" minute="35" hour="2" weekday="1" job="service nginx restart"
+
+  when: use_letsencrypt
+
+- name: Install passlib
+  apt: name=python-passlib
+  when: nginx_use_htpasswd
+
+- name: Create htpasswd {{ nginx_htpasswd_file }}
+  htpasswd: path={{ nginx_htpasswd_file }} name={{ nginx_htpasswd_user }} password={{ nginx_htpasswd_password }} crypt_scheme=md5_crypt
+  when: nginx_use_htpasswd
+
+- name: Install nginx configuration file
+  become: yes
+  become_user: root
+  template: src="nginx.conf.j2" dest="/etc/nginx/sites-enabled/{{ project_name }}" mode="0644"
+  register: nginx_conf_file
+
+- name: Restart nginx
+  become: yes
+  become_user: root
+  service: name=nginx state=restarted enabled=yes
+  when: nginx_conf_file.changed

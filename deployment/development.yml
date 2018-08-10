@@ -1,0 +1,12 @@
+---
+
+- name: Development server
+  hosts: all
+  become: yes
+  gather_facts: no
+  become_user: root
+
+  roles:
+    - provision
+    - postgresql
+    - deploy

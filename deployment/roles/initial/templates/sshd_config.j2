@@ -1,0 +1,41 @@
+LoginGraceTime 120
+PermitRootLogin no
+StrictModes yes
+
+Protocol 2
+# HostKeys for protocol version 2
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_dsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+#Privilege Separation is turned on for security
+UsePrivilegeSeparation yes
+
+Port {{ ansible_port }}
+AllowUsers {{ super_user_name }}
+
+RSAAuthentication yes
+PubkeyAuthentication yes
+#AuthorizedKeysFile %h/.ssh/authorized_keys
+
+IgnoreRhosts yes
+RhostsRSAAuthentication no
+HostbasedAuthentication no
+
+PermitEmptyPasswords no
+
+ChallengeResponseAuthentication no
+PasswordAuthentication no
+
+X11Forwarding yes
+X11DisplayOffset 10
+PrintMotd no
+PrintLastLog yes
+TCPKeepAlive yes
+
+# Allow client to pass locale environment variables
+AcceptEnv LANG LC_*
+
+Subsystem sftp /usr/lib/openssh/sftp-server
+
+UsePAM no
+UseDNS no

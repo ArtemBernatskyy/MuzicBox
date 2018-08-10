@@ -1,0 +1,140 @@
+---
+
+- name: Comment Vagrantfile
+  pause: prompt="\n\n\n*** Make sure that you have commented lines in Vagrantfile and PRESS ENTER ***"
+  when: vagrant == 1
+  changed_when: False
+  tags:
+    - vagrant
+
+- name: Creating vagrant Box
+  local_action: command vagrant up
+  become: no
+  when: vagrant == 1
+  tags:
+    - vagrant
+
+- name: Waiting for the vagrant to boot
+  local_action: wait_for host="{{ ansible_host }}" delay=15 state=started port="{{ ansible_port }}" connect_timeout=10 timeout=180
+  become: no
+  when: vagrant == 1
+  tags:
+    - vagrant
+
+- name: Ensure a locale exists
+  locale_gen: name=en_US.UTF-8 state=present
+
+- name: Fix locales
+  become: yes
+  action: command update-locale LC_ALL=en_US.UTF-8
+  when: vagrant == 1
+
+- name: Set default locale
+  become: yes
+  lineinfile: dest=/etc/default/locale regexp="LC_ALL" line="LC_ALL=\"en_US.UTF-8\""
+  when: vagrant == 1
+
+- name: Create project directory
+  become: yes
+  file: state=directory path="{{ project_root }}"
+
+- name: Add group webapps
+  become: yes
+  group: name=webapps state=present system=yes
+
+- name: Create project user
+  become: yes
+  user: >
+    home="{{ project_root }}/home/" 
+    name="{{ project_user }}"
+    password="{{ project_user_password }}"
+    state=present
+    shell="/bin/bash"
+    group="webapps"
+    system="yes"
+    generate_ssh_key=yes
+    ssh_key_bits=2048
+    ssh_key_file=.ssh/id_rsa
+
+- name: Change permissions
+  become: yes
+  file: path="{{ project_root }}" owner="{{ project_user }}"
+
+- name: Change permissions X2
+  become: yes
+  file: >
+    path="{{ project_root }}"
+    group="users"
+    owner="{{ project_user }}"
+    recurse=yes
+
+- name: Add {{ remote_host }} fingerprint to the SSH known_hosts.
+  become: yes
+  become_user: "{{ project_user }}"
+  shell: "ssh-keyscan {{ remote_host }} >> {{ project_root }}/home/.ssh/known_hosts"
+  when: vagrant == 0
+
+- name: Create project directories
+  become: yes
+  become_user: "{{ project_user }}"
+  file: >
+    state=directory
+    path="{{ project_root }}/{{ item }}"
+  with_items:
+    - ""
+    - "code"
+    - "conf"
+    - "www/static"
+    - "www/media"
+    - "logs"
+
+- name: Add redis server repo
+  become: yes
+  apt_repository: repo='ppa:chris-lea/redis-server'
+  tags:
+    - database
+
+- name: Update server packages
+  apt: update_cache=yes cache_valid_time=3600
+  become: yes
+
+- name: Install required system packages
+  become: yes
+  apt: pkg={{ item }} state=present update-cache=yes
+  with_items: "{{ system_packages }}"
+
+- name: Fix supervisor for Ubuntu 16.04
+  become: yes
+  systemd:
+    state: started
+    enabled: yes
+    name: supervisor
+  when: ubuntu_version == '16.04'
+  tags:
+    - supervisor
+
+- name: Disable default nginx server block
+  become: yes
+  file: path=/etc/nginx/sites-enabled/default state=absent
+  notify: restart nginx
+
+- name: Uncomment Vagrantfile
+  pause: prompt="\n\n\n*** Make sure that you have uncommented lines in Vagrantfile and PRESS ENTER ***"
+  when: vagrant == 1
+  changed_when: False
+  tags:
+    - vagrant
+
+- name: Rebooting the Vagrant for Vagrantfile update
+  local_action: command vagrant reload
+  when: vagrant == 1
+  become: no
+  tags:
+    - vagrant
+
+- name: Waiting for the vagrant to reboot
+  local_action: wait_for host="{{ ansible_host }}" delay=15 state=started port="{{ ansible_port }}" connect_timeout=10 timeout=180
+  when: vagrant == 1
+  become: no
+  tags:
+    - vagrant

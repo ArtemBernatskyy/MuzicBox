@@ -1,0 +1,8 @@
+:global .loader__bottom {
+  font-size: 35px;
+}
+
+:global .loader__bottom__container {
+  height: 40px;
+  text-align: center;
+}

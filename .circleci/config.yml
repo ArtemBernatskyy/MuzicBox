@@ -33,11 +33,9 @@ jobs:
             - "env"
       - run:
           command: |
-            source env/bin/activate
             coverage run manage.py test
       - run:
           command: |
-            source env/bin/activate
             pip install codecov && codecov
       # - run:
       #     command: |

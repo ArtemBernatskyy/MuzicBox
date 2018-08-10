@@ -34,7 +34,7 @@ jobs:
       - run:
           command: |
             source env/bin/activate
-            python manage.py test
+            coverage run manage.py test
       - run:
           command: |
             source env/bin/activate

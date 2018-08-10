@@ -54,3 +54,14 @@ Thumbs.db
 
 secret_key.txt
 environment
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*,cover
+.hypothesis/

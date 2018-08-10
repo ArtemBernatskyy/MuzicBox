@@ -18,6 +18,7 @@
   postgresql_user: >
     name="{{ project_database_user }}"
     password="{{ project_database_user_pass }}"
+    role_attr_flags=CREATEDB
   tags: 
     - database 
 

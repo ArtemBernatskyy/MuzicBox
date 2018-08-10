@@ -1,1 +1,4 @@
 -r base.txt
+
+coverage==4.5.1
+pylama==7.4.3

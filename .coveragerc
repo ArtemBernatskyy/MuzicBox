@@ -1,0 +1,5 @@
+[run]
+omit=
+    reactmusic/settings*
+    *migrations*
+source=reactmusic

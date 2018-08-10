@@ -17,7 +17,7 @@ def get_secret_key():
     if os.path.isfile(SECRET_KEY_FILE):
         secret_key = open(SECRET_KEY_FILE).read().strip()
         assert len(secret_key) >= SECRET_KEY_LENGTH, \
-               'SECRET_KEY is too short, minimum length: %s' % SECRET_KEY_LENGTH
+            'SECRET_KEY is too short, minimum length: %s' % SECRET_KEY_LENGTH
     else:
         # Generate new SECRET_KEY
         print('Generating new SECRET_KEY...')

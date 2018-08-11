@@ -1,0 +1,11 @@
+---
+
+- hosts: all
+  gather_facts: no
+  become: yes
+  vars:
+    ansible_user: "{{ super_user_name }}"
+    ansible_host: "{{ server_hostname }}"
+    ansible_sudo_pass: "{{ super_user_password }}"
+  roles:
+    - deploy

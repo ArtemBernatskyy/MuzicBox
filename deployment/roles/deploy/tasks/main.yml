@@ -19,6 +19,8 @@
   git: repo="{{ project_repo }}" dest="{{ project_root }}/code/" version="{{ branch }}" force=yes
   notify: supervisorctrl restart program
   when: vagrant == 0
+  tags:
+    - push
 
 - name: Manually create the initial virtualenv
   become: yes
@@ -30,6 +32,8 @@
   become_user: "{{ project_user }}"
   pip: requirements="{{ project_root }}/code/requirements/{{ project_settings }}.txt" virtualenv="{{ project_root }}/env/"
   notify: supervisorctrl restart program
+  tags:
+    - push
 
 - name: Copy environment file to remote
   become: yes
@@ -70,6 +74,7 @@
     chdir: "{{ project_root }}/code"
   tags:
     - database
+    - push
 
 - name: Collect static files
   become: yes
@@ -77,9 +82,13 @@
   shell: "{{ project_root }}/env/bin/python {{ project_root }}/code/manage.py collectstatic --clear --noinput"
   args:
     chdir: "{{ project_root }}/code"
+  tags:
+    - push
 
 - name: Ensure services running
   service: name={{ item }} state=started
   with_items:
     - nginx
     - supervisor
+  tags:
+    - push

@@ -2,3 +2,4 @@
 
 coverage==4.5.1
 pylama==7.4.3
+ansible==2.6.2

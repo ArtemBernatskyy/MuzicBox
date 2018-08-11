@@ -1,23 +1,27 @@
+defaults: &DEFAULT
+  working_directory: /home/circleci/reactmusic
+  docker:
+    - image: circleci/python:3.6
+      environment:
+        DEBUG: False
+        STATIC_ROOT: ~/reactmusic/static
+        ALLOWED_HOSTS: muzicbox.net
+        DATABASE_URL: psql://root@localhost/reactmusic_test?sslmode=disable
+        CACHE_URL: rediscache://127.0.0.1:6379:1?client_class=django_redis.client.DefaultClient
+        MEDIA_ROOT: ~/reactmusic/media
+        BROKER_URL: redis://localhost:6379/1
+        CELERY_ACCEPT_CONTENT: json
+        CELERY_TASK_SERIALIZER: json
+        CELERY_RESULT_SERIALIZER: json
+        CELERY_RESULT_BACKEND: redis://localhost:6379/0
+    - image: circleci/postgres:9.6.2
+    - image: redis:3.2-alpine
+
+
 version: 2
 jobs:
   build:
-    working_directory: ~/reactmusic
-    docker:
-      - image: circleci/python:3.6
-        environment:
-          DEBUG: False
-          STATIC_ROOT: ~/reactmusic/static
-          ALLOWED_HOSTS: reactmusic.net
-          DATABASE_URL: psql://root@localhost/reactmusic_test?sslmode=disable
-          CACHE_URL: rediscache://127.0.0.1:6379:1?client_class=django_redis.client.DefaultClient
-          MEDIA_ROOT: ~/reactmusic/media
-          BROKER_URL: redis://localhost:6379/1
-          CELERY_ACCEPT_CONTENT: json
-          CELERY_TASK_SERIALIZER: json
-          CELERY_RESULT_SERIALIZER: json
-          CELERY_RESULT_BACKEND: redis://localhost:6379/0
-      - image: circleci/postgres:9.6.2
-      - image: redis:3.2-alpine
+    <<: *DEFAULT
     steps:
       - checkout
       - restore_cache:
@@ -32,6 +36,18 @@ jobs:
           key: deps1-{{ .Branch }}-{{ checksum "requirements/circle.txt" }}
           paths:
             - "env"
+      - persist_to_workspace:
+          # this is done to persist virtualenv across workflows 
+          root: .
+          paths:
+            - env
+
+  test:
+    <<: *DEFAULT
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /home/circleci/reactmusic
       - run:
           name: Running tests
           command: |
@@ -47,3 +63,35 @@ jobs:
           command: |
             source env/bin/activate
             pylama
+
+  deploy:
+    <<: *DEFAULT
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /home/circleci/reactmusic
+      - run:
+          name: Populate VAULT_PASS
+          command: |
+            echo $VAULT_PASS > .vault_pass.txt
+      - run:
+          name: Push to Server via Ansible
+          command: |
+            source env/bin/activate
+            ansible-playbook -i deployment/inventories/production deployment/push.yml --tags="push" --vault-password-file .vault_pass.txt
+
+
+workflows:
+  version: 2
+  build-test-and-deploy:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - deploy:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master

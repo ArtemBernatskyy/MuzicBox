@@ -3,6 +3,7 @@ import uuid
 
 from django.db import models
 from django.conf import settings
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from autoslug import AutoSlugField
@@ -153,8 +154,7 @@ class Audio(models.Model):
             player_string = '<div class="ui360 ui360-vis"><a href="{}">{}</a></div>'.format(
                 file_url, os.path.basename(file_url)
             )
-            return player_string
-    audio_file_player.allow_tags = True
+            return mark_safe(player_string)
     audio_file_player.short_description = _('audio file player')
 
     large_image_thumbnail = ImageSpecField(

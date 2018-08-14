@@ -13,7 +13,7 @@ from .helpers import cache_users_audios
 from .serialisers import (
     AudioListSerializer, AudioCreateSerializer,
     AudioDetailSerializer, AudioLyricsSerializer,
-    TagListSerializer
+    TagListSerializer,
 )
 
 

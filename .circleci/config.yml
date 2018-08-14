@@ -7,7 +7,7 @@ defaults: &DEFAULT
         STATIC_ROOT: ~/reactmusic/static
         ALLOWED_HOSTS: muzicbox.net
         DATABASE_URL: psql://root@localhost/reactmusic_test?sslmode=disable
-        CACHE_URL: rediscache://127.0.0.1:6379:1?client_class=django_redis.client.DefaultClient
+        CACHE_URL: rediscache://127.0.0.1:6379/1?client_class=django_redis.client.DefaultClient
         MEDIA_ROOT: ~/reactmusic/media
         BROKER_URL: redis://localhost:6379/1
         CELERY_ACCEPT_CONTENT: json

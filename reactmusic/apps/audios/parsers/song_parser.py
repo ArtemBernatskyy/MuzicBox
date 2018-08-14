@@ -17,9 +17,9 @@ from ..models import Audio
 
 
 class SongParser:
-    '''
+    """
         class responsible for song data parsing
-    '''
+    """
 
     def __init__(self, artist, song):
         self.artist = artist
@@ -38,9 +38,9 @@ class SongParser:
         self.s.mount('https://', HTTPAdapter(max_retries=retries))
 
     def _parse_info(self):
-        '''
+        """
             method for getting cover album image from last.fm
-        '''
+        """
         image_url = None
         try:
             # track.getInfo => trying to get album cover
@@ -128,9 +128,9 @@ class SongParser:
                 shutil.copyfileobj(response.raw, f)
 
     def _get_lyrics(self, keep_the=False):
-        '''
+        """
             helper function for get_lyrics method
-        '''
+        """
         artist = self.artist.lower()
         song_title = self.song.lower()
         # remove all except alphanumeric characters from artist and song_title
@@ -151,9 +151,9 @@ class SongParser:
         return lyrics
 
     def _parse_lyrics(self):
-        '''
+        """
             method for getting lyrics from www.metrolyrics.com
-        '''
+        """
         lyrics = None
         lyrics = self._get_lyrics()
         if not lyrics:

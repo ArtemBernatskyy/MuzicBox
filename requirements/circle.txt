@@ -3,3 +3,6 @@
 coverage==4.5.1
 pylama==7.4.3
 ansible==2.6.2
+faker==0.8.17
+parameterized==0.6.1
+factory-boy==2.11.1

@@ -7,6 +7,7 @@ from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db.models.signals import post_save
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 from slugify import UniqueSlugify
@@ -82,10 +83,13 @@ class Profile(models.Model):
     # thumbnail for admin interface
     def admin_image_thumb(self):
         if self.profile_image:
-            return '<img src="{0}{1}" width="100" height="100" />'.format(settings.MEDIA_URL, self.profile_image)
+            return mark_safe(
+                '<img src="{0}{1}" width="100" height="100" />'.format(settings.MEDIA_URL, self.profile_image)
+            )
         else:
-            return '<img src="{0}accounts/default-avatar.jpg" width="100" height="100" />'.format(settings.STATIC_URL)
-    admin_image_thumb.allow_tags = True
+            return mark_safe(
+                '<img src="{0}accounts/default-avatar.jpg" width="100" height="100" />'.format(settings.STATIC_URL)
+            )
 
     # small thumbnail and method for it
     profile_image_thumbnail_sm = ImageSpecField(

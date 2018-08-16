@@ -34,6 +34,7 @@ class TagListSerializer(ModelSerializer):
 class AudioListSerializer(ModelSerializer):
     name = CharField(max_length=255, required=False)
     artist = ArtistSerializer(required=False)
+    tags = TagListSerializer(many=True)
     extra_sm_image_thumbnail = ImageField(read_only=True)
     small_image_thumbnail = ImageField(read_only=True)
     has_lyrics = BooleanField(read_only=True)
@@ -41,8 +42,8 @@ class AudioListSerializer(ModelSerializer):
     class Meta:
         model = Audio
         fields = [
-            'id', 'name', 'length', 'has_lyrics', 'slug', 'bitrate',
-            'small_image_thumbnail', 'audio_file', 'artist', 'extra_sm_image_thumbnail',
+            'id', 'name', 'length', 'has_lyrics', 'slug', 'bitrate', 'tags', 'playcount',
+            'small_image_thumbnail', 'audio_file', 'artist', 'extra_sm_image_thumbnail', 'created_date',
         ]
 
 
@@ -57,9 +58,9 @@ class AudioCreateSerializer(ModelSerializer):
     class Meta:
         model = Audio
         fields = [
-            'id', 'name', 'owner', 'playcount', 'has_lyrics', 'album',
+            'id', 'name', 'owner', 'playcount', 'has_lyrics', 'album', 'slug',
             'audio_file', 'mbid', 'artist', 'tags', 'extra_sm_image_thumbnail',
-            'small_image_thumbnail', 'lyrics', 'image', 'bitrate', 'length',
+            'small_image_thumbnail', 'lyrics', 'image', 'bitrate', 'length', 'created_date',
         ]
 
     def validate_audio_file(self, value):

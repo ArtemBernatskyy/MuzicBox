@@ -46,6 +46,6 @@ class AudioFactory(factory.django.DjangoModelFactory):
             for tag in extracted:
                 self.tags.add(tag)
         elif create:
-            factory_tags = TagFactory.create_batch(random.randint(2, 8))
+            factory_tags = TagFactory.create_batch(random.randint(1, 3))
             for tag in factory_tags:
                 self.tags.add(tag)

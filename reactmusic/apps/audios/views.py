@@ -121,7 +121,7 @@ class AudioListCreateView(ListCreateAPIView):
             return AudioCreateSerializer
 
     def song_clear(self, song):
-        song = song.strip()     # strippings spaces from song
+        song = song.strip()     # stripping spaces from song
         return song
 
     def simple_search(self, song, qs):
@@ -130,7 +130,7 @@ class AudioListCreateView(ListCreateAPIView):
             return qs
 
     def complex_search(self, song, qs):
-        song_parts = song.replace('-', ' ').split(' ')  # splitting on words
+        song_parts = song.replace('-', ' ').split(' ')  # splitting into words
         # filtering for empty values
         song_parts = [x for x in song_parts if x]
         search_artist = reduce(operator.or_, (Q(artist__name__icontains=x) for x in song_parts))

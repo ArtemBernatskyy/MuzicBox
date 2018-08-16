@@ -20,6 +20,6 @@ class ArtistFactory(factory.django.DjangoModelFactory):
                 self.tags.add(tag)
         elif create:
             from reactmusic.apps.audios.tests.factories import TagFactory
-            factory_tags = TagFactory.create_batch(random.randint(2, 8))
+            factory_tags = TagFactory.create_batch(random.randint(1, 3))
             for tag in factory_tags:
                 self.tags.add(tag)

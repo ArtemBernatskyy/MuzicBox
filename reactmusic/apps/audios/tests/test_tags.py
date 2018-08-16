@@ -12,12 +12,12 @@ class TagModelViewSetTestCase(APITestCase):
     def setUp(self):
         self.url = reverse('audios:tags_list')
         self.user = UserFactory()
-        self.PERSONAL_TAGS_COUNT = 4
-        self.PRESENTATION_TAGS_COUNT = 6
+        self.PERSONAL_TAGS_COUNT = 2
+        self.PRESENTATION_TAGS_COUNT = 3
         user_tags = TagFactory.create_batch(self.PERSONAL_TAGS_COUNT)
         presentation_tags = TagFactory.create_batch(self.PRESENTATION_TAGS_COUNT)
-        AudioFactory.create_batch(12, is_presentation=True, tags=user_tags)
-        AudioFactory.create_batch(12, is_presentation=False, owner=self.user, tags=presentation_tags)
+        AudioFactory.create_batch(3, is_presentation=True, tags=user_tags)
+        AudioFactory.create_batch(3, is_presentation=False, owner=self.user, tags=presentation_tags)
 
     @parameterized.expand([
         (True, ),

@@ -1,6 +1,5 @@
 import os
 import re
-import json
 import errno
 import uuid
 import shutil
@@ -21,9 +20,9 @@ class SongParser:
         class responsible for song data parsing
     """
 
-    def __init__(self, artist, song):
-        self.artist = artist
-        self.song = song
+    def __init__(self):
+        self.artist = None
+        self.song = None
         self.image = None
         self.lyrics = None
         self.mbid = None
@@ -37,80 +36,89 @@ class SongParser:
                         status_forcelist=[500, 502, 503, 504])
         self.s.mount('https://', HTTPAdapter(max_retries=retries))
 
-    def _parse_info(self):
+    def artist_get_info(self):
+        url = "https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist={artist}&api_key={key}&autocorrect=1&format=json".format(key=settings.LAST_FM_KEY, artist=self.artist)   # noqa
+        data = self.s.get(url)
+        try:
+            data_dict = data.json()['artist']
+            try:
+                image_url = next(filter(lambda cover: cover['size'] == 'mega', data_dict['image']))['#text']
+            except (KeyError, StopIteration):
+                try:
+                    image_url = next(
+                        filter(lambda cover: cover['size'] == 'extralarge', data_dict['image'])
+                    )['#text']
+                except (KeyError, StopIteration):
+                    pass
+        except KeyError:
+            return None
+        return image_url
+
+    def track_get_info(self):
+        url = "https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key={key}&artist={artist}&track={name}&autocorrect=1&format=json".format(key=settings.LAST_FM_KEY, artist=self.artist, name=self.song)   # noqa
+        data = self.s.get(url)
+        try:
+            data_dict = data.json()['track']
+        except (ValueError, KeyError):
+            raise SongDoesNotExist
+        # getting mbid
+        try:
+            self.mbid = data_dict['mbid']
+        except KeyError:
+            pass
+        # getting corrected artist name
+        try:
+            self.artist = data_dict['artist']['name']
+        except KeyError:
+            pass
+        # getting corrected song name
+        try:
+            self.song = data_dict['name']
+        except KeyError:
+            pass
+        # getting album
+        try:
+            self.album = data_dict['album']['title']
+        except KeyError:
+            pass
+        # getting album mbid
+        try:
+            self.album_mbid = data_dict['album']['mbid']
+        except KeyError:
+            pass
+        # getting tags
+        try:
+            self.tags = data_dict['toptags']['tag']
+        except KeyError:
+            pass
+        # getting playcount
+        try:
+            self.playcount = data_dict['playcount']
+        except KeyError:
+            pass
+        try:
+            image_url = next(
+                filter(lambda cover: cover['size'] == 'extralarge', data_dict['album']['image'])
+            )['#text']
+        except (KeyError, StopIteration):
+            # here we should fail in order to start parsing from artist
+            image_url = next(filter(lambda cover: cover['size'] == 'large', data_dict['album']['image']))['#text']
+        if image_url == "":
+            raise KeyError  # here we should fail if image is empty string
+        else:
+            return image_url
+
+    def parse_info(self):
         """
             method for getting cover album image from last.fm
         """
         image_url = None
         try:
             # track.getInfo => trying to get album cover
-            url = "https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key={key}&artist={artist}&track={name}&autocorrect=1&format=json".format(key=settings.LAST_FM_KEY, artist=self.artist, name=self.song)   # noqa
-            data = self.s.get(url)
-            try:
-                data_dict = json.loads(data.text)['track']
-            except ValueError:
-                raise SongDoesNotExist
-            # getting mbid
-            try:
-                self.mbid = data_dict['mbid']
-            except KeyError:
-                pass
-            # getting corrected artist name
-            try:
-                self.artist = data_dict['artist']['name']
-            except KeyError:
-                pass
-            # getting corrected song name
-            try:
-                self.song = data_dict['name']
-            except KeyError:
-                pass
-            # getting album
-            try:
-                self.album = data_dict['album']['title']
-            except KeyError:
-                pass
-            # getting album mbid
-            try:
-                self.album_mbid = data_dict['album']['mbid']
-            except KeyError:
-                pass
-            # getting tags
-            try:
-                self.tags = data_dict['toptags']['tag']
-            except KeyError:
-                pass
-            # getting playcount
-            try:
-                self.playcount = data_dict['playcount']
-            except KeyError:
-                pass
-            try:
-                image_url = next(
-                    filter(lambda cover: cover['size'] == 'extralarge', data_dict['album']['image'])
-                )['#text']
-            except (KeyError, StopIteration):
-                # here we should fail in order to start parsing from artist
-                image_url = next(filter(lambda cover: cover['size'] == 'large', data_dict['album']['image']))['#text']
-            if image_url == "":
-                raise KeyError  # here we should fail if image is empty string
+            image_url = self.track_get_info()
         except (KeyError, StopIteration):
             # artist.getinfo => trying to get artist cover instead of album cover
-            url = "https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist={artist}&api_key={key}&autocorrect=1&format=json".format(key=settings.LAST_FM_KEY, artist=self.artist)   # noqa
-            data = self.s.get(url)
-            try:
-                data_dict = json.loads(data.text)['artist']
-                try:
-                    image_url = next(filter(lambda cover: cover['size'] == 'mega', data_dict['image']))['#text']
-                except (KeyError, StopIteration):
-                    try:
-                        image_url = next(
-                            filter(lambda cover: cover['size'] == 'extralarge', data_dict['image'])
-                        )['#text']
-                    except (KeyError, StopIteration):
-                        pass
-            except KeyError:
-                return None
+            image_url = self.artist_get_info()
         # at this point we should have valid image_url
         if image_url:
             response = self.s.get(image_url, stream=True)
@@ -127,7 +135,7 @@ class SongParser:
             with open(absolute_file_path, 'wb') as f:
                 shutil.copyfileobj(response.raw, f)
 
-    def _get_lyrics(self, keep_the=False):
+    def get_lyrics(self, keep_the=False):
         """
             helper function for get_lyrics method
         """
@@ -150,21 +158,34 @@ class SongParser:
         lyrics = textile.textile(lyrics_raw).replace('\t', "").replace("\n", "")
         return lyrics
 
-    def _parse_lyrics(self):
+    def parse_lyrics(self):
         """
             method for getting lyrics from www.metrolyrics.com
         """
         lyrics = None
-        lyrics = self._get_lyrics()
+        lyrics = self.get_lyrics()
         if not lyrics:
-            lyrics = self._get_lyrics(keep_the=True)
+            lyrics = self.get_lyrics(keep_the=True)
         if lyrics:
             self.lyrics = lyrics
 
-    def _quit(self):
+    def quit(self):
         self.s.close()
 
-    def parse(self):
-        self._parse_info()
-        self._parse_lyrics()
-        self._quit()
+    def parse(self, artist, song):
+        self.artist = artist
+        self.song = song
+        self.parse_info()
+        self.parse_lyrics()
+        self.quit()
+        return {
+            'artist': self.artist,
+            'song': self.song,
+            'image': self.image,
+            'lyrics': self.lyrics,
+            'mbid': self.mbid,
+            'album': self.album,
+            'album_mbid': self.album_mbid,
+            'playcount': self.playcount,
+            'tags': self.tags,
+        }

@@ -1,3 +1,4 @@
+import mock
 from datetime import datetime
 from django.urls import reverse
 from rest_framework import status
@@ -9,9 +10,6 @@ from muzicbox.apps.audios.models import Audio
 from muzicbox.apps.accounts.tests.factories import UserFactory
 from muzicbox.apps.artists.tests.factories import ArtistFactory
 from .factories import AudioFactory, TagFactory
-
-
-# TODO mock external APIs here and make tests fully unittest compatible
 
 
 class AudioListCreateViewSetTestCase(APITestCase):
@@ -157,12 +155,26 @@ class AudioListCreateViewSetTestCase(APITestCase):
         (True, False),  # is_anonymous, allowed
         (False, True),
     ])
-    def test_create_audio_permissions(self, is_anonymous, allowed):
+    @mock.patch('muzicbox.apps.audios.parsers.song_parser.SongParser.parse')
+    def test_create_audio_permissions(self, is_anonymous, allowed, mock_parser):
         """
             Checking if we can create audios for logged in and can't for logged out users
         """
         if not is_anonymous:
             self.client.force_authenticate(self.user)
+            mock_parser.return_value = {
+                'album': 'Tomorrow Never Knows', 'lyrics': None,
+                'album_mbid': 'f172d1bf-575b-483c-9de1-bfbfef9b66bf',
+                'song': 'Savoy Truffle', 'artist': 'The Beatles',
+                'tags': [
+                    {'url': 'https://www.last.fm/tag/rock', 'name': 'rock'},
+                    {'url': 'https://www.last.fm/tag/classic+rock', 'name': 'classic rock'},
+                    {'url': 'https://www.last.fm/tag/60s', 'name': '60s'},
+                    {'url': 'https://www.last.fm/tag/The+Beatles', 'name': 'The Beatles'},
+                    {'url': 'https://www.last.fm/tag/pop', 'name': 'pop'},
+                ], 'mbid': '2eb16581-560c-4a4d-82af-6f33e38fffad', 'playcount': '1179498',
+                'image': None,
+            }
         with open('muzicbox/apps/audios/tests/fixtures/with_id3.mp3', 'rb') as audio_file:
             response = self.client.post(
                 self.url,
@@ -198,11 +210,22 @@ class AudioListCreateViewSetTestCase(APITestCase):
             )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_create_success_audio_without_id3_but_naming(self):
+    @mock.patch('muzicbox.apps.audios.parsers.song_parser.SongParser.parse')
+    def test_create_success_audio_without_id3_but_naming(self, mock_parser):
         """
-            Checking that we can't create audio which doesn't have ID3 tags but have correct naming
+            Checking that we can create audio which doesn't have ID3 tags but have correct naming
         """
         self.client.force_authenticate(self.user)
+        mock_parser.return_value = {
+            'mbid': None, 'song': 'Swim', 'playcount': '30202', 'artist': 'Dan Croll',
+            'tags': [
+                {'name': 'british', 'url': 'https://www.last.fm/tag/british'},
+                {'name': 'FM4', 'url': 'https://www.last.fm/tag/FM4'},
+                {'name': '2016 single', 'url': 'https://www.last.fm/tag/2016+single'},
+            ], 'lyrics': '<p class="verse">lorem ipsum</p>',
+            'album_mbid': None, 'image': None,
+            'album': 'Emerging Adulthood',
+        }
         with open('muzicbox/apps/audios/tests/fixtures/Dan Croll - Swim.mp3', 'rb') as audio_file:
             response = self.client.post(
                 self.url,

@@ -131,18 +131,18 @@ class AudioCreateSerializer(ModelSerializer):
             attrs['name'] = name
         if name and name.strip() and artist and artist.strip():
             # parse song info
-            song_parser = SongParser(artist=artist, song=name)
+            song_parser = SongParser()
             try:
-                song_parser.parse()
+                song_parser_res = song_parser.parse(artist=artist, song=name)
             except SongDoesNotExist:
                 raise ValidationError('No artist was found in ID3 data or in song file name')
-            artist = song_parser.artist
-            attrs['name'] = song_parser.song
-            attrs['image'] = song_parser.image
-            attrs['lyrics'] = song_parser.lyrics
-            attrs['mbid'] = song_parser.mbid
-            attrs['playcount'] = song_parser.playcount
-            api_tags = song_parser.tags
+            artist = song_parser_res['artist']
+            attrs['name'] = song_parser_res['song']
+            attrs['image'] = song_parser_res['image']
+            attrs['lyrics'] = song_parser_res['lyrics']
+            attrs['mbid'] = song_parser_res['mbid']
+            attrs['playcount'] = song_parser_res['playcount']
+            api_tags = song_parser_res['tags']
             tags = []
             for api_tag in api_tags:
                 tag, created = Tag.objects.get_or_create(name=api_tag['name'])
@@ -169,11 +169,14 @@ class AudioCreateSerializer(ModelSerializer):
                 if artist_parser.image_url:
                     artist_obj.save_image_from_url(artist_parser.image_url)
             # saving album with such artist and song
-            if song_parser.album:
+            if song_parser_res['album']:
                 try:
-                    album_obj = Album.objects.get(name__iexact=song_parser.album)
+                    album_obj = Album.objects.get(name__iexact=song_parser_res['album'])
                 except Album.DoesNotExist:
-                    album_obj = Album(name=song_parser.album, artist=artist_obj, mbid=song_parser.album_mbid)
+                    album_obj = Album(
+                        name=song_parser_res['album'], artist=artist_obj,
+                        mbid=song_parser_res['album_mbid'],
+                    )
                     album_obj.save()
                 attrs['album'] = album_obj
 

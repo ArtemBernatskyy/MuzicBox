@@ -1,5 +1,5 @@
 ALLOWED_HOSTS=172.11.0.11
-STATIC_ROOT=/var/webapps/reactmusic/www/static/
+STATIC_ROOT=/var/webapps/muzicbox/www/static/
 CACHE_URL=rediscache://127.0.0.1:xxxxxx:1?client_class=django_redis.client.DefaultClient
 DATABASE_URL=psql://xxxxxxxxx:dev_secret_pass@127.0.0.1:5432/xxxxxxx
 MEDIA_ROOT=/var/webapps/xxxxxxx/www/media/

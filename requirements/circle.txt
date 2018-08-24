@@ -6,3 +6,5 @@ ansible==2.6.2
 faker==0.8.17
 parameterized==0.6.1
 factory-boy==2.11.1
+mock==2.0.0
+py_w3c==0.3.1

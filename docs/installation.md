@@ -22,7 +22,7 @@ Local server setup
 * Switch to project's directory
 * Edit `group_vars/development.yml` faq in `docs/vault.md`
 * Comment this line in Vagrantfile to allow syncing a project directory:  
-   `config.vm.synced_folder ".", "/var/webapps/reactmusic/code", owner: "reactmusic_user_dev", group: "users"`
+   `config.vm.synced_folder ".", "/var/webapps/muzicbox/code", owner: "muzicbox_user_dev", group: "users"`
 * `ansible-playbook --ask-vault-pass deployment/development.yml -i deployment/inventories/development`
 
 

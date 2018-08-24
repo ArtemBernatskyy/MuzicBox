@@ -41,9 +41,9 @@ function getServedPath(appPackageJson) {
 // config after eject: we're in ./config/
 module.exports = {
   dotenv: resolveApp('.env'),
-  appBuild: resolveApp('../reactmusic/static/build'),
-  appPublic: resolveApp('../reactmusic/static/build'),
-  appHtml: resolveApp('../reactmusic/templates/index.html'),
+  appBuild: resolveApp('../muzicbox/static/build'),
+  appPublic: resolveApp('../muzicbox/static/build'),
+  appHtml: resolveApp('../muzicbox/templates/index.html'),
   appIndexJs: resolveApp('src/index.js'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),

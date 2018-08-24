@@ -1,5 +1,5 @@
 [run]
 omit=
-    reactmusic/settings*
+    muzicbox/settings*
     *migrations*
-source=reactmusic
+source=muzicbox

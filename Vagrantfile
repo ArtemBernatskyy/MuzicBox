@@ -1,8 +1,8 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/ubuntu-16.04"
   # - - - START COMMENTING - - -
-  config.vm.synced_folder ".", "/var/webapps/reactmusic/code",
-    owner: "reactmusic_user_dev", group: "users"
+  config.vm.synced_folder ".", "/var/webapps/muzicbox/code",
+    owner: "muzicbox_user_dev", group: "users"
   # - - - END COMMENTING - - -
   config.vm.box_check_update = false
   # config.vm.network "public_network", ip: "192.168.0.105"
@@ -11,6 +11,6 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |v|
     v.memory = 512
     v.cpus = 1
-    v.name = "ReactMusic"
+    v.name = "MuzicBox"
   end
 end

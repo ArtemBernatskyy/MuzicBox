@@ -60,6 +60,11 @@ jobs:
             done
             echo Failed waiting for Postgres && exit 1
       - run:
+          name: Run collectstatic
+          command: |
+            source env/bin/activate
+            python manage.py collectstatic
+      - run:
           name: Running tests
           command: |
             source env/bin/activate

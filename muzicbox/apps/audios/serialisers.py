@@ -155,19 +155,19 @@ class AudioCreateSerializer(ModelSerializer):
             except Artist.DoesNotExist:
                 artist_obj = Artist(name=artist)
                 artist_obj.save()
-                artist_parser = ArtistParser(artist=artist)
-                artist_parser.parse()
-                api_tags = artist_parser.tags
+                artist_parser = ArtistParser()
+                artist_parser_res = artist_parser.parse(artist=artist)
+                api_tags = artist_parser_res['tags']
                 tags = []
                 for api_tag in api_tags:
                     tag, created = Tag.objects.get_or_create(name=api_tag['name'])
                     tags.append(tag)    # here we should get list of orm tags
                 artist_obj.tags.add(*tags)
-                artist_obj.mbid = artist_parser.mbid
-                artist_obj.playcount = artist_parser.playcount
-                artist_obj.content = artist_parser.content
-                if artist_parser.image_url:
-                    artist_obj.save_image_from_url(artist_parser.image_url)
+                artist_obj.mbid = artist_parser_res['mbid']
+                artist_obj.playcount = artist_parser_res['playcount']
+                artist_obj.content = artist_parser_res['content']
+                if artist_parser_res['image_url']:
+                    artist_obj.save_image_from_url(artist_parser_res['image_url'])
             # saving album with such artist and song
             if song_parser_res['album']:
                 try:

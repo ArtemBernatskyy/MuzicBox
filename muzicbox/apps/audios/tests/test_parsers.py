@@ -1,4 +1,3 @@
-import mock
 import unittest
 
 from muzicbox.utils.custom_exceptions import SongDoesNotExist
@@ -18,7 +17,7 @@ class SongParserTestCase(unittest.TestCase):
         self.song_parser = SongParser()
         self.maxDiff = None
 
-    def test_parse(self, mtgi=None):
+    def test_parse(self):
         """
             Checking if SongParser.parse works
         """
@@ -32,19 +31,19 @@ class SongParserTestCase(unittest.TestCase):
                 {'url': 'https://www.last.fm/tag/running', 'name': 'running'},
             ],
             'mbid': 'ba14c3e2-54f7-4ad4-acb5-a802d835d187', 'song': 'Tainted Love',
-            'album_mbid': 'd6aa4236-21ed-4917-8c01-a5eae3df8791', 'artist': 'Marc Almond', 'playcount': '6527',
+            'album_mbid': 'd6aa4236-21ed-4917-8c01-a5eae3df8791', 'artist': 'Marc Almond',
             'lyrics': '<p class="verse">Sometimes I feel I&#8217;ve got to run away<br/>I&#8217;ve got to get away<br/>From the pain you drive jnto the heart of me.<br/>fhe love we share seems to go nowhere</p><p class="verse">And I&#8217;ve lost my light for I toss and turn &#8211; I can&#8217;t sleep at night.</p><p class="verse">Once I ran to you<br/>now I&#8217;ll run from you</p><p class="verse">This tainted love you&#8217;ve given -<br/>I give you all a boy could give you.<br/>Take my tears and that&#8217;s not living &#8211; oh<br/>tainted love &#8211; tainted love.</p><p class="verse">Now I know I&#8217;ve got to run away<br/>I&#8217;ve got to get away.<br/>You don&#8217;t really want it any more from me -<br/>To make things right you need someone to hold you tight</p><p class="verse">And you&#8217;ll think love is to pray but I&#8217;m sorry I don&#8217;t pray that ws</p><p class="verse">Once I ran to you<br/>now I&#8217;ll run from you<br/>. . .</p><p class="verse">Don&#8217;t touch me please &#8211; I cannot stand the way you tease.<br/>I love you though you hurt me so</p><p class="verse">Now I&#8217;m gonna pack my things and go. Tainted love &#8211; tainted love</p>', # noqa
         }
         result = self.song_parser.parse(artist='Marc Almond', song='Tainted Love')
-        result.pop('image', None)   # removing image because this path is UUID and it will be different every time
+        # removing image and playcount because this path is UUID and it will be different every time
+        self.assertTrue(result.pop('image', None))
+        self.assertTrue(result.pop('playcount', None))
         self.assertDictEqual(result, should_be_dict)
 
-    @mock.patch('muzicbox.apps.audios.parsers.song_parser.SongParser.track_get_info')
-    def test_artist_get_info(self, mock_track_get_info):
+    def test_artist_get_info(self):
         """
             Testing that SongParser.artist_get_info works
         """
-        mock_track_get_info.side_effect = KeyError  # patching to raise error in order to enable artist_get_info
         self.song_parser.artist = 'Marc Almond'
         self.song_parser.song = 'Tainted Love'
         result = self.song_parser.artist_get_info()
@@ -58,30 +57,20 @@ class SongParserTestCase(unittest.TestCase):
         self.song_parser.song = 'Tainted WFT MZFK'
         self.assertRaises(SongDoesNotExist, self.song_parser.track_get_info)
 
-    def test_track_get_info_handling_empty_data(self, mock_request=None):
+    def test_track_get_info_handling_empty_data(self):
         """
             Testing that SongParser.track_get_info can handle empty data
             Here we are monkey patching with broken values object
         """
         return_dict = {
             'track': {
-                'listeners': '1919', 'duration': '235000',
-                'streamable': {'fulltrack': '0', '#text': '0'},
-                'artist': {
-                    'mbid': 'd67e6b0a-d2c6-4e4a-ba30-7834701535a1',
-                    'url': 'https://www.last.fm/music/Marc+Almond',
-                },
                 'album': {
-                    '@attr': {'position': '13'}, 'artist': 'Marc Almond',
                     'image': [
-                        {'size': 'small', '#text': 'https://lastfm-img2.akamaized.net/i/u/34s/92ef83be41694b86ac59165deda8f5e1.png'},  # noqa
-                        {'size': 'medium', '#text': 'https://lastfm-img2.akamaized.net/i/u/64s/92ef83be41694b86ac59165deda8f5e1.png'},  # noqa
                         {'size': 'large', '#text': 'https://lastfm-img2.akamaized.net/i/u/174s/92ef83be41694b86ac59165deda8f5e1.png'},  # noqa
                     ],
-                    'url': 'https://www.last.fm/music/Marc+Almond/12+Years+of+Tears:+Live+at+the+Royal+Albert+Hall+(Edited+Highlights)'},  # noqa
-                    'url': 'https://www.last.fm/music/Marc+Almond/_/Tainted+Love',
-                }
+                },
             }
+        }
         patched_request = PatchedRequest(return_dict)
         self.song_parser.s.get = lambda url: patched_request
         self.song_parser.artist = 'Marc Almond'

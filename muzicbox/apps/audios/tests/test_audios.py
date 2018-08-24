@@ -156,13 +156,14 @@ class AudioListCreateViewSetTestCase(APITestCase):
         (False, True),
     ])
     @mock.patch('muzicbox.apps.audios.parsers.song_parser.SongParser.parse')
-    def test_create_audio_permissions(self, is_anonymous, allowed, mock_parser):
+    @mock.patch('muzicbox.apps.artists.parsers.artist_parser.ArtistParser.parse')
+    def test_create_audio_permissions(self, is_anonymous, allowed, m_art_parser, m_song_parser):
         """
             Checking if we can create audios for logged in and can't for logged out users
         """
         if not is_anonymous:
             self.client.force_authenticate(self.user)
-            mock_parser.return_value = {
+            m_song_parser.return_value = {
                 'album': 'Tomorrow Never Knows', 'lyrics': None,
                 'album_mbid': 'f172d1bf-575b-483c-9de1-bfbfef9b66bf',
                 'song': 'Savoy Truffle', 'artist': 'The Beatles',
@@ -174,6 +175,17 @@ class AudioListCreateViewSetTestCase(APITestCase):
                     {'url': 'https://www.last.fm/tag/pop', 'name': 'pop'},
                 ], 'mbid': '2eb16581-560c-4a4d-82af-6f33e38fffad', 'playcount': '1179498',
                 'image': None,
+            }
+            m_art_parser.return_value = {
+                'mbid': 'b10bbbfc-cf9e-42e0-be17-e2c3e1d2600d', 'content': None,
+                'tags': [
+                    {'url': 'https://www.last.fm/tag/classic+rock', 'name': 'classic rock'},
+                    {'url': 'https://www.last.fm/tag/rock', 'name': 'rock'},
+                    {'url': 'https://www.last.fm/tag/british', 'name': 'british'},
+                    {'url': 'https://www.last.fm/tag/60s', 'name': '60s'},
+                    {'url': 'https://www.last.fm/tag/pop', 'name': 'pop'},
+                ], 'artist': 'The Beatles', 'playcount': '501772761',
+                'image_url': 'https://lastfm-img2.akamaized.net/i/u/300x300/774177d77ee348e198bee6d223a22ff3.png',
             }
         with open('muzicbox/apps/audios/tests/fixtures/with_id3.mp3', 'rb') as audio_file:
             response = self.client.post(
@@ -211,12 +223,13 @@ class AudioListCreateViewSetTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     @mock.patch('muzicbox.apps.audios.parsers.song_parser.SongParser.parse')
-    def test_create_success_audio_without_id3_but_naming(self, mock_parser):
+    @mock.patch('muzicbox.apps.artists.parsers.artist_parser.ArtistParser.parse')
+    def test_create_success_audio_without_id3_but_naming(self, m_art_parser, m_song_parser):
         """
             Checking that we can create audio which doesn't have ID3 tags but have correct naming
         """
         self.client.force_authenticate(self.user)
-        mock_parser.return_value = {
+        m_song_parser.return_value = {
             'mbid': None, 'song': 'Swim', 'playcount': '30202', 'artist': 'Dan Croll',
             'tags': [
                 {'name': 'british', 'url': 'https://www.last.fm/tag/british'},
@@ -225,6 +238,18 @@ class AudioListCreateViewSetTestCase(APITestCase):
             ], 'lyrics': '<p class="verse">lorem ipsum</p>',
             'album_mbid': None, 'image': None,
             'album': 'Emerging Adulthood',
+        }
+        m_art_parser.return_value = {
+            'content': None, 'artist': 'Dan Croll', 'mbid': '480801c6-bd47-4d0d-b9fc-c20289529760',
+            'playcount': '2689156',
+            'image_url': 'https://lastfm-img2.akamaized.net/i/u/300x300/1622306ea93c4efe9c5ec5842806432e.png',
+            'tags': [
+                {'url': 'https://www.last.fm/tag/indie+pop', 'name': 'indie pop'},
+                {'url': 'https://www.last.fm/tag/indie', 'name': 'indie'},
+                {'url': 'https://www.last.fm/tag/electronic', 'name': 'electronic'},
+                {'url': 'https://www.last.fm/tag/seen+live', 'name': 'seen live'},
+                {'url': 'https://www.last.fm/tag/pop', 'name': 'pop'},
+            ],
         }
         with open('muzicbox/apps/audios/tests/fixtures/Dan Croll - Swim.mp3', 'rb') as audio_file:
             response = self.client.post(

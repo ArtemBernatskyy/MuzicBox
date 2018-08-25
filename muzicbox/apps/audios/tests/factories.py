@@ -1,3 +1,4 @@
+import os
 import random
 import factory
 
@@ -37,8 +38,22 @@ class AudioFactory(factory.django.DjangoModelFactory):
     year = factory.Faker('date_time')
     lyrics = factory.Faker('paragraph')
 
+    files = set()
+
+    @classmethod
+    def tear_down_files(cls):
+        for file in cls.files.copy():
+            os.remove(file.path)
+            cls.files.remove(file)
+
     class Meta:
         model = Audio
+        exclude = ('files',)
+
+    @factory.post_generation
+    def post(self, create, extracted, **kwargs):
+        # keeping track of created files in order to purge in tearDownClass
+        AudioFactory.files.add(self.audio_file)
 
     @factory.post_generation
     def tags(self, create, extracted, **kwargs):

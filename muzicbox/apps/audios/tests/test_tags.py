@@ -9,15 +9,21 @@ from .factories import AudioFactory, TagFactory
 
 class TagModelViewSetTestCase(APITestCase):
 
-    def setUp(self):
-        self.url = reverse('audios:tags_list')
-        self.user = UserFactory()
-        self.PERSONAL_TAGS_COUNT = 2
-        self.PRESENTATION_TAGS_COUNT = 3
-        user_tags = TagFactory.create_batch(self.PERSONAL_TAGS_COUNT)
-        presentation_tags = TagFactory.create_batch(self.PRESENTATION_TAGS_COUNT)
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('audios:tags_list')
+        cls.user = UserFactory()
+        cls.PERSONAL_TAGS_COUNT = 2
+        cls.PRESENTATION_TAGS_COUNT = 3
+        user_tags = TagFactory.create_batch(cls.PERSONAL_TAGS_COUNT)
+        presentation_tags = TagFactory.create_batch(cls.PRESENTATION_TAGS_COUNT)
         AudioFactory.create_batch(3, is_presentation=True, tags=user_tags)
-        AudioFactory.create_batch(3, is_presentation=False, owner=self.user, tags=presentation_tags)
+        AudioFactory.create_batch(3, is_presentation=False, owner=cls.user, tags=presentation_tags)
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        AudioFactory.tear_down_files()
 
     @parameterized.expand([
         (True, ),

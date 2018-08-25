@@ -9,12 +9,13 @@ def populate_color(apps, schema_editor):
     """
     Artist = apps.get_model('artists', 'Artist')
     for artist in Artist.objects.all():
-        color_thief = ColorThief(artist.image.path)
-        palette = color_thief.get_palette(color_count=2, quality=1)
-        color_thief.image.close()
-        artist.background_color = '#%02x%02x%02x' % palette[1]
-        artist.top_background_color = '#%02x%02x%02x' % palette[0]
-        artist.save(update_fields=['background_color', 'top_background_color'])
+        if artist.image:
+            color_thief = ColorThief(artist.image.path)
+            palette = color_thief.get_palette(color_count=2, quality=1)
+            color_thief.image.close()
+            artist.background_color = '#%02x%02x%02x' % palette[1]
+            artist.top_background_color = '#%02x%02x%02x' % palette[0]
+            artist.save(update_fields=['background_color', 'top_background_color'])
 
 
 def depopulate_color(apps, schema_editor):

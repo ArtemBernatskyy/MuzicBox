@@ -114,7 +114,7 @@ function identity(value) {
 }
 
 function escapeRegExpFn(str) {
-  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+  return str.replace(/[-[\]/{}()*+?.\\^$|]/g, "\\$&");
 }
 
 Highlighter.propTypes = {

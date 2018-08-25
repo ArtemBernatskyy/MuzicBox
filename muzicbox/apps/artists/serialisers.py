@@ -20,4 +20,4 @@ class ArtistDetailSerializer(ModelSerializer):
 
     class Meta:
         model = Artist
-        fields = ['id', 'name', 'playcount', 'slug', 'image']
+        fields = ['id', 'name', 'playcount', 'slug', 'image', 'background_color', 'top_background_color']

@@ -123,7 +123,7 @@ class Audio(models.Model):
         format='JPEG',
         options={'quality': 90},
         null=True,
-        blank=True
+        blank=True,
     )
 
     slug = AutoSlugField(

@@ -49,12 +49,6 @@
 <div id="root">
 </div>
 
-<script src="https://cdn.ravenjs.com/3.26.4/raven.min.js" crossorigin="anonymous"></script>
-{% if debug %}
-  <script>Raven.config('https://e4324708c61040909daaed217fc879f5@sentry.io/1258839').install();</script>
-{% else %}
-  <script>Raven.config('https://666cbcf624ac42a6936a96f8507dbf5e@sentry.io/1259461').install();</script>
-{% endif %}
 <link href="{% static 'plugins/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
 <script src="{% static 'build/js/main.js' %}"></script>
 <link href="{% static 'build/css/main.css' %}" rel="stylesheet">

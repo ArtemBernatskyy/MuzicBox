@@ -3,17 +3,18 @@ import uuid
 import errno
 import tempfile
 import requests
-from requests.adapters import HTTPAdapter
-from requests.packages.urllib3.util.retry import Retry
 
 from django.db import models
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
-
+from colorthief import ColorThief
 from autoslug import AutoSlugField
-from imagekit.processors import ResizeToFill
-from imagekit.models import ImageSpecField, ProcessedImageField
 from ckeditor.fields import RichTextField
+from requests.adapters import HTTPAdapter
+from imagekit.processors import ResizeToFill
+from django.core.validators import RegexValidator
+from requests.packages.urllib3.util.retry import Retry
+from django.utils.translation import ugettext_lazy as _
+from imagekit.models import ImageSpecField, ProcessedImageField
 
 from muzicbox.utils.models_helpers import UploadToPathAndRename
 
@@ -41,6 +42,26 @@ class Artist(models.Model):
         null=True,
         blank=True
     )
+    background_color = models.CharField(
+        default='#8c8c8c', max_length=9,
+        help_text=_("Most common color for artist's background"),
+        validators=[
+            RegexValidator(
+                regex='^#(?:[0-9a-fA-F]{3}){1,2}$',
+                message=_('Plz specify correct color'),
+            ),
+        ]
+    )
+    top_background_color = models.CharField(
+        default='#8c8c8c', max_length=9,
+        help_text=_("Most common color for top border in artist's page"),
+        validators=[
+            RegexValidator(
+                regex='^#(?:[0-9a-fA-F]{3}){1,2}$',
+                message=_('Plz specify correct color'),
+            ),
+        ]
+    )
     content = RichTextField(blank=True, null=True)
 
     tags = models.ManyToManyField('audios.Tag', blank=True)
@@ -59,6 +80,14 @@ class Artist(models.Model):
         format='JPEG',
         options={'quality': 80}
     )
+
+    def save_most_common_colors(self, image_path):
+        color_thief = ColorThief(image_path)
+        palette = color_thief.get_palette(color_count=2, quality=1)
+        color_thief.image.close()
+        self.background_color = '#%02x%02x%02x' % palette[1]
+        self.top_background_color = '#%02x%02x%02x' % palette[0]
+        self.save(update_fields=['background_color', 'top_background_color'])
 
     def save_image_from_url(self, image_url):
         s = requests.Session()
@@ -79,6 +108,7 @@ class Artist(models.Model):
         tmp = tempfile.NamedTemporaryFile(delete=True)
         try:
             tmp.write(response.raw.read())
+            self.save_most_common_colors(tmp.name)
             with open(tmp.name, 'rb') as f:
                 self.image.save(random_name, f)
         finally:

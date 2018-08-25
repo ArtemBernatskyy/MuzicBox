@@ -10,19 +10,25 @@ from .factories import ArtistFactory
 
 class ArtistListViewSetTestCase(APITestCase):
 
-    def setUp(self):
-        self.url = reverse('artists:list')
-        self.user = UserFactory()
-        self.PRESENTATION_ARTISTS_COUNT = 3
-        self.PERSONAL_ARTISTS_COUNT = 1
-        self.artist_public1 = ArtistFactory()   # PRESENTATION_ARTISTS_1
-        self.artist_public2 = ArtistFactory()   # PRESENTATION_ARTISTS_2
-        self.artist_public3 = ArtistFactory()   # PRESENTATION_ARTISTS_3
-        self.artist_private = ArtistFactory()   # PERSONAL_ARTISTS_COUNT_1
-        AudioFactory(is_presentation=True, artist=self.artist_public1)
-        AudioFactory(is_presentation=True, artist=self.artist_public2)
-        AudioFactory(is_presentation=True, artist=self.artist_public3)
-        AudioFactory(is_presentation=False, owner=self.user, artist=self.artist_private)
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('artists:list')
+        cls.user = UserFactory()
+        cls.PRESENTATION_ARTISTS_COUNT = 3
+        cls.PERSONAL_ARTISTS_COUNT = 1
+        cls.artist_public1 = ArtistFactory()   # PRESENTATION_ARTISTS_1
+        cls.artist_public2 = ArtistFactory()   # PRESENTATION_ARTISTS_2
+        cls.artist_public3 = ArtistFactory()   # PRESENTATION_ARTISTS_3
+        cls.artist_private = ArtistFactory()   # PERSONAL_ARTISTS_COUNT_1
+        AudioFactory(is_presentation=True, artist=cls.artist_public1)
+        AudioFactory(is_presentation=True, artist=cls.artist_public2)
+        AudioFactory(is_presentation=True, artist=cls.artist_public3)
+        AudioFactory(is_presentation=False, owner=cls.user, artist=cls.artist_private)
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        AudioFactory.tear_down_files()
 
     @parameterized.expand([
         (True, ),
@@ -54,16 +60,22 @@ class ArtistListViewSetTestCase(APITestCase):
 
 class ArtistDetailViewSetTestCase(APITestCase):
 
-    def setUp(self):
-        self.user = UserFactory()
-        self.artist_public = ArtistFactory()
-        self.artist_private = ArtistFactory()
-        self.not_presentation_but_owner_audio = AudioFactory(
-            is_presentation=False, owner=self.user,
-            artist=self.artist_private,
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = UserFactory()
+        cls.artist_public = ArtistFactory()
+        cls.artist_private = ArtistFactory()
+        cls.not_presentation_but_owner_audio = AudioFactory(
+            is_presentation=False, owner=cls.user,
+            artist=cls.artist_private,
         )
-        self.not_presentation_not_owner_audio = AudioFactory(is_presentation=False)
-        self.presentation_audio = AudioFactory(is_presentation=True, artist=self.artist_public)
+        cls.not_presentation_not_owner_audio = AudioFactory(is_presentation=False)
+        cls.presentation_audio = AudioFactory(is_presentation=True, artist=cls.artist_public)
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        AudioFactory.tear_down_files()
 
     @parameterized.expand([
         (True, ),

@@ -14,18 +14,24 @@ from .factories import AudioFactory, TagFactory
 
 class AudioListCreateViewSetTestCase(APITestCase):
 
-    def setUp(self):
-        self.url = reverse('audios:audios_list_create')
-        self.user = UserFactory()
-        self.PERSONAL_AUDIOS_COUNT = 2
-        self.PRESENTATION_AUDIOS_COUNT = 3
-        self.tag = TagFactory()
-        self.artist = ArtistFactory()
+    @classmethod
+    def setUpTestData(cls):
+        cls.url = reverse('audios:audios_list_create')
+        cls.user = UserFactory()
+        cls.PERSONAL_AUDIOS_COUNT = 2
+        cls.PRESENTATION_AUDIOS_COUNT = 3
+        cls.tag = TagFactory()
+        cls.artist = ArtistFactory()
         AudioFactory.create_batch(
-            self.PRESENTATION_AUDIOS_COUNT, is_presentation=True,
-            artist=self.artist, tags=[self.tag],
+            cls.PRESENTATION_AUDIOS_COUNT, is_presentation=True,
+            artist=cls.artist, tags=[cls.tag],
         )
-        AudioFactory.create_batch(self.PERSONAL_AUDIOS_COUNT, is_presentation=False, owner=self.user)
+        AudioFactory.create_batch(cls.PERSONAL_AUDIOS_COUNT, is_presentation=False, owner=cls.user)
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        AudioFactory.tear_down_files()
 
     @parameterized.expand([
         (True, ),
@@ -264,11 +270,17 @@ class AudioListCreateViewSetTestCase(APITestCase):
 
 class AudioDetailViewSetTestCase(APITestCase):
 
-    def setUp(self):
-        self.user = UserFactory()
-        self.not_presentation_but_owner_audio = AudioFactory(is_presentation=False, owner=self.user)
-        self.not_presentation_not_owner_audio = AudioFactory(is_presentation=False)
-        self.presentation_audio = AudioFactory(is_presentation=True)
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = UserFactory()
+        cls.not_presentation_but_owner_audio = AudioFactory(is_presentation=False, owner=cls.user)
+        cls.not_presentation_not_owner_audio = AudioFactory(is_presentation=False)
+        cls.presentation_audio = AudioFactory(is_presentation=True)
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        AudioFactory.tear_down_files()
 
     @parameterized.expand([
         (True, ),
@@ -308,11 +320,17 @@ class AudioDetailViewSetTestCase(APITestCase):
 
 class AudioLyricsViewSetTestCase(APITestCase):
 
-    def setUp(self):
-        self.user = UserFactory()
-        self.not_presentation_but_owner_audio = AudioFactory(is_presentation=False, owner=self.user)
-        self.not_presentation_not_owner_audio = AudioFactory(is_presentation=False)
-        self.presentation_audio = AudioFactory(is_presentation=True)
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = UserFactory()
+        cls.not_presentation_but_owner_audio = AudioFactory(is_presentation=False, owner=cls.user)
+        cls.not_presentation_not_owner_audio = AudioFactory(is_presentation=False)
+        cls.presentation_audio = AudioFactory(is_presentation=True)
+
+    @classmethod
+    def tearDownClass(cls):
+        super().tearDownClass()
+        AudioFactory.tear_down_files()
 
     @parameterized.expand([
         (True, ),

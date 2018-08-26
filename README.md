@@ -10,4 +10,5 @@ MUZICBOX is a music storage website where you can upload your songs and listen t
 * [Production Server setup](/docs/installation.md#production-server-setup)
 
 ###  Contribute
-Improvements is more than appreciated via [GitHub](https://github.com/ArtemBernatskyy/MuzicBox/) or [Trello](https://trello.com/b/9rZKIREP)
+You can help project via [submitting bug](https://github.com/ArtemBernatskyy/MuzicBox/issues) or [improving website](https://github.com/ArtemBernatskyy/MuzicBox/pulls) .
+You can track project [milestones here](https://trello.com/b/9rZKIREP) .

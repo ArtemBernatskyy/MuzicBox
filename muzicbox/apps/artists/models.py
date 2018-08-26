@@ -6,7 +6,6 @@ import requests
 
 from django.db import models
 from django.conf import settings
-from colorthief import ColorThief
 from autoslug import AutoSlugField
 from ckeditor.fields import RichTextField
 from requests.adapters import HTTPAdapter
@@ -16,7 +15,7 @@ from requests.packages.urllib3.util.retry import Retry
 from django.utils.translation import ugettext_lazy as _
 from imagekit.models import ImageSpecField, ProcessedImageField
 
-from muzicbox.utils.models_helpers import UploadToPathAndRename
+from muzicbox.utils.models_helpers import UploadToPathAndRename, Color
 
 
 class ArtistQuerySet(models.QuerySet):
@@ -82,11 +81,12 @@ class Artist(models.Model):
     )
 
     def save_most_common_colors(self, image_path):
-        color_thief = ColorThief(image_path)
-        palette = color_thief.get_palette(color_count=2, quality=1)
-        color_thief.image.close()
-        self.background_color = '#%02x%02x%02x' % palette[1]
-        self.top_background_color = '#%02x%02x%02x' % palette[0]
+        color_manipulator = Color(image_path)
+        color_manipulator.sort_brightest_color()
+        color_manipulator.process_colors()
+        color_manipulator.quit()
+        self.background_color = color_manipulator.background_color
+        self.top_background_color = color_manipulator.top_background_color
         self.save(update_fields=['background_color', 'top_background_color'])
 
     def save_image_from_url(self, image_url):

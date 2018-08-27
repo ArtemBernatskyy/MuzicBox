@@ -55,4 +55,11 @@ function isTouchDevice() {
   return mq(query);
 }
 
-export { offsetLeft, format2Number, roundUp, formatTime, roundDown, isTouchDevice };
+function handleErrors(response) {
+  if (!response.ok) {
+    throw Error(response.statusText);
+  }
+  return response;
+}
+
+export { offsetLeft, format2Number, roundUp, formatTime, roundDown, isTouchDevice, handleErrors };

@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { withRouter } from "react-router-dom";
 import {
   playNext,
   setIsPlaying,
@@ -8,6 +9,7 @@ import {
   togglePlayNextItem,
   orderSongByValue,
   scrollToSong,
+  emitIsLoading,
 } from "actions";
 import Player from "./player";
 
@@ -20,6 +22,7 @@ function mapStateToProps(state) {
     no_songs: state.no_songs,
     play_next_list: state.play_next_list,
     ordering_type: state.ordering_type,
+    is_loading: state.is_loading,
   };
 }
 
@@ -33,12 +36,15 @@ function matchDispatchToProps(dispatch) {
       togglePlayNextItem,
       orderSongByValue,
       scrollToSong,
+      emitIsLoading,
     },
     dispatch
   );
 }
 
-export default connect(
-  mapStateToProps,
-  matchDispatchToProps
-)(Player);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    matchDispatchToProps
+  )(Player)
+);

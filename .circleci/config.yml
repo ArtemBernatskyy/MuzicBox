@@ -36,7 +36,7 @@ jobs:
       - save_cache:
           key: deps1-{{ .Branch }}-{{ checksum "requirements/circle.txt" }}
           paths:
-            - "env"
+            - env
       - persist_to_workspace:
           # this is done to persist virtualenv across workflows 
           root: .
@@ -60,25 +60,20 @@ jobs:
             done
             echo Failed waiting for Postgres && exit 1
       - run:
+          name: Activate virtualenv
+          command: echo 'source env/bin/activate' >> $BASH_ENV
+      - run:
           name: Run collectstatic
-          command: |
-            source env/bin/activate
-            python manage.py collectstatic
+          command: python manage.py collectstatic
       - run:
           name: Running tests
-          command: |
-            source env/bin/activate
-            coverage run manage.py test
+          command: coverage run manage.py test
       - run:
           name: Generating code coverage
-          command: |
-            source env/bin/activate
-            pip install codecov && codecov
+          command: codecov
       - run:
           name: Running code audition
-          command: |
-            source env/bin/activate
-            pylama
+          command: pylama
 
   deploy:
     <<: *DEFAULT
@@ -88,8 +83,7 @@ jobs:
           at: /home/circleci/muzicbox
       - run:
           name: Populate VAULT_PASS
-          command: |
-            echo $VAULT_PASS > .vault_pass.txt
+          command: echo $VAULT_PASS > .vault_pass.txt
       - run:
           name: Push to Server via Ansible
           command: |

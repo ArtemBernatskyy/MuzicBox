@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { songReducer, activeSongReducer, noSongsReducer } from "./song";
-import { isPlayingReducer } from "./player";
+import { isPlayingReducer, isLoadingReducer } from "./player";
 import {
   setPlaylistReducer,
   setSearchSongValueReducer,
@@ -26,6 +26,7 @@ const rootReducer = combineReducers({
   playlist: setPlaylistReducer,
   active_song: activeSongReducer,
   is_playing: isPlayingReducer,
+  is_loading: isLoadingReducer,
   is_menu_open: menuOpenReducer,
   is_author_search: setAutorSearchValueReducer,
   is_search_song_loading: setSearchSongLoadingReducer,

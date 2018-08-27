@@ -27,16 +27,21 @@ class ArtistsDetail extends Component {
       artist_slug = nextProps.match.params.slug;
     }
     // get artist info
-    ArtistApi.getArtist(artist_slug).then(artist_object => {
-      this.setState({
-        playcount: artist_object.playcount,
-        name: artist_object.name,
-        image: artist_object.image || this.state.image,
-        is_loading: false,
-        background_color: artist_object.background_color || this.state.background_color,
-        top_color: artist_object.top_background_color || this.state.top_color,
+    ArtistApi.getArtist(artist_slug)
+      .then(artist_object => {
+        this.setState({
+          playcount: artist_object.playcount,
+          name: artist_object.name,
+          image: artist_object.image || this.state.image,
+          is_loading: false,
+          background_color: artist_object.background_color || this.state.background_color,
+          top_color: artist_object.top_background_color || this.state.top_color,
+        });
+      })
+      .catch(() => {
+        // redirecting to 404 page if Artist isn't visible for user
+        this.props.history.push("/404/");
       });
-    });
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {

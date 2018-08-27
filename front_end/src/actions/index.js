@@ -9,7 +9,7 @@ import {
   mergeNextPlaylist,
   scrollToSong,
 } from "./playlist";
-import { setIsPlaying, playNext } from "./player";
+import { setIsPlaying, playNext, emitIsLoading } from "./player";
 import { initialLoadSongs, setSongs, loadSongs, mergeNextSongs, noSongs } from "./song";
 import { loadArtists, mergeNextArtists, searchArtists, setSearchArtistValue, setArtists } from "./artist";
 
@@ -35,4 +35,5 @@ export {
   setArtists,
   orderSongByValue,
   scrollToSong,
+  emitIsLoading,
 };

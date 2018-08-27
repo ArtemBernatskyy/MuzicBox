@@ -67,7 +67,14 @@
   color: #ffffff;
   z-index: 1;
   opacity: 0;
-  transition: all 0.3s cubic-bezier(0, 0, 0, 2.41);
+}
+
+:global .playlist__song__overlay--loading {
+  left: 4px;
+  top: 4px;
+  width: initial;
+  height: initial;
+  font-size: 22px;
 }
 
 .playlist__controls__button--active {

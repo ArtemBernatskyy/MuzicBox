@@ -33,6 +33,7 @@ export default {
     extra_sm_image_thumbnail: "",
   },
   is_playing: false,
+  is_loading: true,
   is_menu_open: false,
   is_author_search: false,
   is_search_song_loading: false,

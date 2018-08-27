@@ -20,7 +20,6 @@ class Player extends Component {
       volume: 1,
       in_set_progress_mode: false,
       in_set_volume_mode: false,
-      is_loading: this.props.no_songs,
       play: this.props.autoplay || false,
       repeat: false,
       is_muted: false,
@@ -65,7 +64,7 @@ class Player extends Component {
     // toggling play/pause based on props.is_playing
     // this also allows to control player outside of this component
     if (this.props.is_playing !== nextProps.is_playing) {
-      if (!this.state.is_loading) {
+      if (!this.props.is_loading) {
         if (nextProps.is_playing) {
           this.safePlay();
         } else {
@@ -107,8 +106,8 @@ class Player extends Component {
     this.setState({
       total_time: this.props.active_song.length,
       current_time: this._player.currentTime,
-      is_loading: false,
     });
+    this.props.emitIsLoading(false);
     if (this.props.is_playing) {
       // this fires when we set progress or load song
       this.safePlay();
@@ -215,7 +214,6 @@ class Player extends Component {
     this.setState({
       progress: 0,
       current_time: 0,
-      is_loading: true,
     });
   }
 
@@ -227,8 +225,8 @@ class Player extends Component {
 
   onPause() {
     // used when Safari uses pause from touchbar
-    // here we need to ignore onEnded callback and state is_loading
-    if (this.state.progress < 1 && !this.state.is_loading) {
+    // here we need to ignore onEnded callback and props is_loading
+    if (this.state.progress < 1 && !this.props.is_loading) {
       this.props.setIsPlaying(false);
     }
   }
@@ -246,7 +244,7 @@ class Player extends Component {
   }
 
   listenProgress() {
-    if (!this.state.is_loading) {
+    if (!this.props.is_loading) {
       this.setState({
         progress: this._player.currentTime / this._player.duration,
         current_time: this._player.currentTime,
@@ -255,7 +253,7 @@ class Player extends Component {
   }
 
   startSetProgress(evt, working = true) {
-    if (!this.state.is_loading && working) {
+    if (!this.props.is_loading && working) {
       this.is_progress_mouse = false;
       this.setProgress(evt);
       this.setState({
@@ -265,7 +263,7 @@ class Player extends Component {
   }
 
   setProgress(evt, working = true) {
-    if (this.state.in_set_progress_mode && !this.props.no_songs && !this.state.is_loading && working) {
+    if (this.state.in_set_progress_mode && !this.props.no_songs && !this.props.is_loading && working) {
       let elem = evt.target;
       let clientX = null;
       try {
@@ -290,7 +288,7 @@ class Player extends Component {
   }
 
   stopSetProgress(evt, force = false, working = true) {
-    if (!this.state.is_loading && working) {
+    if (!this.props.is_loading && working) {
       if (!force && this.is_progress_mouse !== true) {
         this.setProgress(evt);
       }
@@ -375,9 +373,9 @@ class Player extends Component {
   render() {
     let playerClsName = cx({
       fa: true,
-      "fa-play-circle-o": !this.props.is_playing && !this.state.is_loading,
-      "fa-pause-circle-o": this.props.is_playing && !this.state.is_loading,
-      "fa-circle-o-notch fa-spin": this.state.is_loading,
+      "fa-play-circle-o": !this.props.is_playing && !this.props.is_loading,
+      "fa-pause-circle-o": this.props.is_playing && !this.props.is_loading,
+      "fa-circle-o-notch fa-spin": this.props.is_loading,
     });
     let randomClass = cx({
       "control-button": true,

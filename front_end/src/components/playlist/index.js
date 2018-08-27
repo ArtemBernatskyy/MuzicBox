@@ -74,8 +74,8 @@ class Song extends Component {
     // if clicked song isn't active then switch to next song
     if (this.props.song.id !== this.props.active_song.id) {
       this.props.playNext(this.props.song, true);
-      // if song is active then toggle is_playing
     } else {
+      // if song is active then toggle is_playing
       this.props.setIsPlaying(!this.props.is_playing);
     }
     // remove item from play_next_list if we clicked on it
@@ -102,7 +102,10 @@ class Song extends Component {
   }
 
   playClass() {
-    if (this.props.song.id === this.props.active_song.id && this.props.is_playing) {
+    if (this.props.song.id === this.props.active_song.id && this.props.is_loading) {
+      return "fa fa-circle-o-notch fa-spin playlist__song__overlay playlist__song__overlay--loading";
+    }
+    else if (this.props.song.id === this.props.active_song.id && this.props.is_playing) {
       return "fa fa-pause-circle playlist__song__overlay";
     } else {
       return "fa fa-play-circle playlist__song__overlay";
@@ -391,6 +394,7 @@ class Playlist extends Component {
                     scroll_to_song={this.props.scroll_to_song}
                     play_next_list={this.props.play_next_list}
                     is_playing={this.props.is_playing}
+                    is_loading={this.props.is_loading}
                     active_song={this.props.active_song}
                     search_song_value={this.props.search_song_value}
                     setLocalSearch={this.setLocalSearch.bind(this)}
@@ -423,6 +427,7 @@ function mapStateToProps(state) {
     songs: state.songs,
     active_song: state.active_song,
     is_playing: state.is_playing,
+    is_loading: state.is_loading,
     search_song_value: state.search_song_value,
     filter_tag_value: state.filter_tag_value,
     no_songs: state.no_songs,

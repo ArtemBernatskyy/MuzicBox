@@ -18,3 +18,4 @@ export const MERGE_PLAYLIST = "MERGE_PLAYLIST"; // merge next pagination of curr
 export const TOGGLE_PLAYNEXT_ITEM = "TOGGLE_PLAYNEXT_ITEM"; // if song is in play_next_list then it removes it and vice versa
 export const IS_AUTHOR_SEARCH = "IS_AUTHOR_SEARCH"; // defines whether we search only by author or not
 export const SCROLL_TO_SONG = "SCROLL_TO_SONG"; // scrolling in to view provided song if it is in current playlist
+export const SET_IS_LOADING = "SET_IS_LOADING"; // toggles true/false, controls if is loading or not

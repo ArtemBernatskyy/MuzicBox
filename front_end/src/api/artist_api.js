@@ -1,3 +1,5 @@
+import { handleErrors } from "utils/misc";
+
 class ArtistApi {
   static getNextArtists(page_url) {
     let fetch_url;
@@ -25,6 +27,7 @@ class ArtistApi {
     return fetch(`/api/v0/artists/${artist_slug}/`, {
       credentials: "same-origin",
     })
+      .then(handleErrors)
       .then(response => response.json())
       .catch(error => {
         throw error;

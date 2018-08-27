@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { withRouter } from "react-router-dom";
 import {
   playNext,
   setIsPlaying,
@@ -41,7 +42,9 @@ function matchDispatchToProps(dispatch) {
   );
 }
 
-export default connect(
-  mapStateToProps,
-  matchDispatchToProps
-)(Player);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    matchDispatchToProps
+  )(Player)
+);

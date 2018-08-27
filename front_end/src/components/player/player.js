@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import Raven from "raven-js";
 import classNames from "classnames";
 import { Link } from "react-router-dom";
 import NotificationSystem from "react-notification-system";
@@ -83,21 +84,9 @@ class Player extends Component {
       play_promise.catch(error => {
         if (error.name == "NotAllowedError") {
           // Automatic playback failed.
-          // Show a UI element to let the user manually start playback.
-          if (this._notificationSystem) {
-            this._notificationSystem.addNotification({
-              message: "Allow autoplay functionality for better support",
-              level: "error",
-              autoDismiss: 0,
-              action: {
-                label: "Learn more",
-                callback: function() {
-                  window.open("https://reduxblog.com/post/how-enable-autoplay-safari-11/", "_blank", "noopener");
-                },
-              },
-            });
-          }
+          this.props.setIsPlaying(false);
         }
+        Raven.captureException(error);
       });
     }
   }
@@ -187,17 +176,19 @@ class Player extends Component {
   }
 
   handleScrollIntoView() {
+    const current_url = this.props.history.location.pathname;
     const song_in_playlist_id = this.props.songs["results"].findIndex(song => song.id == this.props.active_song.id);
-    if (song_in_playlist_id !== -1) {
-      // it means that active song is in current playlist and we can scrollIntoView
+    if (song_in_playlist_id !== -1 && current_url === "/") {
+      // it means that active song is in current playlist and we are on playlist page so we can scrollIntoView
       this.props.scrollToSong(this.props.active_song.id);
     } else {
       // showing warning instead
       if (this._notificationSystem) {
         this._notificationSystem.addNotification({
-          message: "This song isn't visible",
+          message: "This song isn't visible or you aren't on playlist page",
           level: "warning",
-          autoDismiss: 1,
+          autoDismiss: 4,
+          dismissible: "none",
         });
       }
     }
@@ -391,10 +382,10 @@ class Player extends Component {
       "fa-volume-off": this.state.is_muted,
     });
     let progressBarSliderLeft = "0px"; // this is done to allow better user experience
-    if (this.state.progress >= 0 && this.state.progress < 0.1) {
-      progressBarSliderLeft = "6px"; // here we are allowing slider to be slightly to the right
-    } else if (this.state.progress >= 0.978) {
-      progressBarSliderLeft = "-2px"; // or to the left to allow user to better drag slider
+    if (this.state.progress >= 0 && this.state.progress < 0.1 && this.state.is_touch) {
+      progressBarSliderLeft = "6px"; // we are allowing slider to be slightly to the right (only touch devices)
+    } else if (this.state.progress >= 0.978 && this.state.is_touch) {
+      progressBarSliderLeft = "-2px"; // or to the left to allow user to better drag slider (only touch devices)
     }
     return (
       <footer styleName="player">

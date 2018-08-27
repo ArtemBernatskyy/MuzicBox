@@ -160,6 +160,7 @@
   text-align: center;
   cursor: default;
   user-select: none;
+  cursor: pointer;
 }
 
 .progress-bar {

@@ -18,7 +18,7 @@ class Header extends Component {
   }
 
   handleLogoutUrl() {
-    let current_url = this.props.history.location.pathname;
+    const current_url = this.props.history.location.pathname;
     let next_page = this.props.location.pathname;
     // we are checking if we are on artst's detail page
     // and redirecting to the root url

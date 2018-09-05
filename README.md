@@ -12,3 +12,8 @@ MUZICBOX is a music storage website where you can upload your songs and listen t
 ###  Contribute
 You can help project via [submitting bug](https://github.com/ArtemBernatskyy/MuzicBox/issues) or [improving website](https://github.com/ArtemBernatskyy/MuzicBox/pulls) .
 You can track project [milestones here](https://trello.com/b/9rZKIREP) .
+
+###  License
+GNU General Public License v3.0
+
+See [COPYING](https://github.com/ArtemBernatskyy/MuzicBox/blob/master/COPYING) to see the full text.

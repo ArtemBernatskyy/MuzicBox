@@ -1,5 +1,9 @@
 {
  "name": "MuzicBox",
+ "short_name": "MuzicBox",
+ "display": "standalone",
+ "start_url": "/",
+ "theme_color": "#282828",
  "icons": [
   {
    "src": "\/android-icon-36x36.png",

@@ -1,5 +1,8 @@
+import json
+
 from django.urls import reverse
 from rest_framework.test import APITestCase
+from django.contrib.staticfiles import finders
 from py_w3c.validators.html.validator import HTMLValidator
 
 
@@ -25,3 +28,12 @@ class LandingTestCase(APITestCase):
         self.validator.validate_fragment(str(response.content, encoding='utf8'))
         filtered_errors = [msg for msg in self.validator.errors if not self.ignore(msg['message'])]
         self.assertFalse(filtered_errors)     # Empty lists/dicts evaluate to False
+
+    def test_valid_manifest(self):
+        """
+            Testing that manifest is valid and accessible
+        """
+        # import ipdb;ipdb.set_trace()
+        manifest_path = finders.find('manifest.json')
+        with open(manifest_path, 'r') as manifest:
+            self.assertTrue(json.load(manifest))

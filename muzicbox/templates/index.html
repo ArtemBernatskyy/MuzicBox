@@ -39,15 +39,15 @@
   <link rel="apple-touch-startup-image" href="{% static 'img/splash/launch-2048x2732.png' %}" media="(min-device-width: 1024px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)">
   <!-- end splash screens for PWA -->
   <title>MuzicBox</title>
-    <script>
-        if (!window.hasOwnProperty('opts')) {
-            window.opts = {};
-        }
-        window.opts.is_authenticated = {{ request.user.is_authenticated|yesno:'true,false' }};
-        if (window.opts.is_authenticated) {
-          window.opts.user_container = JSON.parse('{{  request.user.profile.user_container | safe }}');
-        }
-    </script>
+  <script>
+      if (!window.hasOwnProperty('opts')) {
+          window.opts = {};
+      }
+      window.opts.is_authenticated = {{ request.user.is_authenticated|yesno:'true,false' }};
+      if (window.opts.is_authenticated) {
+        window.opts.user_container = JSON.parse('{{  request.user.profile.user_container | safe }}');
+      }
+  </script>
 </head>
 
 <body>

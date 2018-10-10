@@ -3,7 +3,7 @@
 <html lang="en" prefix="og: http://ogp.me/ns#">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
   <meta name="description" content="Best ever muzic storage website">
   <meta name="author" content="Artem B.">
   <meta name="theme-color" content="#ffffff">
@@ -51,17 +51,17 @@
 </head>
 
 <body>
-<noscript>
-  <h1 style="z-index: 99999;position: fixed;color: black;">Hey, it seems that you've disabled javascript, plz enable it )</h1>
-</noscript>
-{% include 'includes/loader.html' %}
+  <noscript>
+    <h1 style="z-index: 99999;position: fixed;color: black;">Hey, it seems that you've disabled javascript, plz enable it )</h1>
+  </noscript>
+  {% include 'includes/loader.html' %}
 
-<div id="root">
-</div>
+  <div id="root">
+  </div>
 
-<link href="{% static 'plugins/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
-<script src="{% static 'build/js/main.js' %}"></script>
-<link href="{% static 'build/css/main.css' %}" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Monoton%7CRoboto:300,400,500,700&amp;subset=cyrillic" rel="stylesheet">
+  <link href="{% static 'plugins/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+  <script src="{% static 'build/js/main.js' %}"></script>
+  <link href="{% static 'build/css/main.css' %}" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Monoton%7CRoboto:300,400,500,700&amp;subset=cyrillic" rel="stylesheet">
 </body>
 </html>

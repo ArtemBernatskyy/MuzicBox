@@ -6,7 +6,7 @@ class SongApi {
     } else {
       fetch_url = "/api/v0/audio/";
     }
-    return fetch(fetch_url, { credentials: "same-origin" })
+    return fetch(fetch_url, { cache: "no-cache", credentials: "same-origin" })
       .then(response => response.json())
       .catch(error => {
         throw error;
@@ -14,7 +14,7 @@ class SongApi {
   }
 
   static getTags() {
-    return fetch("/api/v0/tags/", { credentials: "same-origin" })
+    return fetch("/api/v0/tags/", { cache: "no-cache", credentials: "same-origin" })
       .then(response => response.json())
       .catch(error => {
         throw error;
@@ -35,7 +35,7 @@ class SongApi {
     if (filter_tag_value_object) {
       fetch_url += `&tag=${filter_tag_value_object.slug}`;
     }
-    return fetch(fetch_url, { credentials: "same-origin" })
+    return fetch(fetch_url, { cache: "no-cache", credentials: "same-origin" })
       .then(response => response.json())
       .catch(error => {
         throw error;
@@ -44,6 +44,7 @@ class SongApi {
 
   static getSongLyrics(song_id) {
     return fetch(`/api/v0/audio/${song_id}/lyrics/`, {
+      cache: "no-cache",
       credentials: "same-origin",
     })
       .then(response => response.json())

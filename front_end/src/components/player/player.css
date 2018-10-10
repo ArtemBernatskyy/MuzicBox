@@ -163,6 +163,11 @@
   cursor: pointer;
 }
 
+.playback-bar__progress-time:nth-child(1) {
+  /* hiding cursor for current time on the left */
+  cursor: default;
+}
+
 .progress-bar {
   cursor: pointer;
   height: 12px;

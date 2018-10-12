@@ -1,7 +1,7 @@
 import * as types from "actions/action_types";
 import initialState from "./initial_state";
 
-export function setPlaylistReducer(state = initialState.playlist, action) {
+export const playlist = (state = initialState.playlist, action) => {
   switch (action.type) {
     case types.SET_PLAYLIST:
       return action.payload;
@@ -11,54 +11,54 @@ export function setPlaylistReducer(state = initialState.playlist, action) {
     default:
       return state;
   }
-}
+};
 
-export function setSearchSongValueReducer(state = initialState.search_song_value, action) {
+export const search_song_value = (state = initialState.search_song_value, action) => {
   switch (action.type) {
     case types.SET_SEARCH_SONG_VALUE:
       return action.payload;
     default:
       return state;
   }
-}
+};
 
-export function setFilterTagValueReducer(state = initialState.filter_tag_value, action) {
+export const filter_tag_value = (state = initialState.filter_tag_value, action) => {
   switch (action.type) {
     case types.SET_FILTER_TAG_VALUE:
       return action.payload;
     default:
       return state;
   }
-}
+};
 
-export function setAutorSearchValueReducer(state = initialState.is_author_search, action) {
+export const is_author_search = (state = initialState.is_author_search, action) => {
   switch (action.type) {
     case types.IS_AUTHOR_SEARCH:
       return action.payload;
     default:
       return state;
   }
-}
+};
 
-export function setOrderingTypeReducer(state = initialState.ordering_type, action) {
+export const ordering_type = (state = initialState.ordering_type, action) => {
   switch (action.type) {
     case types.SET_ORDER_TYPE:
       return action.payload;
     default:
       return state;
   }
-}
+};
 
-export function setSearchSongLoadingReducer(state = initialState.is_search_song_loading, action) {
+export const is_search_song_loading = (state = initialState.is_search_song_loading, action) => {
   switch (action.type) {
     case types.TOGGLE_SEARCH_SONG_LOADING:
       return action.payload;
     default:
       return state;
   }
-}
+};
 
-export function playNextListReducer(state = initialState.play_next_list, action) {
+export const play_next_list = (state = initialState.play_next_list, action) => {
   switch (action.type) {
     case types.TOGGLE_PLAYNEXT_ITEM: {
       let new_play_next = [...action.old_play_next];
@@ -75,13 +75,13 @@ export function playNextListReducer(state = initialState.play_next_list, action)
     default:
       return state;
   }
-}
+};
 
-export function scrollToSongReducer(state = initialState.scroll_to_song, action) {
+export const scroll_to_song = (state = initialState.scroll_to_song, action) => {
   switch (action.type) {
     case types.SCROLL_TO_SONG:
       return action.payload;
     default:
       return state;
   }
-}
+};

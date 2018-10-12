@@ -104,4 +104,4 @@ workflows:
             - test
           filters:
             branches:
-              only: master
+              only: redux_persist

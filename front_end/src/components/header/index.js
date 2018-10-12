@@ -29,6 +29,10 @@ class Header extends Component {
     return `/api/v0/accounts/logout/?next_page=${next_page}`;
   }
 
+  handleLogout() {
+    localStorage.clear();
+  }
+
   render() {
     let sidebarClass = cx({
       sidebar__icon: true,
@@ -54,7 +58,7 @@ class Header extends Component {
           <div styleName="auth">
             <div styleName="auth__links-container">
               {window.opts.is_authenticated ? (
-                <a href={this.handleLogoutUrl()}>
+                <a onClick={this.handleLogout.bind(this)} href={this.handleLogoutUrl()}>
                   <span>Logout</span>
                 </a>
               ) : (

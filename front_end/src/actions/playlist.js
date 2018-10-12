@@ -2,62 +2,46 @@ import SongApi from "api/song_api";
 import * as types from "./action_types";
 import { setSongs } from "./song";
 
-export const setPlaylist = songs => {
-  return {
-    type: types.SET_PLAYLIST,
-    payload: songs,
-  };
-};
+export const setPlaylist = songs => ({
+  type: types.SET_PLAYLIST,
+  payload: songs,
+});
 
-export const setSearchSongValue = value => {
-  return {
-    type: types.SET_SEARCH_SONG_VALUE,
-    payload: value,
-  };
-};
+export const setSearchSongValue = value => ({
+  type: types.SET_SEARCH_SONG_VALUE,
+  payload: value,
+});
 
-export const setSearchSongLoading = bool => {
-  return {
-    type: types.TOGGLE_SEARCH_SONG_LOADING,
-    payload: bool,
-  };
-};
+export const setSearchSongLoading = bool => ({
+  type: types.TOGGLE_SEARCH_SONG_LOADING,
+  payload: bool,
+});
 
-export const setAuthorSearchValue = bool => {
-  return {
-    type: types.IS_AUTHOR_SEARCH,
-    payload: bool,
-  };
-};
+export const setAuthorSearchValue = bool => ({
+  type: types.IS_AUTHOR_SEARCH,
+  payload: bool,
+});
 
-export const setFilterTagValue = value => {
-  return {
-    type: types.SET_FILTER_TAG_VALUE,
-    payload: value,
-  };
-};
+export const setFilterTagValue = value => ({
+  type: types.SET_FILTER_TAG_VALUE,
+  payload: value,
+});
 
-export const setOrderingType = value => {
-  return {
-    type: types.SET_ORDER_TYPE,
-    payload: value,
-  };
-};
+export const setOrderingType = value => ({
+  type: types.SET_ORDER_TYPE,
+  payload: value,
+});
 
-export const scrollToSong = song_id => {
-  return {
-    type: types.SCROLL_TO_SONG,
-    payload: song_id,
-  };
-};
+export const scrollToSong = song_id => ({
+  type: types.SCROLL_TO_SONG,
+  payload: song_id,
+});
 
-export const togglePlayNextItemAction = (song, old_play_next) => {
-  return {
-    type: types.TOGGLE_PLAYNEXT_ITEM,
-    song: song,
-    old_play_next: old_play_next,
-  };
-};
+export const togglePlayNextItemAction = (song, old_play_next) => ({
+  type: types.TOGGLE_PLAYNEXT_ITEM,
+  song: song,
+  old_play_next: old_play_next,
+});
 
 export function togglePlayNextItem(song) {
   return (dispatch, getState) => {
@@ -123,13 +107,11 @@ export function filterSongByTag(filter_tag_value_object) {
   };
 }
 
-export const mergePlaylist = (playlist_object, old_playlist_object) => {
-  return {
-    type: types.MERGE_PLAYLIST,
-    playlist_object: playlist_object,
-    old_playlist_object: old_playlist_object,
-  };
-};
+export const mergePlaylist = (playlist_object, old_playlist_object) => ({
+  type: types.MERGE_PLAYLIST,
+  playlist_object: playlist_object,
+  old_playlist_object: old_playlist_object,
+});
 
 export function mergeNextPlaylist(page_url) {
   return (dispatch, getState) => {

@@ -1,7 +1,7 @@
 import * as types from "actions/action_types";
 import initialState from "./initial_state";
 
-export function songReducer(state = initialState.songs, action) {
+export const songs = (state = initialState.songs, action) => {
   switch (action.type) {
     case types.SET_SONGS:
       return action.songs_object;
@@ -11,9 +11,9 @@ export function songReducer(state = initialState.songs, action) {
     default:
       return state;
   }
-}
+};
 
-export function activeSongReducer(state = initialState.song, action) {
+export const active_song = (state = initialState.active_song, action) => {
   switch (action.type) {
     case types.PLAY_NEXT:
       document.title = `${action.payload.artist.name} - ${action.payload.name}`;
@@ -21,13 +21,13 @@ export function activeSongReducer(state = initialState.song, action) {
     default:
       return state;
   }
-}
+};
 
-export function noSongsReducer(state = initialState.no_songs, action) {
+export const no_songs = (state = initialState.no_songs, action) => {
   switch (action.type) {
     case types.NO_SONGS:
       return action.payload;
     default:
       return state;
   }
-}
+};

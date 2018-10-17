@@ -53,11 +53,11 @@ export function togglePlayNextItem(song) {
 export function orderSongByValue(ordering_type) {
   return (dispatch, getState) => {
     const search_song_value = getState().search_song_value;
-    const filter_tag_value_object = getState().filter_tag_value;
+    const filterTagObject = getState().filter_tag_value;
     const is_author_search = getState().is_author_search;
     dispatch(setSearchSongLoading(true)); // setting search loading to ON
     dispatch(setOrderingType(ordering_type));
-    SongApi.fetchSongs(ordering_type, search_song_value, filter_tag_value_object, is_author_search)
+    SongApi.fetchSongs(ordering_type, search_song_value, filterTagObject, is_author_search)
       .then(songs => {
         dispatch(setSongs(songs));
       })
@@ -69,12 +69,12 @@ export function orderSongByValue(ordering_type) {
 
 export function searchSong(song, is_author_search) {
   return (dispatch, getState) => {
-    const filter_tag_value_object = getState().filter_tag_value;
+    const filterTagObject = getState().filter_tag_value;
     const ordering_type = getState().ordering_type;
     dispatch(setSearchSongLoading(true)); // setting search loading to ON
     dispatch(setSearchSongValue(song));
     dispatch(setAuthorSearchValue(is_author_search));
-    SongApi.fetchSongs(ordering_type, song, filter_tag_value_object, is_author_search)
+    SongApi.fetchSongs(ordering_type, song, filterTagObject, is_author_search)
       .then(songs => {
         dispatch(setSongs(songs));
       })
@@ -87,14 +87,14 @@ export function searchSong(song, is_author_search) {
   };
 }
 
-export function filterSongByTag(filter_tag_value_object) {
+export function filterSongByTag(filterTagObject) {
   return (dispatch, getState) => {
     const search_song_value = getState().search_song_value;
     const ordering_type = getState().ordering_type;
     const is_author_search = getState().is_author_search;
     dispatch(setSearchSongLoading(true)); // setting search loading to ON
-    dispatch(setFilterTagValue(filter_tag_value_object));
-    SongApi.fetchSongs(ordering_type, search_song_value, filter_tag_value_object, is_author_search)
+    dispatch(setFilterTagValue(filterTagObject));
+    SongApi.fetchSongs(ordering_type, search_song_value, filterTagObject, is_author_search)
       .then(songs => {
         dispatch(setSongs(songs));
       })

@@ -1,5 +1,7 @@
 import Raven from "raven-js";
 
+import { getParameterByName } from "utils/misc";
+
 const filterState = state => {
   return {
     songs: state.songs,
@@ -20,11 +22,30 @@ const filterState = state => {
 
 export const loadState = () => {
   try {
+    let state = {};
     const serializedState = localStorage.getItem("reduxState");
-    if (serializedState === null) {
-      return undefined;
+    if (serializedState !== null) {
+      state = JSON.parse(serializedState);
     }
-    return JSON.parse(serializedState);
+    const search = getParameterByName("search");
+    const isAuthorSearch = getParameterByName("author");
+    const tagSlug = getParameterByName("tag");
+    const ordering = getParameterByName("o");
+    // if we have url params then injecting them in state
+    if (search) {
+      state.search_song_value = search;
+    }
+    if (isAuthorSearch) {
+      state.is_author_search = isAuthorSearch;
+    }
+    if (tagSlug) {
+      // feels kind of hack but it's a middle of the night so ...
+      state.filter_tag_value = { name: tagSlug, slug: tagSlug };
+    }
+    if (ordering) {
+      state.ordering_type = ordering;
+    }
+    return state;
   } catch (err) {
     return undefined;
   }

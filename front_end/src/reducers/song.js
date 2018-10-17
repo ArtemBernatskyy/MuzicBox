@@ -1,5 +1,5 @@
 import * as types from "actions/action_types";
-import initialState from "./initial_state";
+import initialState from "constants/initial_state";
 
 export const songs = (state = initialState.songs, action) => {
   switch (action.type) {

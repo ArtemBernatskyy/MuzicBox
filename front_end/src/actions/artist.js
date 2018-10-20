@@ -1,13 +1,11 @@
 import ArtistApi from "api/artist_api";
 import * as types from "./action_types";
 
-export const mergeArtists = (artists_object, old_artists_object) => {
-  return {
-    type: types.MERGE_ARTISTS,
-    artists_object: artists_object,
-    old_artists_object: old_artists_object,
-  };
-};
+export const mergeArtists = (artists_object, old_artists_object) => ({
+  type: types.MERGE_ARTISTS,
+  artists_object: artists_object,
+  old_artists_object: old_artists_object,
+});
 
 export function mergeNextArtists(page_url) {
   return (dispatch, getState) => {
@@ -22,26 +20,20 @@ export function mergeNextArtists(page_url) {
   };
 }
 
-export const setArtists = artists_object => {
-  return {
-    type: types.SET_ARTISTS,
-    artists_object: artists_object,
-  };
-};
+export const setArtists = artists_object => ({
+  type: types.SET_ARTISTS,
+  artists_object: artists_object,
+});
 
-export const setSearchArtistValue = value => {
-  return {
-    type: types.SET_SEARCH_ARTIST_VALUE,
-    payload: value,
-  };
-};
+export const setSearchArtistValue = value => ({
+  type: types.SET_SEARCH_ARTIST_VALUE,
+  payload: value,
+});
 
-export const setSearchArtistLoading = bool => {
-  return {
-    type: types.TOGGLE_SEARCH_ARTIST_LOADING,
-    payload: bool,
-  };
-};
+export const setSearchArtistLoading = bool => ({
+  type: types.TOGGLE_SEARCH_ARTIST_LOADING,
+  payload: bool,
+});
 
 export function searchArtists(artist) {
   return dispatch => {

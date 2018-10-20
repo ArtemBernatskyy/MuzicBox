@@ -110,7 +110,7 @@ class App extends Component {
             </button>
           </div>
 
-          <Player autoplay={false} />
+          <Player />
         </div>
       </BrowserRouter>
     );

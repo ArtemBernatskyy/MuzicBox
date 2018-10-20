@@ -1,19 +1,25 @@
 import * as types from "./action_types";
 import { loadSongDetailsSuccess } from "./song";
 
-export const emitIsPlaying = bool => {
-  return {
-    type: types.SET_IS_PLAYING,
-    payload: bool,
-  };
-};
+export const emitIsPlaying = bool => ({
+  type: types.SET_IS_PLAYING,
+  payload: bool,
+});
 
-export const emitIsLoading = bool => {
-  return {
-    type: types.SET_IS_LOADING,
-    payload: bool,
-  };
-};
+export const emitIsLoading = bool => ({
+  type: types.SET_IS_LOADING,
+  payload: bool,
+});
+
+export const toggleRepeat = bool => ({
+  type: types.TOGGLE_REPEAT,
+  payload: bool,
+});
+
+export const setProgress = unitInterval => ({
+  type: types.SET_PROGRESS,
+  payload: unitInterval,
+});
 
 export function setIsPlaying(is_playing) {
   return (dispatch, getState) => {

@@ -9,6 +9,11 @@ class AuthPage extends Component {
     this.state = {};
   }
 
+  handleLogin() {
+    this.sooqadsds();
+    localStorage.clear();
+  }
+
   render() {
     return (
       <div className="app__container">
@@ -16,7 +21,12 @@ class AuthPage extends Component {
           <div styleName="loginbox__inner">
             <h1>MUZICBOX</h1>
             <div styleName="login__inner__buttons">
-              <a href="/oauth/login/facebook/" className="btn btn--success" styleName="facebook__button">
+              <a
+                onClick={this.handleLogin.bind(this)}
+                href="/oauth/login/facebook/"
+                className="btn btn--success"
+                styleName="facebook__button"
+              >
                 LOG IN WITH FACEBOOK
               </a>
               <button disabled className="btn" styleName="twitter__button">

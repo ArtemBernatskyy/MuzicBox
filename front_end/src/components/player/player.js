@@ -17,15 +17,10 @@ class Player extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      progress: 0, // progress of the playback
       volume: 1,
       in_set_progress_mode: false,
       in_set_volume_mode: false,
-      play: this.props.autoplay || false,
-      repeat: false,
       is_muted: false,
-      current_time: 0,
-      total_time: 0,
       is_remaining_time: false,
       is_touch: false,
     };
@@ -40,6 +35,9 @@ class Player extends Component {
   }
 
   componentDidMount() {
+    if (this.props.active_song.id !== "" && this._player.readyState == 0) {
+      this._player.load(); // this is a case when we are loading song from localStorage
+    }
     // capturing mouse up everywhere and stopping setting song progress
     document.addEventListener("mouseup", e => this.stopSetProgress(e, true));
     document.addEventListener("mouseup", e => this.stopSetVolume(e, true));
@@ -92,10 +90,6 @@ class Player extends Component {
   }
 
   onCanPlay() {
-    this.setState({
-      total_time: this.props.active_song.length,
-      current_time: this._player.currentTime,
-    });
     this.props.emitIsLoading(false);
     if (this.props.is_playing) {
       // this fires when we set progress or load song
@@ -125,7 +119,7 @@ class Player extends Component {
         this.props.mergeNextPlaylist(this.props.playlist.next);
       }
     }
-    let next_playlist_id = !force && this.state.repeat ? current : current < total - 1 ? current + 1 : 0;
+    let next_playlist_id = !force && this.props.is_repeat ? current : current < total - 1 ? current + 1 : 0;
     // when we have only 1 song in playlist we'll pause and not use loader
     if (total === 1) {
       this.props.setIsPlaying(false);
@@ -148,7 +142,7 @@ class Player extends Component {
 
     if (this.props.no_songs) {
       // passing because of no songs
-    } else if (!force && this.state.repeat) {
+    } else if (!force && this.props.is_repeat) {
       this.handleRepeat();
     } else if (this.props.play_next_list.length > 0) {
       // checking if play_next_list isn't empty and picking up songs from it
@@ -202,10 +196,7 @@ class Player extends Component {
 
   songEnded() {
     this._player.pause();
-    this.setState({
-      progress: 0,
-      current_time: 0,
-    });
+    this.props.setProgress(0);
   }
 
   togglePlay() {
@@ -217,7 +208,7 @@ class Player extends Component {
   onPause() {
     // used when Safari uses pause from touchbar
     // here we need to ignore onEnded callback and props is_loading
-    if (this.state.progress < 1 && !this.props.is_loading) {
+    if (this.props.progress < 1 && !this.props.is_loading) {
       this.props.setIsPlaying(false);
     }
   }
@@ -225,6 +216,10 @@ class Player extends Component {
   onPlay() {
     // used when Safari uses play from touchbar
     this.props.setIsPlaying(true);
+  }
+
+  onLoadedData() {
+    this._player.currentTime = this._player.duration * this.props.progress; // setting progress from localStorage
   }
 
   toggleMute() {
@@ -236,10 +231,7 @@ class Player extends Component {
 
   listenProgress() {
     if (!this.props.is_loading) {
-      this.setState({
-        progress: this._player.currentTime / this._player.duration,
-        current_time: this._player.currentTime,
-      });
+      this.props.setProgress(this._player.currentTime / this._player.duration);
     }
   }
 
@@ -271,9 +263,7 @@ class Player extends Component {
         progress = 0; // preventing from progress being negative because it will incorrectly display on FE
       }
       this._player.currentTime = this._player.duration * progress;
-      this.setState({
-        progress: progress,
-      });
+      this.props.setProgress(progress);
       this.is_progress_mouse = true;
     }
   }
@@ -354,7 +344,7 @@ class Player extends Component {
   };
 
   repeat() {
-    this.setState({ repeat: !this.state.repeat });
+    this.props.toggleRepeat(!this.props.is_repeat);
   }
 
   toggleRemainingTime() {
@@ -362,6 +352,7 @@ class Player extends Component {
   }
 
   render() {
+    let songDuration = this._player ? this._player.duration : 0;
     let playerClsName = cx({
       fa: true,
       "fa-play-circle-o": !this.props.is_playing && !this.props.is_loading,
@@ -374,7 +365,7 @@ class Player extends Component {
     });
     let repeatClass = cx({
       "control-button": true,
-      active: this.state.repeat,
+      active: this.props.is_repeat,
     });
     let volumeClass = cx({
       fa: true,
@@ -382,9 +373,9 @@ class Player extends Component {
       "fa-volume-off": this.state.is_muted,
     });
     let progressBarSliderLeft = "0px"; // this is done to allow better user experience
-    if (this.state.progress >= 0 && this.state.progress < 0.1 && this.state.is_touch) {
+    if (this.props.progress >= 0 && this.props.progress < 0.1 && this.state.is_touch) {
       progressBarSliderLeft = "6px"; // we are allowing slider to be slightly to the right (only touch devices)
-    } else if (this.state.progress >= 0.978 && this.state.is_touch) {
+    } else if (this.props.progress >= 0.978 && this.state.is_touch) {
       progressBarSliderLeft = "-2px"; // or to the left to allow user to better drag slider (only touch devices)
     }
     return (
@@ -470,7 +461,7 @@ class Player extends Component {
               </div>
 
               <div styleName="playback-bar">
-                <div styleName="playback-bar__progress-time">{formatTime(this.state.current_time)}</div>
+                <div styleName="playback-bar__progress-time">{formatTime(this.props.progress * songDuration)}</div>
                 <div
                   ref={ref => (this._progress_bar = ref)}
                   onTouchStart={e => this.startSetProgress(e, this.state.is_touch)}
@@ -486,21 +477,21 @@ class Player extends Component {
                     <div
                       styleName="progress-bar__fg"
                       style={{
-                        width: `${roundUp(this.state.progress * 100, 100)}%`,
+                        width: `${roundUp(this.props.progress * 100, 100)}%`,
                       }}
                     />
                     <div
                       styleName="middle-align progress-bar__slider"
                       style={{
-                        left: `calc(${progressBarSliderLeft} + ${roundUp(this.state.progress * 100, 100)}%)`,
+                        left: `calc(${progressBarSliderLeft} + ${roundUp(this.props.progress * 100, 100)}%)`,
                       }}
                     />
                   </div>
                 </div>
                 <div styleName="playback-bar__progress-time" onClick={this.toggleRemainingTime.bind(this)}>
                   {!this.state.is_remaining_time
-                    ? formatTime(this.state.total_time)
-                    : `- ${formatTime(this.state.total_time - this.state.current_time)}`}
+                    ? formatTime(this.props.active_song.length)
+                    : `- ${formatTime(this.props.active_song.length - this.props.progress * songDuration)}`}
                 </div>
               </div>
             </div>
@@ -513,7 +504,8 @@ class Player extends Component {
             onTimeUpdate={this.listenProgress.bind(this)}
             onPause={this.onPause.bind(this)}
             onPlay={this.onPlay.bind(this)}
-            autoPlay={this.state.play}
+            onLoadedData={this.onLoadedData.bind(this)}
+            autoPlay={false}
             preload="none"
           >
             <source src={this.props.active_song.audio_file} type="audio/mp3" />

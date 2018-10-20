@@ -21,20 +21,23 @@ class SongApi {
       });
   }
 
-  static fetchSongs(o_type, search_song_value, filter_tag_value_object, author) {
-    let fetch_url = "/api/v0/audio/?";
+  static fetchSongs(o_type, searchSongValue, filterObject, author) {
+    let fetch_url = "";
     if (o_type) {
-      fetch_url += `&o=${o_type}`;
+      fetch_url += `o=${o_type}&`;
     }
-    if (search_song_value) {
-      fetch_url += `&search=${search_song_value}`;
+    if (searchSongValue) {
+      fetch_url += `search=${searchSongValue}&`;
     }
     if (author) {
-      fetch_url += `&author=true`;
+      fetch_url += `author=true&`;
     }
-    if (filter_tag_value_object) {
-      fetch_url += `&tag=${filter_tag_value_object.slug}`;
+    if (filterObject && filterObject.slug) {
+      fetch_url += `tag=${filterObject.slug}&`;
     }
+    // keep url in sync to allow loading state from Url
+    history.pushState(null, "", `?${fetch_url}`);
+    fetch_url = "/api/v0/audio/?" + fetch_url;
     return fetch(fetch_url, { cache: "no-cache", credentials: "same-origin" })
       .then(response => response.json())
       .catch(error => {

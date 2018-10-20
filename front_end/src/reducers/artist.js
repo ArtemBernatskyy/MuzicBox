@@ -1,7 +1,7 @@
 import * as types from "actions/action_types";
-import initialState from "./initial_state";
+import initialState from "constants/initial_state";
 
-export function artistReducer(state = initialState.artists, action) {
+export const artists = (state = initialState.artists, action) => {
   switch (action.type) {
     case types.SET_ARTISTS:
       return action.artists_object;
@@ -11,22 +11,22 @@ export function artistReducer(state = initialState.artists, action) {
     default:
       return state;
   }
-}
+};
 
-export function setSearchArtistValueReducer(state = initialState.search_artist_value, action) {
+export const search_artist_value = (state = initialState.search_artist_value, action) => {
   switch (action.type) {
     case types.SET_SEARCH_ARTIST_VALUE:
       return action.payload;
     default:
       return state;
   }
-}
+};
 
-export function setSearchArtistLoadingReducer(state = initialState.is_search_artist_loading, action) {
+export const is_search_artist_loading = (state = initialState.is_search_artist_loading, action) => {
   switch (action.type) {
     case types.TOGGLE_SEARCH_ARTIST_LOADING:
       return action.payload;
     default:
       return state;
   }
-}
+};

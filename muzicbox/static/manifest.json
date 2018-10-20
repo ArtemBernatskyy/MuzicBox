@@ -1,7 +1,7 @@
 {
  "name": "MuzicBox",
  "short_name": "MuzicBox",
- "start_url": "/",
+ "start_url": "/?pwa=true&",
  "display": "standalone",
  "background_color": "#000000",
  "description": "Best ever muzic storage website",

@@ -10,6 +10,8 @@ import {
   orderSongByValue,
   scrollToSong,
   emitIsLoading,
+  toggleRepeat,
+  setProgress,
 } from "actions";
 import Player from "./player";
 
@@ -23,6 +25,8 @@ function mapStateToProps(state) {
     play_next_list: state.play_next_list,
     ordering_type: state.ordering_type,
     is_loading: state.is_loading,
+    is_repeat: state.is_repeat,
+    progress: state.progress,
   };
 }
 
@@ -37,6 +41,8 @@ function matchDispatchToProps(dispatch) {
       orderSongByValue,
       scrollToSong,
       emitIsLoading,
+      toggleRepeat,
+      setProgress,
     },
     dispatch
   );

@@ -104,8 +104,7 @@ class Song extends Component {
   playClass() {
     if (this.props.song.id === this.props.active_song.id && this.props.is_loading) {
       return "fa fa-circle-o-notch fa-spin playlist__song__overlay playlist__song__overlay--loading";
-    }
-    else if (this.props.song.id === this.props.active_song.id && this.props.is_playing) {
+    } else if (this.props.song.id === this.props.active_song.id && this.props.is_playing) {
       return "fa fa-pause-circle playlist__song__overlay";
     } else {
       return "fa fa-play-circle playlist__song__overlay";
@@ -182,7 +181,8 @@ class Song extends Component {
           <div className="playlist__right">
             <div className="playlist__right__kbs">
               <span title="Song bitrate" className="playlist__right__kbs--span">
-                {roundDown(this.props.song.bitrate / 1000)}/kbps
+                {roundDown(this.props.song.bitrate / 1000)}
+                /kbps
               </span>
             </div>
 
@@ -379,7 +379,8 @@ class Playlist extends Component {
         <div className="m-3vh" styleName="playlist">
           {this.props.no_songs ? (
             <h3 className="default-center">
-              You&#39;ve got no songs yet, &nbsp;<Link className="default-link" to="/upload/">
+              You&#39;ve got no songs yet, &nbsp;
+              <Link className="default-link" to="/upload/">
                 upload some
               </Link>
             </h3>

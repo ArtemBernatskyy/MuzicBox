@@ -1,21 +1,24 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import CSSModules from "react-css-modules";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import CSSModules from 'react-css-modules';
 
-import styles from "./404.css";
+import styles from './404.css';
 
 const NotFound = () => (
   <div styleName="error-page">
     <div>
       <p styleName="code">
-        4<span>0</span>
+        4
+        <span>0</span>
         <span>4</span>
       </p>
       <span styleName="code">
-        G<span>0</span>
+        G
+        <span>0</span>
       </span>
       <Link to="/" styleName="error">
-        B<span>A</span>
+        B
+        <span>A</span>
         <span>C</span>
         <span>K</span>
       </Link>

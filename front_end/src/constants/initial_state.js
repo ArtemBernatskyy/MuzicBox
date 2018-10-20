@@ -41,7 +41,7 @@ export default {
   isPlaying: false,
   isLoading: false,
   is_repeat: false,
-  is_menu_open: false,
+  isMenuOpen: false,
   isAuthorSearch: false,
   is_search_song_loading: false,
   is_search_artist_loading: false,

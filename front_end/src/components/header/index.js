@@ -36,12 +36,12 @@ class Header extends Component {
   render() {
     let sidebarClass = cx({
       sidebar__icon: true,
-      open: this.props.is_menu_open,
+      open: this.props.isMenuOpen,
     });
     return (
       <div styleName="header">
         <div styleName="header__wrapper">
-          <div onClick={this.props.toggleMenu.bind(this, !this.props.is_menu_open)} styleName="sidebar">
+          <div onClick={this.props.toggleMenu.bind(this, !this.props.isMenuOpen)} styleName="sidebar">
             <div styleName={sidebarClass}>
               <span styleName="icon-bar" />
               <span styleName="icon-bar" />
@@ -84,7 +84,7 @@ class Header extends Component {
 
 function mapStateToProps(state) {
   return {
-    is_menu_open: state.is_menu_open,
+    isMenuOpen: state.isMenuOpen,
   };
 }
 

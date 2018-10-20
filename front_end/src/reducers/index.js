@@ -11,7 +11,7 @@ import {
   is_search_song_loading,
   scroll_to_song,
 } from "./playlist";
-import { is_menu_open } from "./menu";
+import { isMenuOpen } from "./menu";
 import { artists, search_artist_value, is_search_artist_loading } from "./artist";
 
 const rootReducer = combineReducers({
@@ -28,7 +28,7 @@ const rootReducer = combineReducers({
   isPlaying,
   isLoading,
   is_repeat,
-  is_menu_open,
+  isMenuOpen,
   isAuthorSearch,
   is_search_song_loading,
   is_search_artist_loading,

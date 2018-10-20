@@ -9,9 +9,9 @@
   border-top: 4px solid #2c494a;
 }
 
-.artist__background:before {
+.artist__background::before {
   background-image: url(/static/img/artist_background.png);
-  content: "";
+  content: '';
   background-position: top;
   position: absolute;
   top: 0;
@@ -23,7 +23,7 @@
 .artist__info {
   height: inherit;
   padding: 30px;
-  padding-bottom: 0px;
+  padding-bottom: 0;
   padding-left: 19px;
   position: relative;
   display: flex;
@@ -51,14 +51,17 @@
   .artist__background {
     height: 150px;
   }
+
   .artist__info {
     padding: 4px;
-    padding-left: 0px;
+    padding-left: 0;
   }
+
   .artist__description {
     align-self: center;
     justify-content: center;
   }
+
   .artist__description h2 {
     font-size: 21px;
     margin-top: inherit;

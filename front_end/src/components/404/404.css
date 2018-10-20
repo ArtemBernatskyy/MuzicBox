@@ -1,6 +1,12 @@
 .error {
-  text-shadow: 0 0 80px #ffffff, 0 0 30px #949494, 0 0 6px #ababab;
+  text-shadow: 0 0 80px #fff, 0 0 30px #949494, 0 0 6px #ababab;
   color: rgb(255, 255, 255) !important;
+}
+
+.error-page span,
+.error-page p,
+.error-page a {
+  font-family: 'Monoton', cursive;
 }
 
 .code span:nth-of-type(1) {
@@ -16,10 +22,4 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.error-page span,
-.error-page p,
-.error-page a {
-  font-family: "Monoton", cursive;
 }

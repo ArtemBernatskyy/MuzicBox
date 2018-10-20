@@ -18,7 +18,7 @@ class Menu extends Component {
     let appLeftClass = cx({
       "scrollbar-custom": true,
       app__left: true,
-      "app__left--open": this.props.is_menu_open,
+      "app__left--open": this.props.isMenuOpen,
     });
     return (
       <Hammer
@@ -158,7 +158,7 @@ class Menu extends Component {
 
 function mapStateToProps(state) {
   return {
-    is_menu_open: state.is_menu_open,
+    isMenuOpen: state.isMenuOpen,
   };
 }
 

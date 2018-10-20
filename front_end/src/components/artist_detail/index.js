@@ -15,7 +15,7 @@ class ArtistsDetail extends Component {
       top_color: "#2c2c2c",
       playcount: 0,
       name: "",
-      is_loading: true,
+      isLoading: true,
       image: "/static/img/artist_default_small.png",
     };
   }
@@ -33,7 +33,7 @@ class ArtistsDetail extends Component {
           playcount: artist_object.playcount,
           name: artist_object.name,
           image: artist_object.image || this.state.image,
-          is_loading: false,
+          isLoading: false,
           background_color: artist_object.background_color || this.state.background_color,
           top_color: artist_object.top_background_color || this.state.top_color,
         });
@@ -68,7 +68,7 @@ class ArtistsDetail extends Component {
         />
         <div styleName="artist__info">
           <img
-            src={this.state.is_loading ? "/static/img/loader.gif" : this.state.image}
+            src={this.state.isLoading ? "/static/img/loader.gif" : this.state.image}
             styleName="artist__image"
             alt="artist's image"
           />

@@ -1,10 +1,10 @@
 import { handleErrors } from "utils/misc";
 
 class ArtistApi {
-  static getNextArtists(page_url) {
+  static getNextArtists(pageUrl) {
     let fetch_url;
-    if (page_url) {
-      fetch_url = page_url;
+    if (pageUrl) {
+      fetch_url = pageUrl;
     } else {
       fetch_url = "/api/v0/artists/";
     }

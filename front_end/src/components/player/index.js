@@ -18,13 +18,13 @@ import Player from "./player";
 function mapStateToProps(state) {
   return {
     active_song: state.active_song,
-    is_playing: state.is_playing,
+    isPlaying: state.isPlaying,
     playlist: state.playlist,
     songs: state.songs,
     no_songs: state.no_songs,
     play_next_list: state.play_next_list,
-    ordering_type: state.ordering_type,
-    is_loading: state.is_loading,
+    orderingType: state.orderingType,
+    isLoading: state.isLoading,
     is_repeat: state.is_repeat,
     progress: state.progress,
   };

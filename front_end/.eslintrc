@@ -1,25 +1,35 @@
 {
-  "extends": [ "eslint:recommended", "plugin:react/recommended" ],
+  // "extends": ["airbnb"],
+  // "extends": ["airbnb", "prettier", "prettier/react"],
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "env": {
     "node": true,
-    "browser": true,
+    "browser": true
   },
   "globals": {
-    "DocumentTouch": true,
+    "DocumentTouch": true
   },
   "parserOptions": {
-      "ecmaVersion": 6,
-      "ecmaFeatures": {
-          "jsx": true,
-          "spread": true,
-          "experimentalObjectRestSpread": true
-      },
-      "sourceType": "module"
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "jsx": true,
+      "spread": true,
+      "experimentalObjectRestSpread": true
+    },
+    "sourceType": "module"
   },
   "parser": "babel-eslint",
-  "plugins": [ "react" ],
+  "plugins": ["react"],
   "rules": {
     "react/prop-types": 0,
     "max-len": ["error", { "code": 120, "ignoreComments": true }],
+    "no-shadow": "off"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": ["src"]
+      }
+    }
   }
 }

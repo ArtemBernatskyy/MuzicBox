@@ -4,10 +4,10 @@ import initialState from "constants/initial_state";
 export const songs = (state = initialState.songs, action) => {
   switch (action.type) {
     case types.SET_SONGS:
-      return action.songs_object;
+      return action.songObjects;
     case types.MERGE_SONGS:
-      action.songs_object.results = action.old_songs_object.results.concat(action.songs_object.results);
-      return action.songs_object;
+      action.songObjects.results = action.oldSongObjects.results.concat(action.songObjects.results);
+      return action.songObjects;
     default:
       return state;
   }

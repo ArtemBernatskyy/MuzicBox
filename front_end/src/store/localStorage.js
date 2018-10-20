@@ -7,14 +7,14 @@ const filterState = state => {
     songs: state.songs,
     playlist: state.playlist,
     play_next_list: state.play_next_list,
-    search_song_value: state.search_song_value,
+    searchSongValue: state.searchSongValue,
     search_artist_value: state.search_artist_value,
     artists: state.artists,
     no_songs: state.no_songs,
-    filter_tag_value: state.filter_tag_value,
-    ordering_type: state.ordering_type,
+    filterTagValue: state.filterTagValue,
+    orderingType: state.orderingType,
     active_song: state.active_song,
-    is_author_search: state.is_author_search,
+    isAuthorSearch: state.isAuthorSearch,
     is_repeat: state.is_repeat,
     progress: state.progress,
   };
@@ -33,17 +33,17 @@ export const loadState = () => {
     const ordering = getParameterByName("o");
     // if we have url params then injecting them in state
     if (search) {
-      state.search_song_value = search;
+      state.searchSongValue = search;
     }
     if (isAuthorSearch) {
-      state.is_author_search = isAuthorSearch;
+      state.isAuthorSearch = isAuthorSearch;
     }
     if (tagSlug) {
       // feels kind of hack but it's a middle of the night so ...
-      state.filter_tag_value = { name: tagSlug, slug: tagSlug };
+      state.filterTagValue = { name: tagSlug, slug: tagSlug };
     }
     if (ordering) {
-      state.ordering_type = ordering;
+      state.orderingType = ordering;
     }
     return state;
   } catch (err) {

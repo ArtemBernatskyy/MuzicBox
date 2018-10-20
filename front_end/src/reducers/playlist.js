@@ -6,14 +6,14 @@ export const playlist = (state = initialState.playlist, action) => {
     case types.SET_PLAYLIST:
       return action.payload;
     case types.MERGE_PLAYLIST:
-      action.playlist_object.results = action.old_playlist_object.results.concat(action.playlist_object.results);
-      return action.playlist_object;
+      action.playlistObject.results = action.oldPlaylistObject.results.concat(action.playlistObject.results);
+      return action.playlistObject;
     default:
       return state;
   }
 };
 
-export const search_song_value = (state = initialState.search_song_value, action) => {
+export const searchSongValue = (state = initialState.searchSongValue, action) => {
   switch (action.type) {
     case types.SET_SEARCH_SONG_VALUE:
       return action.payload;
@@ -22,7 +22,7 @@ export const search_song_value = (state = initialState.search_song_value, action
   }
 };
 
-export const filter_tag_value = (state = initialState.filter_tag_value, action) => {
+export const filterTagValue = (state = initialState.filterTagValue, action) => {
   switch (action.type) {
     case types.SET_FILTER_TAG_VALUE:
       return action.payload;
@@ -31,7 +31,7 @@ export const filter_tag_value = (state = initialState.filter_tag_value, action) 
   }
 };
 
-export const is_author_search = (state = initialState.is_author_search, action) => {
+export const isAuthorSearch = (state = initialState.isAuthorSearch, action) => {
   switch (action.type) {
     case types.IS_AUTHOR_SEARCH:
       return action.payload;
@@ -40,7 +40,7 @@ export const is_author_search = (state = initialState.is_author_search, action) 
   }
 };
 
-export const ordering_type = (state = initialState.ordering_type, action) => {
+export const orderingType = (state = initialState.orderingType, action) => {
   switch (action.type) {
     case types.SET_ORDER_TYPE:
       return action.payload;
@@ -61,7 +61,7 @@ export const is_search_song_loading = (state = initialState.is_search_song_loadi
 export const play_next_list = (state = initialState.play_next_list, action) => {
   switch (action.type) {
     case types.TOGGLE_PLAYNEXT_ITEM: {
-      let new_play_next = [...action.old_play_next];
+      let new_play_next = [...action.oldPlayNext];
       let song_in_playlist_id = new_play_next.findIndex(song => song.id == action.song.id);
       if (song_in_playlist_id !== -1) {
         // removing item if it present in play_next_list

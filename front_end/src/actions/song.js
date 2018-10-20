@@ -1,87 +1,159 @@
-import SongApi from "api/song_api";
-import * as types from "./action_types";
-import { setPlaylist } from "./playlist";
-import { playNext } from "./player";
-import { getParameterByName } from "utils/misc";
+import SongApi from 'api/song_api';
+import { getParameterByName } from 'utils/misc';
+import { playNext } from './player';
+import * as types from './action_types';
+import { setPlaylist } from './playlist';
 
 export const noSongs = bool => ({
   type: types.NO_SONGS,
   payload: bool,
 });
 
-export const loadSongDetailsSuccess = song => ({
-  type: types.PLAY_NEXT,
-  payload: song,
+export const setFilterTagValue = value => ({
+  type: types.SET_FILTER_TAG_VALUE,
+  payload: value,
 });
 
-export const setSongs = songs_object => ({
+export const setAuthorSearchValue = bool => ({
+  type: types.IS_AUTHOR_SEARCH,
+  payload: bool,
+});
+
+export const setSearchSongValue = value => ({
+  type: types.SET_SEARCH_SONG_VALUE,
+  payload: value,
+});
+
+export const setSearchSongLoading = bool => ({
+  type: types.TOGGLE_SEARCH_SONG_LOADING,
+  payload: bool,
+});
+
+export const setOrderingType = value => ({
+  type: types.SET_ORDER_TYPE,
+  payload: value,
+});
+
+export const setSongs = songObjects => ({
   type: types.SET_SONGS,
-  songs_object: songs_object,
+  songObjects,
 });
 
-export const mergeSongs = (songs_object, old_songs_object) => ({
+export const mergeSongs = (songObjects, oldSongObjects) => ({
   type: types.MERGE_SONGS,
-  songs_object: songs_object,
-  old_songs_object: old_songs_object,
+  songObjects,
+  oldSongObjects,
 });
 
 export function initialLoadSongs() {
   return (dispatch, getState) => {
-    const old_active_song = getState().active_song;
-    const search = getParameterByName("search");
-    const isAuthorSearch = getParameterByName("author");
-    const tagSlug = getParameterByName("tag");
-    const ordering = getParameterByName("o");
+    const oldActiveSong = getState().active_song;
+    const search = getParameterByName('search');
+    const isAuthorSearch = getParameterByName('author');
+    const tagSlug = getParameterByName('tag');
+    const ordering = getParameterByName('o');
     const hasUrlParams = search || isAuthorSearch || tagSlug || ordering;
-    // if we have old_active_song then it means that we have localStorage
-    const isLocalStorage = old_active_song ? old_active_song.id !== "" : false;
+    // if we have oldActiveSong then it means that we have localStorage
+    const isLocalStorage = oldActiveSong ? oldActiveSong.id !== '' : false;
 
     if (hasUrlParams) {
       // because we don't know name of tag then we will populate it with slug )
       SongApi.fetchSongs(ordering, search, { name: tagSlug, slug: tagSlug }, isAuthorSearch)
-        .then(songs_object => {
-          dispatch(setSongs(songs_object));
-          if (songs_object.results.length > 0) {
+        .then((songObjects) => {
+          dispatch(setSongs(songObjects));
+          if (songObjects.results.length > 0) {
             // checking if user has at least one song
-            dispatch(setPlaylist(songs_object)); // loading songs in to playlist
-            dispatch(playNext(songs_object.results[0])); // setting active first song during onLoad
+            dispatch(setPlaylist(songObjects)); // loading songs in to playlist
+            dispatch(playNext(songObjects.results[0])); // setting active first song during onLoad
           } else {
             dispatch(noSongs(true));
           }
         })
-        .catch(error => {
+        .catch((error) => {
           throw error;
         });
     } else if (!isLocalStorage) {
       SongApi.getNextSongs()
-        .then(songs_object => {
-          dispatch(setSongs(songs_object));
-          if (songs_object.results.length > 0) {
+        .then((songObjects) => {
+          dispatch(setSongs(songObjects));
+          if (songObjects.results.length > 0) {
             // checking if user has at least one song
-            dispatch(setPlaylist(songs_object)); // loading songs in to playlist
-            dispatch(playNext(songs_object.results[0])); // setting active first song during onLoad
+            dispatch(setPlaylist(songObjects)); // loading songs in to playlist
+            dispatch(playNext(songObjects.results[0])); // setting active first song during onLoad
           } else {
             dispatch(noSongs(true));
           }
         })
-        .catch(error => {
+        .catch((error) => {
           throw error;
         });
     } else {
-      dispatch(playNext(old_active_song)); // setting song from localStorage
+      dispatch(playNext(oldActiveSong)); // setting song from localStorage
     }
   };
 }
 
-export function mergeNextSongs(page_url) {
+export function mergeNextSongs(pageUrl) {
   return (dispatch, getState) => {
-    const old_songs_object = getState().songs;
-    SongApi.getNextSongs(page_url)
-      .then(songs_object => {
-        dispatch(mergeSongs(songs_object, old_songs_object));
+    const oldSongObjects = getState().songs;
+    SongApi.getNextSongs(pageUrl)
+      .then((songObjects) => {
+        dispatch(mergeSongs(songObjects, oldSongObjects));
       })
-      .catch(error => {
+      .catch((error) => {
         throw error;
+      });
+  };
+}
+
+export function orderSongByValue(orderingType) {
+  return (dispatch, getState) => {
+    const { searchSongValue, filterTagValue, isAuthorSearch } = getState();
+    dispatch(setSearchSongLoading(true)); // setting search loading to ON
+    dispatch(setOrderingType(orderingType));
+    SongApi.fetchSongs(orderingType, searchSongValue, filterTagValue, isAuthorSearch)
+      .then((songs) => {
+        dispatch(setSongs(songs));
+      })
+      .finally(() => {
+        dispatch(setSearchSongLoading(false)); // setting search loading to OFF
+      });
+  };
+}
+
+export function searchSong(song, isAuthorSearch) {
+  return (dispatch, getState) => {
+    const { filterTagValue, orderingType } = getState();
+    dispatch(setSearchSongLoading(true)); // setting search loading to ON
+    dispatch(setSearchSongValue(song));
+    dispatch(setAuthorSearchValue(isAuthorSearch));
+    SongApi.fetchSongs(orderingType, song, filterTagValue, isAuthorSearch)
+      .then((songs) => {
+        dispatch(setSongs(songs));
+      })
+      .catch((error) => {
+        throw error;
+      })
+      .finally(() => {
+        dispatch(setSearchSongLoading(false)); // setting search loading to OFF
+      });
+  };
+}
+
+export function filterSongByTag(filterTagValue) {
+  return (dispatch, getState) => {
+    const { searchSongValue, orderingType, isAuthorSearch } = getState();
+    dispatch(setSearchSongLoading(true)); // setting search loading to ON
+    dispatch(setFilterTagValue(filterTagValue));
+    SongApi.fetchSongs(orderingType, searchSongValue, filterTagValue, isAuthorSearch)
+      .then((songs) => {
+        dispatch(setSongs(songs));
+      })
+      .catch((error) => {
+        throw error;
+      })
+      .finally(() => {
+        dispatch(setSearchSongLoading(false)); // setting search loading to OFF
       });
   };
 }

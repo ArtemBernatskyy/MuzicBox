@@ -4,10 +4,10 @@ import initialState from "constants/initial_state";
 export const artists = (state = initialState.artists, action) => {
   switch (action.type) {
     case types.SET_ARTISTS:
-      return action.artists_object;
+      return action.artistsObject;
     case types.MERGE_ARTISTS:
-      action.artists_object.results = action.old_artists_object.results.concat(action.artists_object.results);
-      return action.artists_object;
+      action.artistsObject.results = action.oldArtistsObject.results.concat(action.artistsObject.results);
+      return action.artistsObject;
     default:
       return state;
   }

@@ -55,9 +55,9 @@ class Song extends Component {
       this.setState({
         is_lyrics_open: !this.state.is_lyrics_open,
       });
-      SongApi.getSongLyrics(this.props.song.id).then(song_object => {
+      SongApi.getSongLyrics(this.props.song.id).then(songObject => {
         this.setState({
-          lyrics: song_object.lyrics,
+          lyrics: songObject.lyrics,
         });
       });
     } else if (this.props.song.has_lyrics) {
@@ -75,8 +75,8 @@ class Song extends Component {
     if (this.props.song.id !== this.props.active_song.id) {
       this.props.playNext(this.props.song, true);
     } else {
-      // if song is active then toggle is_playing
-      this.props.setIsPlaying(!this.props.is_playing);
+      // if song is active then toggle isPlaying
+      this.props.setIsPlaying(!this.props.isPlaying);
     }
     // remove item from play_next_list if we clicked on it
     const song_in_playlist_id = this.props.play_next_list.findIndex(song => song.id == this.props.song.id);
@@ -102,9 +102,9 @@ class Song extends Component {
   }
 
   playClass() {
-    if (this.props.song.id === this.props.active_song.id && this.props.is_loading) {
+    if (this.props.song.id === this.props.active_song.id && this.props.isLoading) {
       return "fa fa-circle-o-notch fa-spin playlist__song__overlay playlist__song__overlay--loading";
-    } else if (this.props.song.id === this.props.active_song.id && this.props.is_playing) {
+    } else if (this.props.song.id === this.props.active_song.id && this.props.isPlaying) {
       return "fa fa-pause-circle playlist__song__overlay";
     } else {
       return "fa fa-play-circle playlist__song__overlay";
@@ -154,10 +154,10 @@ class Song extends Component {
               onClick={this.handleClickAuthor.bind(this, this.props.song.artist.name)}
               className="link-light a-underlined"
             >
-              {this.props.search_song_value ? (
+              {this.props.searchSongValue ? (
                 <Highlighter
                   highlightClassName="marked"
-                  searchWords={this.props.search_song_value.split(/[, ]+/)}
+                  searchWords={this.props.searchSongValue.split(/[, ]+/)}
                   textToHighlight={this.props.song.artist.name}
                 />
               ) : (
@@ -166,10 +166,10 @@ class Song extends Component {
             </span>
             <span className="playlist__separator">•</span>
             <span onClick={this.handleClickName.bind(this)} className={songNameCls}>
-              {this.props.search_song_value ? (
+              {this.props.searchSongValue ? (
                 <Highlighter
                   highlightClassName="marked"
-                  searchWords={this.props.search_song_value.split(/[, ]+/)}
+                  searchWords={this.props.searchSongValue.split(/[, ]+/)}
                   textToHighlight={this.props.song.name}
                 />
               ) : (
@@ -227,7 +227,7 @@ class Playlist extends Component {
   }
 
   componentDidMount() {
-    this.search_input_ref.value = this.props.search_song_value;
+    this.search_input_ref.value = this.props.searchSongValue;
   }
 
   componentWillUnmount() {
@@ -254,7 +254,7 @@ class Playlist extends Component {
 
   getNextSongs() {
     let hasSongs = this.props.songs.next;
-    let searchHasResult = this.props.search_song_value && !this.props.songs.results.length;
+    let searchHasResult = this.props.searchSongValue && !this.props.songs.results.length;
     if (hasSongs && !searchHasResult && !this.props.is_search_song_loading) {
       this.props.mergeNextSongs(this.props.songs.next);
     }
@@ -286,9 +286,9 @@ class Playlist extends Component {
   }
 
   activeTagClass(tag, initial = null) {
-    if (this.props.filter_tag_value && tag && this.props.filter_tag_value.slug === tag.slug) {
+    if (this.props.filterTagValue && tag && this.props.filterTagValue.slug === tag.slug) {
       return "playlist__controls__options__item playlist__controls__options__item--active";
-    } else if (!this.props.filter_tag_value && initial) {
+    } else if (!this.props.filterTagValue && initial) {
       return "playlist__controls__options__item playlist__controls__options__item--active";
     } else {
       return "playlist__controls__options__item";
@@ -296,7 +296,7 @@ class Playlist extends Component {
   }
 
   activeOrderingClass(o_type) {
-    if (this.props.ordering_type === o_type) {
+    if (this.props.orderingType === o_type) {
       return "playlist__controls__options__item playlist__controls__options__item--active";
     } else {
       return "playlist__controls__options__item";
@@ -325,14 +325,14 @@ class Playlist extends Component {
               spellCheck="false"
               styleName="playlist__controls__search__input"
               placeholder="Search for artists, bands, tracks"
-              autoFocus={this.props.search_song_value}
+              autoFocus={this.props.searchSongValue}
               type="search"
             />
           </div>
 
           <div styleName="playlist__controls__right">
             <button onClick={this.toggleFilter.bind(this)} className="content--truncate" styleName={filterButtonCls}>
-              {this.props.filter_tag_value ? this.props.filter_tag_value.name : "All music genres"}
+              {this.props.filterTagValue ? this.props.filterTagValue.name : "All music genres"}
             </button>
             <div className={filterDivCls} styleName="playlist__controls__options">
               <div styleName="playlist__controls__options__headline">Ordering:</div>
@@ -394,10 +394,10 @@ class Playlist extends Component {
                     songs={this.props.songs}
                     scroll_to_song={this.props.scroll_to_song}
                     play_next_list={this.props.play_next_list}
-                    is_playing={this.props.is_playing}
-                    is_loading={this.props.is_loading}
+                    isPlaying={this.props.isPlaying}
+                    isLoading={this.props.isLoading}
                     active_song={this.props.active_song}
-                    search_song_value={this.props.search_song_value}
+                    searchSongValue={this.props.searchSongValue}
                     setLocalSearch={this.setLocalSearch.bind(this)}
                     playNext={this.props.playNext.bind(this)}
                     searchSong={this.props.searchSong.bind(this)}
@@ -410,10 +410,10 @@ class Playlist extends Component {
               : null}
             {this.props.songs.next || this.props.is_search_song_loading ? <BottomLoader /> : null}
             <Waypoint bottomOffset={"-200px"} onEnter={this.getNextSongs.bind(this)} />
-            {this.props.search_song_value && !this.props.songs.results.length && !this.props.is_search_song_loading ? (
+            {this.props.searchSongValue && !this.props.songs.results.length && !this.props.is_search_song_loading ? (
               <p className="search-error-text">
-                The search for <strong>{this.props.search_song_value}</strong> returned no matches in{" "}
-                <strong>{this.props.filter_tag_value ? this.props.filter_tag_value.name : "your audios"}</strong>
+                The search for <strong>{this.props.searchSongValue}</strong> returned no matches in{" "}
+                <strong>{this.props.filterTagValue ? this.props.filterTagValue.name : "your audios"}</strong>
               </p>
             ) : null}
           </ul>
@@ -427,12 +427,12 @@ function mapStateToProps(state) {
   return {
     songs: state.songs,
     active_song: state.active_song,
-    is_playing: state.is_playing,
-    is_loading: state.is_loading,
-    search_song_value: state.search_song_value,
-    filter_tag_value: state.filter_tag_value,
+    isPlaying: state.isPlaying,
+    isLoading: state.isLoading,
+    searchSongValue: state.searchSongValue,
+    filterTagValue: state.filterTagValue,
     no_songs: state.no_songs,
-    ordering_type: state.ordering_type,
+    orderingType: state.orderingType,
     play_next_list: state.play_next_list,
     is_search_song_loading: state.is_search_song_loading,
     scroll_to_song: state.scroll_to_song,

@@ -1,7 +1,7 @@
 import * as types from "actions/action_types";
 import initialState from "constants/initial_state";
 
-export const is_playing = (state = initialState.is_playing, action) => {
+export const isPlaying = (state = initialState.isPlaying, action) => {
   switch (action.type) {
     case types.SET_IS_PLAYING:
       return action.payload;
@@ -10,7 +10,7 @@ export const is_playing = (state = initialState.is_playing, action) => {
   }
 };
 
-export const is_loading = (state = initialState.is_loading, action) => {
+export const isLoading = (state = initialState.isLoading, action) => {
   switch (action.type) {
     case types.SET_IS_LOADING:
       return action.payload;

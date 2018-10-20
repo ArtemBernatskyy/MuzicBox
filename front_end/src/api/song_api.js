@@ -1,8 +1,8 @@
 class SongApi {
-  static getNextSongs(page_url) {
+  static getNextSongs(pageUrl) {
     let fetch_url;
-    if (page_url) {
-      fetch_url = page_url;
+    if (pageUrl) {
+      fetch_url = pageUrl;
     } else {
       fetch_url = "/api/v0/audio/";
     }
@@ -45,8 +45,8 @@ class SongApi {
       });
   }
 
-  static getSongLyrics(song_id) {
-    return fetch(`/api/v0/audio/${song_id}/lyrics/`, {
+  static getSongLyrics(songId) {
+    return fetch(`/api/v0/audio/${songId}/lyrics/`, {
       cache: "no-cache",
       credentials: "same-origin",
     })

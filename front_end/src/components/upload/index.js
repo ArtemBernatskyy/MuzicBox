@@ -74,13 +74,13 @@ class Upload extends Component {
           this.props.noSongs(false);
           this.props.initialLoadSongs();
         }
-        if (!this.props.search_song_value) {
-          if (this.props.filter_tag_value && data.body.tags.includes(this.props.filter_tag_value.id)) {
+        if (!this.props.searchSongValue) {
+          if (this.props.filterTagValue && data.body.tags.includes(this.props.filterTagValue.id)) {
             // checking if we uploaded song matches to filtered tag
             let new_songs_object = { ...this.props.songs };
             new_songs_object.results.unshift(data.body);
             this.props.setSongs(new_songs_object);
-          } else if (!this.props.filter_tag_value) {
+          } else if (!this.props.filterTagValue) {
             let new_songs_object = { ...this.props.songs };
             new_songs_object.results.unshift(data.body);
             this.props.setSongs(new_songs_object);
@@ -181,8 +181,8 @@ class Upload extends Component {
 function mapStateToProps(state) {
   return {
     songs: state.songs,
-    filter_tag_value: state.filter_tag_value,
-    search_song_value: state.search_song_value,
+    filterTagValue: state.filterTagValue,
+    searchSongValue: state.searchSongValue,
     no_songs: state.no_songs,
   };
 }

@@ -1,57 +1,57 @@
 class SongApi {
   static getNextSongs(pageUrl) {
-    let fetch_url;
+    let fetchUrl;
     if (pageUrl) {
-      fetch_url = pageUrl;
+      fetchUrl = pageUrl;
     } else {
-      fetch_url = "/api/v0/audio/";
+      fetchUrl = '/api/v0/audio/';
     }
-    return fetch(fetch_url, { cache: "no-cache", credentials: "same-origin" })
+    return fetch(fetchUrl, { cache: 'no-cache', credentials: 'same-origin' })
       .then(response => response.json())
-      .catch(error => {
+      .catch((error) => {
         throw error;
       });
   }
 
   static getTags() {
-    return fetch("/api/v0/tags/", { cache: "no-cache", credentials: "same-origin" })
+    return fetch('/api/v0/tags/', { cache: 'no-cache', credentials: 'same-origin' })
       .then(response => response.json())
-      .catch(error => {
+      .catch((error) => {
         throw error;
       });
   }
 
-  static fetchSongs(o_type, searchSongValue, filterObject, author) {
-    let fetch_url = "";
-    if (o_type) {
-      fetch_url += `o=${o_type}&`;
+  static fetchSongs(oType, searchSongValue, filterObject, author) {
+    let fetchUrl = '';
+    if (oType) {
+      fetchUrl += `o=${oType}&`;
     }
     if (searchSongValue) {
-      fetch_url += `search=${searchSongValue}&`;
+      fetchUrl += `search=${searchSongValue}&`;
     }
     if (author) {
-      fetch_url += `author=true&`;
+      fetchUrl += 'author=true&';
     }
     if (filterObject && filterObject.slug) {
-      fetch_url += `tag=${filterObject.slug}&`;
+      fetchUrl += `tag=${filterObject.slug}&`;
     }
     // keep url in sync to allow loading state from Url
-    history.pushState(null, "", `?${fetch_url}`);
-    fetch_url = "/api/v0/audio/?" + fetch_url;
-    return fetch(fetch_url, { cache: "no-cache", credentials: "same-origin" })
+    window.history.pushState(null, '', `?${fetchUrl}`);
+    fetchUrl = `/api/v0/audio/?${fetchUrl}`;
+    return fetch(fetchUrl, { cache: 'no-cache', credentials: 'same-origin' })
       .then(response => response.json())
-      .catch(error => {
+      .catch((error) => {
         throw error;
       });
   }
 
   static getSongLyrics(songId) {
     return fetch(`/api/v0/audio/${songId}/lyrics/`, {
-      cache: "no-cache",
-      credentials: "same-origin",
+      cache: 'no-cache',
+      credentials: 'same-origin',
     })
       .then(response => response.json())
-      .catch(error => {
+      .catch((error) => {
         throw error;
       });
   }

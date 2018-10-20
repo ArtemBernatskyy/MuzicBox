@@ -295,8 +295,8 @@ class Playlist extends Component {
     }
   }
 
-  activeOrderingClass(o_type) {
-    if (this.props.orderingType === o_type) {
+  activeOrderingClass(oType) {
+    if (this.props.orderingType === oType) {
       return "playlist__controls__options__item playlist__controls__options__item--active";
     } else {
       return "playlist__controls__options__item";

@@ -22,12 +22,12 @@ class ArtistsDetail extends Component {
 
   loadArtistInfo(nextProps = null) {
     // get slug from url
-    let artist_slug = this.props.match.params.slug;
+    let artistSlug = this.props.match.params.slug;
     if (nextProps) {
-      artist_slug = nextProps.match.params.slug;
+      artistSlug = nextProps.match.params.slug;
     }
     // get artist info
-    ArtistApi.getArtist(artist_slug)
+    ArtistApi.getArtist(artistSlug)
       .then(artist_object => {
         this.setState({
           playcount: artist_object.playcount,

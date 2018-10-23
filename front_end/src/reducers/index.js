@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { songs, active_song, noSongs } from "./song";
+import { songs, activeSong, noSongs } from "./song";
 import { isPlaying, isLoading, is_repeat, progress } from "./player";
 import {
   playlist,
@@ -24,7 +24,7 @@ const rootReducer = combineReducers({
   searchArtistValue,
   searchSongValue,
   playlist,
-  active_song,
+  activeSong,
   isPlaying,
   isLoading,
   is_repeat,

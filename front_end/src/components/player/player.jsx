@@ -1,17 +1,19 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import Raven from "raven-js";
-import classNames from "classnames";
-import { Link } from "react-router-dom";
-import NotificationSystem from "react-notification-system";
-import CSSModules from "react-css-modules";
+import Raven from 'raven-js';
+import PropTypes from 'prop-types';
+import classNames from 'classnames';
+import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
+import CSSModules from 'react-css-modules';
+import NotificationSystem from 'react-notification-system';
 
-import * as ordering_types from "constants/ordering_types";
-import { roundUp, formatTime, offsetLeft, isTouchDevice } from "utils/misc";
+import * as orderingTypes from 'constants/ordering_types';
+import {
+  roundUp, formatTime, offsetLeft, isTouchDevice,
+} from 'utils/misc';
 
-import styles from "./player.css";
+import styles from './player.css';
 
-let cx = classNames.bind(styles);
+const cx = classNames.bind(styles);
 
 class Player extends Component {
   constructor(props) {
@@ -22,42 +24,37 @@ class Player extends Component {
       in_set_volume_mode: false,
       is_muted: false,
       is_remaining_time: false,
-      is_touch: false,
+      is_touch: isTouchDevice(),
     };
-    this._notificationSystem = null;
+    this.notificationSystem = null;
     this.is_progress_mouse = false;
   }
 
-  UNSAFE_componentWillMount() {
-    this.setState({
-      is_touch: isTouchDevice(),
-    });
-  }
-
   componentDidMount() {
-    if (this.props.active_song.id !== "" && this._player.readyState == 0) {
-      this._player.load(); // this is a case when we are loading song from localStorage
+    const { activeSong } = this.props;
+    if (activeSong.id !== '' && this.player.readyState === 0) {
+      this.player.load(); // this is a case when we are loading song from localStorage
     }
     // capturing mouse up everywhere and stopping setting song progress
-    document.addEventListener("mouseup", e => this.stopSetProgress(e, true));
-    document.addEventListener("mouseup", e => this.stopSetVolume(e, true));
+    document.addEventListener('mouseup', e => this.stopSetProgress(e, true));
+    document.addEventListener('mouseup', e => this.stopSetVolume(e, true));
     // capturing touchend, touchcancel everywhere and stopping setting song progress
-    document.addEventListener("touchend", e => this.stopSetProgress(e, true));
-    document.addEventListener("touchcancel", e => this.stopSetProgress(e, true));
+    document.addEventListener('touchend', e => this.stopSetProgress(e, true));
+    document.addEventListener('touchcancel', e => this.stopSetProgress(e, true));
   }
 
   componentWillUnmount() {
-    document.removeEventListener("mouseup", e => this.stopSetProgress(e, true));
-    document.removeEventListener("mouseup", e => this.stopSetVolume(e, true));
-    document.removeEventListener("touchend", e => this.stopSetProgress(e, true));
-    document.removeEventListener("touchcancel", e => this.stopSetProgress(e, true));
+    document.removeEventListener('mouseup', e => this.stopSetProgress(e, true));
+    document.removeEventListener('mouseup', e => this.stopSetVolume(e, true));
+    document.removeEventListener('touchend', e => this.stopSetProgress(e, true));
+    document.removeEventListener('touchcancel', e => this.stopSetProgress(e, true));
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     // checking for first load and loading first song
-    if (this.props.active_song.id !== nextProps.active_song.id) {
+    if (this.props.activeSong.id !== nextProps.activeSong.id) {
       this.songEnded();
-      this._player.load();
+      this.player.load();
     }
 
     // toggling play/pause based on props.isPlaying
@@ -67,7 +64,7 @@ class Player extends Component {
         if (nextProps.isPlaying) {
           this.safePlay();
         } else {
-          this._player.pause();
+          this.player.pause();
         }
       }
     }
@@ -75,12 +72,12 @@ class Player extends Component {
 
   safePlay() {
     // method for handling Safari 11 blocking with message
-    let play_promise = this._player.play();
+    let play_promise = this.player.play();
     // In browsers that don’t yet support this functionality,
     // play_promise won’t be defined.
     if (play_promise !== undefined) {
       play_promise.catch(error => {
-        if (error.name == "NotAllowedError") {
+        if (error.name == 'NotAllowedError') {
           // Automatic playback failed.
           this.props.setIsPlaying(false);
         }
@@ -104,13 +101,13 @@ class Player extends Component {
   }
 
   handleRepeat() {
-    this._player.currentTime = 0;
-    this._player.play();
+    this.player.currentTime = 0;
+    this.player.play();
   }
 
   handlePreloadPlaylist(force) {
     let total = this.props.playlist.results.length;
-    let current = this.props.playlist.results.findIndex(song => song.id === this.props.active_song.id);
+    let current = this.props.playlist.results.findIndex(song => song.id === this.props.activeSong.id);
     // checking if playlist is at nearly end
     // because we'll load pagination and use it for next life cycle
     if (current + 2 === total) {
@@ -156,7 +153,7 @@ class Player extends Component {
   prev() {
     if (!this.props.noSongs) {
       let total = this.props.playlist.results.length;
-      let current = this.props.playlist.results.findIndex(song => song.id === this.props.active_song.id);
+      let current = this.props.playlist.results.findIndex(song => song.id === this.props.activeSong.id);
       let prev_id = current > 0 ? current - 1 : total - 1;
       let previous = this.props.playlist.results[prev_id];
       // checking if song is single in playlist and ignoring action
@@ -171,31 +168,31 @@ class Player extends Component {
 
   handleScrollIntoView() {
     const currentUrl = this.props.history.location.pathname;
-    const song_in_playlist_id = this.props.songs["results"].findIndex(song => song.id == this.props.active_song.id);
-    if (song_in_playlist_id !== -1 && currentUrl === "/") {
+    const song_in_playlist_id = this.props.songs['results'].findIndex(song => song.id == this.props.activeSong.id);
+    if (song_in_playlist_id !== -1 && currentUrl === '/') {
       // it means that active song is in current playlist and we are on playlist page so we can scrollIntoView
-      this.props.scrollToSong(this.props.active_song.id);
+      this.props.scrollToSong(this.props.activeSong.id);
     } else {
       // showing warning instead
-      if (this._notificationSystem) {
-        this._notificationSystem.addNotification({
+      if (this.notificationSystem) {
+        this.notificationSystem.addNotification({
           message: "This song isn't visible or you aren't on playlist page",
-          level: "warning",
+          level: 'warning',
           autoDismiss: 4,
-          dismissible: "none",
+          dismissible: 'none',
         });
       }
     }
   }
 
   randomize() {
-    this.props.orderingType == ordering_types.RANDOM
-      ? this.props.orderSongByValue(ordering_types.UPLOADED_DATE)
-      : this.props.orderSongByValue(ordering_types.RANDOM);
+    this.props.orderingType == orderingTypes.RANDOM
+      ? this.props.orderSongByValue(orderingTypes.UPLOADED_DATE)
+      : this.props.orderSongByValue(orderingTypes.RANDOM);
   }
 
   songEnded() {
-    this._player.pause();
+    this.player.pause();
     this.props.setProgress(0);
   }
 
@@ -219,19 +216,19 @@ class Player extends Component {
   }
 
   onLoadedData() {
-    this._player.currentTime = this._player.duration * this.props.progress; // setting progress from localStorage
+    this.player.currentTime = this.player.duration * this.props.progress; // setting progress from localStorage
   }
 
   toggleMute() {
     let is_muted = this.state.is_muted;
     let new_volume = is_muted ? this.state.volume : 0;
-    this._player.volume = new_volume;
+    this.player.volume = new_volume;
     this.setState({ is_muted: !this.state.is_muted });
   }
 
   listenProgress() {
     if (!this.props.isLoading) {
-      this.props.setProgress(this._player.currentTime / this._player.duration);
+      this.props.setProgress(this.player.currentTime / this.player.duration);
     }
   }
 
@@ -262,7 +259,7 @@ class Player extends Component {
       } else if (progress <= 0) {
         progress = 0; // preventing from progress being negative because it will incorrectly display on FE
       }
-      this._player.currentTime = this._player.duration * progress;
+      this.player.currentTime = this.player.duration * progress;
       this.props.setProgress(progress);
       this.is_progress_mouse = true;
     }
@@ -297,7 +294,7 @@ class Player extends Component {
       } else {
         is_muted = false;
       }
-      this._player.volume = new_volume;
+      this.player.volume = new_volume;
       this.setState({
         volume: new_volume,
         is_muted: is_muted,
@@ -309,7 +306,7 @@ class Player extends Component {
     let new_volume = 0;
     let change_speed = 0.1;
     let is_muted = this.state.is_muted;
-    let old_volume = this._player.volume;
+    let old_volume = this.player.volume;
 
     if (evt.deltaY > 0) {
       new_volume = old_volume - change_speed;
@@ -320,13 +317,13 @@ class Player extends Component {
     if (new_volume > 1) {
       new_volume = 1;
     } else if (1 >= new_volume && new_volume >= 0.05) {
-      this._player.volume = new_volume;
+      this.player.volume = new_volume;
       is_muted = false;
     } else {
       new_volume = 0;
       is_muted = true;
     }
-    this._player.volume = new_volume;
+    this.player.volume = new_volume;
 
     this.setState({
       volume: new_volume,
@@ -352,35 +349,35 @@ class Player extends Component {
   }
 
   render() {
-    let songDuration = this._player ? this._player.duration : 0;
+    let songDuration = this.player ? this.player.duration : 0;
     let playerClsName = cx({
       fa: true,
-      "fa-play-circle-o": !this.props.isPlaying && !this.props.isLoading,
-      "fa-pause-circle-o": this.props.isPlaying && !this.props.isLoading,
-      "fa-circle-o-notch fa-spin": this.props.isLoading,
+      'fa-play-circle-o': !this.props.isPlaying && !this.props.isLoading,
+      'fa-pause-circle-o': this.props.isPlaying && !this.props.isLoading,
+      'fa-circle-o-notch fa-spin': this.props.isLoading,
     });
     let randomClass = cx({
-      "control-button": true,
-      active: this.props.orderingType == ordering_types.RANDOM,
+      'control-button': true,
+      active: this.props.orderingType == orderingTypes.RANDOM,
     });
     let repeatClass = cx({
-      "control-button": true,
+      'control-button': true,
       active: this.props.is_repeat,
     });
     let volumeClass = cx({
       fa: true,
-      "fa-volume-up": !this.state.is_muted,
-      "fa-volume-off": this.state.is_muted,
+      'fa-volume-up': !this.state.is_muted,
+      'fa-volume-off': this.state.is_muted,
     });
-    let progressBarSliderLeft = "0px"; // this is done to allow better user experience
+    let progressBarSliderLeft = '0px'; // this is done to allow better user experience
     if (this.props.progress >= 0 && this.props.progress < 0.1 && this.state.is_touch) {
-      progressBarSliderLeft = "6px"; // we are allowing slider to be slightly to the right (only touch devices)
+      progressBarSliderLeft = '6px'; // we are allowing slider to be slightly to the right (only touch devices)
     } else if (this.props.progress >= 0.978 && this.state.is_touch) {
-      progressBarSliderLeft = "-2px"; // or to the left to allow user to better drag slider (only touch devices)
+      progressBarSliderLeft = '-2px'; // or to the left to allow user to better drag slider (only touch devices)
     }
     return (
       <footer styleName="player">
-        <NotificationSystem ref={n => (this._notificationSystem = n)} />
+        <NotificationSystem ref={n => (this.notificationSystem = n)} />
         <div styleName="player__bar">
           <div styleName="player__bar__left">
             <div styleName="now-playing">
@@ -388,7 +385,7 @@ class Player extends Component {
                 <div onClick={this.handleScrollIntoView.bind(this)}>
                   <img
                     styleName="cover-art-image cover-art-image-loaded"
-                    src={this.props.active_song.small_image_thumbnail || "/static/img/song_default_small.png"}
+                    src={this.props.activeSong.small_image_thumbnail || '/static/img/song_default_small.png'}
                   />
                 </div>
               </div>
@@ -397,16 +394,16 @@ class Player extends Component {
                 <div styleName="track-info__name ellipsis-one-line">
                   <div styleName="track-info__name ellipsis-one-line">
                     <div styleName="react-contextmenu-wrapper">
-                      {this.props.active_song.album ? (
+                      {this.props.activeSong.album ? (
                         <Link
-                          to={`/artist/${this.props.active_song.artist.slug}/${this.props.active_song.album.slug}/`}
+                          to={`/artist/${this.props.activeSong.artist.slug}/${this.props.activeSong.album.slug}/`}
                           className="a-underlined"
                         >
-                          {this.props.active_song.name}
+                          {this.props.activeSong.name}
                         </Link>
                       ) : (
-                        <Link to={`/artist/${this.props.active_song.artist.slug}/`} className="a-underlined">
-                          {this.props.active_song.name}
+                        <Link to={`/artist/${this.props.activeSong.artist.slug}/`} className="a-underlined">
+                          {this.props.activeSong.name}
                         </Link>
                       )}
                     </div>
@@ -415,8 +412,8 @@ class Player extends Component {
                 <div className="link-subtle" styleName="track-info__artists ellipsis-one-line">
                   <span>
                     <span styleName="react-contextmenu-wrapper">
-                      <Link to={`/artist/${this.props.active_song.artist.slug}/`} className="a-underlined">
-                        {this.props.active_song.artist.name}
+                      <Link to={`/artist/${this.props.activeSong.artist.slug}/`} className="a-underlined">
+                        {this.props.activeSong.artist.name}
                       </Link>
                     </span>
                   </span>
@@ -490,15 +487,15 @@ class Player extends Component {
                 </div>
                 <div styleName="playback-bar__progress-time" onClick={this.toggleRemainingTime.bind(this)}>
                   {!this.state.is_remaining_time
-                    ? formatTime(this.props.active_song.length)
-                    : `- ${formatTime(this.props.active_song.length - this.props.progress * songDuration)}`}
+                    ? formatTime(this.props.activeSong.length)
+                    : `- ${formatTime(this.props.activeSong.length - this.props.progress * songDuration)}`}
                 </div>
               </div>
             </div>
           </div>
 
           <audio
-            ref={ref => (this._player = ref)}
+            ref={ref => (this.player = ref)}
             onEnded={() => this.next()}
             onCanPlayThrough={this.onCanPlay.bind(this)}
             onTimeUpdate={this.listenProgress.bind(this)}
@@ -508,13 +505,13 @@ class Player extends Component {
             autoPlay={false}
             preload="none"
           >
-            <source src={this.props.active_song.audio_file} type="audio/mp3" />
+            <source src={this.props.activeSong.audio_file} type="audio/mp3" />
           </audio>
 
           <div styleName="player__bar__right">
             <div styleName="now-playing-bar__right__inner">
               <div styleName="extra-controls">
-                <span styleName="connect-device-picker" style={{ display: "none" }}>
+                <span styleName="connect-device-picker" style={{ display: 'none' }}>
                   <button className="fa fa-heart" styleName="control-button" />
                 </span>
 

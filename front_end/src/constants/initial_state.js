@@ -23,7 +23,7 @@ export default {
   noSongs: false,
   filterTagValue: null,
   orderingType: null,
-  active_song: {
+  activeSong: {
     id: "",
     name: "",
     length: 0,

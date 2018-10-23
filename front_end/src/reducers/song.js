@@ -13,7 +13,7 @@ export const songs = (state = initialState.songs, action) => {
   }
 };
 
-export const active_song = (state = initialState.active_song, action) => {
+export const activeSong = (state = initialState.activeSong, action) => {
   switch (action.type) {
     case types.PLAY_NEXT:
       document.title = `${action.payload.artist.name} - ${action.payload.name}`;

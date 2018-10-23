@@ -11,7 +11,7 @@ import { formatTime, roundDown } from "utils/misc";
 import Highlighter from "utils/highlighter";
 import SongApi from "api/song_api";
 import { Loader, BottomLoader } from "components/common";
-import * as ordering_types from "constants/ordering_types";
+import * as orderingTypes from "constants/ordering_types";
 import {
   setIsPlaying,
   playNext,
@@ -72,7 +72,7 @@ class Song extends Component {
   handlePlay() {
     this.props.setPlaylist(this.props.songs); // setting new playlist to keep sync search with playlist
     // if clicked song isn't active then switch to next song
-    if (this.props.song.id !== this.props.active_song.id) {
+    if (this.props.song.id !== this.props.activeSong.id) {
       this.props.playNext(this.props.song, true);
     } else {
       // if song is active then toggle isPlaying
@@ -102,9 +102,9 @@ class Song extends Component {
   }
 
   playClass() {
-    if (this.props.song.id === this.props.active_song.id && this.props.isLoading) {
+    if (this.props.song.id === this.props.activeSong.id && this.props.isLoading) {
       return "fa fa-circle-o-notch fa-spin playlist__song__overlay playlist__song__overlay--loading";
-    } else if (this.props.song.id === this.props.active_song.id && this.props.isPlaying) {
+    } else if (this.props.song.id === this.props.activeSong.id && this.props.isPlaying) {
       return "fa fa-pause-circle playlist__song__overlay";
     } else {
       return "fa fa-play-circle playlist__song__overlay";
@@ -117,7 +117,7 @@ class Song extends Component {
       pointer: true,
       "playlist--border": true,
       "playlist--hover": true,
-      "playlist--active": this.props.song.id === this.props.active_song.id,
+      "playlist--active": this.props.song.id === this.props.activeSong.id,
     });
     let lyricsCls = cx({
       playlist__lyrics: true,
@@ -338,14 +338,14 @@ class Playlist extends Component {
               <div styleName="playlist__controls__options__headline">Ordering:</div>
               <div styleName="playlist__controls__options__inner first">
                 <div
-                  onClick={e => this.handleOrderingClick(e, ordering_types.POPULARITY)}
-                  styleName={this.activeOrderingClass(ordering_types.POPULARITY)}
+                  onClick={e => this.handleOrderingClick(e, orderingTypes.POPULARITY)}
+                  styleName={this.activeOrderingClass(orderingTypes.POPULARITY)}
                 >
                   Popularity
                 </div>
                 <div
-                  onClick={e => this.handleOrderingClick(e, ordering_types.RANDOM)}
-                  styleName={this.activeOrderingClass(ordering_types.RANDOM)}
+                  onClick={e => this.handleOrderingClick(e, orderingTypes.RANDOM)}
+                  styleName={this.activeOrderingClass(orderingTypes.RANDOM)}
                 >
                   Random
                 </div>
@@ -359,8 +359,8 @@ class Playlist extends Component {
                   <Loader />
                 ) : (
                   <div
-                    onClick={e => this.handleTagClick(e, ordering_types.UPLOADED_DATE)}
-                    styleName={this.activeTagClass(ordering_types.UPLOADED_DATE, true)}
+                    onClick={e => this.handleTagClick(e, orderingTypes.UPLOADED_DATE)}
+                    styleName={this.activeTagClass(orderingTypes.UPLOADED_DATE, true)}
                   >
                     All music genres
                   </div>
@@ -396,7 +396,7 @@ class Playlist extends Component {
                     play_next_list={this.props.play_next_list}
                     isPlaying={this.props.isPlaying}
                     isLoading={this.props.isLoading}
-                    active_song={this.props.active_song}
+                    activeSong={this.props.activeSong}
                     searchSongValue={this.props.searchSongValue}
                     setLocalSearch={this.setLocalSearch.bind(this)}
                     playNext={this.props.playNext.bind(this)}
@@ -426,7 +426,7 @@ class Playlist extends Component {
 function mapStateToProps(state) {
   return {
     songs: state.songs,
-    active_song: state.active_song,
+    activeSong: state.activeSong,
     isPlaying: state.isPlaying,
     isLoading: state.isLoading,
     searchSongValue: state.searchSongValue,

@@ -158,7 +158,6 @@
   font-size: 11px;
   min-width: 40px;
   text-align: center;
-  cursor: default;
   user-select: none;
   cursor: pointer;
 }
@@ -177,8 +176,31 @@
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+.progress-bar__fg {
+  pointer-events: none;
+  background-color: #a0a0a0;
+  border-radius: 2px;
+  height: 4px;
+  width: 0;
+  transition: background-color 0.1s cubic-bezier(0.3, 0, 0.7, 1);
+}
+
 .progress-bar:hover .progress-bar__fg {
   background-color: #1db954;
+}
+
+.progress-bar__slider {
+  pointer-events: none;
+  background-color: #fff;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: -6px;
+  z-index: 100;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+  transform: scale(0);
+  transition: transform 0.1s cubic-bezier(0.3, 0, 0.7, 1);
 }
 
 .progress-bar:hover .progress-bar__slider {
@@ -197,30 +219,6 @@
 .middle-align {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-}
-
-.progress-bar__fg {
-  pointer-events: none;
-  background-color: #a0a0a0;
-  border-radius: 2px;
-  height: 4px;
-  width: 0;
-  transition: background-color 0.1s cubic-bezier(0.3, 0, 0.7, 1);
-}
-
-.progress-bar__slider {
-  pointer-events: none;
-  background-color: #fff;
-  border-radius: 50%;
-  width: 12px;
-  height: 12px;
-  margin-left: -6px;
-  margin-top: -6px;
-  z-index: 100;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
-  transform: scale(0);
-  transition: transform 0.1s cubic-bezier(0.3, 0, 0.7, 1);
 }
 
 /* -------------------------------------------------- right panel */
@@ -312,6 +310,7 @@
   .control-button.control-button--circled:hover {
     transform: none;
   }
+
   .progress-bar:hover .progress-bar__slider {
     transform: none;
   }

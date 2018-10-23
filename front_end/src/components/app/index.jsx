@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 import CSSModules from 'react-css-modules';
 import { bindActionCreators } from 'redux';
+import { DIRECTION_LEFT, DIRECTION_RIGHT } from 'hammerjs';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 
 import Menu from 'components/menu';
@@ -69,7 +70,7 @@ class App extends Component {
             <Hammer
               options={{
                 recognizers: {
-                  swipe: { direction: window.Hammer.DIRECTION_LEFT },
+                  swipe: { direction: DIRECTION_LEFT },
                 },
               }}
               onTap={() => toggleMenu(false)}
@@ -82,7 +83,7 @@ class App extends Component {
             <Hammer
               options={{
                 recognizers: {
-                  swipe: { direction: window.Hammer.DIRECTION_RIGHT },
+                  swipe: { direction: DIRECTION_RIGHT },
                 },
               }}
               onSwipe={() => toggleMenu(true)}

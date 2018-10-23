@@ -13,7 +13,7 @@ const filterState = state => {
     noSongs: state.noSongs,
     filterTagValue: state.filterTagValue,
     orderingType: state.orderingType,
-    active_song: state.active_song,
+    activeSong: state.activeSong,
     isAuthorSearch: state.isAuthorSearch,
     is_repeat: state.is_repeat,
     progress: state.progress,

@@ -24,14 +24,14 @@ class Upload extends Component {
       rejected: [],
       percentage: 0,
     };
-    this._notificationSystem = null;
+    this.notificationSystem = null;
     this.files_sent = 0;
     this.counter = 0;
   }
 
   _addNotification(message, level) {
-    if (this._notificationSystem) {
-      this._notificationSystem.addNotification({
+    if (this.notificationSystem) {
+      this.notificationSystem.addNotification({
         message: message,
         level: level,
       });
@@ -132,7 +132,7 @@ class Upload extends Component {
     });
     return (
       <div className="app__container">
-        <NotificationSystem ref={n => (this._notificationSystem = n)} />
+        <NotificationSystem ref={n => (this.notificationSystem = n)} />
 
         <div styleName={dropZoneCls}>
           <Dropzone

@@ -20,4 +20,4 @@ export const IS_AUTHOR_SEARCH = 'IS_AUTHOR_SEARCH'; // defines whether we search
 export const SCROLL_TO_SONG = 'SCROLL_TO_SONG'; // scrolling in to view provided song if it is in current playlist
 export const SET_IS_LOADING = 'SET_IS_LOADING'; // toggles true/false, controls if is loading or not
 export const TOGGLE_REPEAT = 'TOGGLE_REPEAT'; // toggles true/false, controls if is repeat or not
-export const SET_PROGRESS = 'SET_PROGRESS'; // sets progress of active_song
+export const SET_PROGRESS = 'SET_PROGRESS'; // sets progress of activeSong

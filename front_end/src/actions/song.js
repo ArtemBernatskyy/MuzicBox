@@ -47,7 +47,7 @@ export const mergeSongs = (songObjects, oldSongObjects) => ({
 
 export function initialLoadSongs() {
   return (dispatch, getState) => {
-    const oldActiveSong = getState().active_song;
+    const oldActiveSong = getState().activeSong;
     const search = getParameterByName('search');
     const isAuthorSearch = getParameterByName('author');
     const tagSlug = getParameterByName('tag');

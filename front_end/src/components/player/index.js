@@ -1,6 +1,6 @@
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { withRouter } from "react-router-dom";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { withRouter } from 'react-router-dom';
 import {
   playNext,
   setIsPlaying,
@@ -12,12 +12,12 @@ import {
   emitIsLoading,
   toggleRepeat,
   setProgress,
-} from "actions";
-import Player from "./player";
+} from 'actions';
+import Player from './player';
 
 function mapStateToProps(state) {
   return {
-    active_song: state.active_song,
+    activeSong: state.activeSong,
     isPlaying: state.isPlaying,
     playlist: state.playlist,
     songs: state.songs,
@@ -44,13 +44,13 @@ function matchDispatchToProps(dispatch) {
       toggleRepeat,
       setProgress,
     },
-    dispatch
+    dispatch,
   );
 }
 
 export default withRouter(
   connect(
     mapStateToProps,
-    matchDispatchToProps
-  )(Player)
+    matchDispatchToProps,
+  )(Player),
 );

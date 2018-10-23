@@ -4,7 +4,7 @@ import { playNext } from './player';
 import * as types from './action_types';
 import { setPlaylist } from './playlist';
 
-export const noSongs = bool => ({
+export const setNoSongs = bool => ({
   type: types.NO_SONGS,
   payload: bool,
 });
@@ -66,7 +66,7 @@ export function initialLoadSongs() {
             dispatch(setPlaylist(songObjects)); // loading songs in to playlist
             dispatch(playNext(songObjects.results[0])); // setting active first song during onLoad
           } else {
-            dispatch(noSongs(true));
+            dispatch(setNoSongs(true));
           }
         })
         .catch((error) => {
@@ -81,7 +81,7 @@ export function initialLoadSongs() {
             dispatch(setPlaylist(songObjects)); // loading songs in to playlist
             dispatch(playNext(songObjects.results[0])); // setting active first song during onLoad
           } else {
-            dispatch(noSongs(true));
+            dispatch(setNoSongs(true));
           }
         })
         .catch((error) => {

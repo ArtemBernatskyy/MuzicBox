@@ -355,7 +355,7 @@ class Playlist extends Component {
               </div>
               <div styleName="playlist__controls__options__headline">Genres:</div>
               <div styleName="playlist__controls__options__inner">
-                {this.state.tags.length === 0 && !this.props.no_songs ? (
+                {this.state.tags.length === 0 && !this.props.noSongs ? (
                   <Loader />
                 ) : (
                   <div
@@ -377,7 +377,7 @@ class Playlist extends Component {
         </div>
 
         <div className="m-3vh" styleName="playlist">
-          {this.props.no_songs ? (
+          {this.props.noSongs ? (
             <h3 className="default-center">
               You&#39;ve got no songs yet, &nbsp;
               <Link className="default-link" to="/upload/">
@@ -431,7 +431,7 @@ function mapStateToProps(state) {
     isLoading: state.isLoading,
     searchSongValue: state.searchSongValue,
     filterTagValue: state.filterTagValue,
-    no_songs: state.no_songs,
+    noSongs: state.noSongs,
     orderingType: state.orderingType,
     play_next_list: state.play_next_list,
     is_search_song_loading: state.is_search_song_loading,

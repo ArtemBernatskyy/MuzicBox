@@ -8,7 +8,7 @@ import NotificationSystem from "react-notification-system";
 import CSSModules from "react-css-modules";
 
 import { roundUp } from "utils/misc";
-import { setSongs, noSongs, initialLoadSongs, mergeNextArtists, setArtists } from "actions";
+import { setSongs, setNoSongs, initialLoadSongs, mergeNextArtists, setArtists } from "actions";
 
 import styles from "./upload.css";
 
@@ -70,8 +70,8 @@ class Upload extends Component {
     req.end((err, data) => {
       this.files_sent += 1;
       if (!err) {
-        if (this.props.no_songs) {
-          this.props.noSongs(false);
+        if (this.props.noSongs) {
+          this.props.setNoSongs(false);
           this.props.initialLoadSongs();
         }
         if (!this.props.searchSongValue) {
@@ -183,7 +183,7 @@ function mapStateToProps(state) {
     songs: state.songs,
     filterTagValue: state.filterTagValue,
     searchSongValue: state.searchSongValue,
-    no_songs: state.no_songs,
+    noSongs: state.noSongs,
   };
 }
 
@@ -191,7 +191,7 @@ function matchDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       setSongs,
-      noSongs,
+      setNoSongs,
       initialLoadSongs,
       mergeNextArtists,
       setArtists,

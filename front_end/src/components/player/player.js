@@ -140,7 +140,7 @@ class Player extends Component {
       - Preload Playlist
     */
 
-    if (this.props.no_songs) {
+    if (this.props.noSongs) {
       // passing because of no songs
     } else if (!force && this.props.is_repeat) {
       this.handleRepeat();
@@ -154,7 +154,7 @@ class Player extends Component {
   }
 
   prev() {
-    if (!this.props.no_songs) {
+    if (!this.props.noSongs) {
       let total = this.props.playlist.results.length;
       let current = this.props.playlist.results.findIndex(song => song.id === this.props.active_song.id);
       let prev_id = current > 0 ? current - 1 : total - 1;
@@ -200,7 +200,7 @@ class Player extends Component {
   }
 
   togglePlay() {
-    if (!this.props.no_songs) {
+    if (!this.props.noSongs) {
       this.props.setIsPlaying(!this.props.isPlaying);
     }
   }
@@ -246,7 +246,7 @@ class Player extends Component {
   }
 
   setProgress(evt, working = true) {
-    if (this.state.in_set_progress_mode && !this.props.no_songs && !this.props.isLoading && working) {
+    if (this.state.in_set_progress_mode && !this.props.noSongs && !this.props.isLoading && working) {
       let elem = evt.target;
       let clientX = null;
       try {

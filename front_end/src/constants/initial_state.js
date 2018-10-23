@@ -13,14 +13,14 @@ export default {
   },
   play_next_list: [],
   searchSongValue: "",
-  search_artist_value: "",
+  searchArtistValue: "",
   artists: {
     count: null,
     next: null,
     previous: null,
     results: [],
   },
-  no_songs: false,
+  noSongs: false,
   filterTagValue: null,
   orderingType: null,
   active_song: {
@@ -44,6 +44,6 @@ export default {
   isMenuOpen: false,
   isAuthorSearch: false,
   is_search_song_loading: false,
-  is_search_artist_loading: false,
+  isSearchArtistLoading: false,
   scroll_to_song: null,
 };

@@ -86,13 +86,13 @@
   margin-left: 5px;
 }
 
+.artwork__play-button:hover {
+  transform: scale(1.15);
+}
+
 .artwork:hover .artwork__play-button {
   opacity: 1;
   visibility: visible;
-}
-
-.artwork__play-button:hover {
-  transform: scale(1.15);
 }
 
 .artwork:hover .image {
@@ -161,8 +161,8 @@
   -webkit-appearance: none;
 }
 
-.search input[type="search"],
-.search input[type="search"]:focus {
+.search input[type='search'],
+.search input[type='search']:focus {
   background: #f8f8f8;
   padding: 0 16px;
   height: 46px;
@@ -177,7 +177,7 @@
   background: url(/static/icons/large_search.svg) 0 0 no-repeat;
   position: absolute;
   border: 0;
-  font: 0/0 a;
+  font: 0/0;
   text-shadow: none;
   color: transparent;
   background-color: transparent;
@@ -196,6 +196,7 @@
   .artwork__play-button {
     display: none;
   }
+
   .artwork:hover .image {
     filter: brightness(1);
   }

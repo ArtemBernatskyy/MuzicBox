@@ -9,7 +9,7 @@ import {
   setIsPlaying, playNext, emitIsLoading, toggleRepeat, setProgress,
 } from './player';
 import {
-  initialLoadSongs, setSongs, mergeNextSongs, noSongs,
+  initialLoadSongs, setSongs, mergeNextSongs, setNoSongs,
   orderSongByValue, filterSongByTag, searchSong, setSearchSongValue,
 } from './song';
 import {
@@ -32,7 +32,7 @@ export {
   searchArtists,
   setSearchArtistValue,
   filterSongByTag,
-  noSongs,
+  setNoSongs,
   setArtists,
   orderSongByValue,
   scrollToSong,

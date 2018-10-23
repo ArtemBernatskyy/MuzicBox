@@ -21,7 +21,7 @@ function mapStateToProps(state) {
     isPlaying: state.isPlaying,
     playlist: state.playlist,
     songs: state.songs,
-    no_songs: state.no_songs,
+    noSongs: state.noSongs,
     play_next_list: state.play_next_list,
     orderingType: state.orderingType,
     isLoading: state.isLoading,

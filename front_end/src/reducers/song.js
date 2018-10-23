@@ -23,7 +23,7 @@ export const active_song = (state = initialState.active_song, action) => {
   }
 };
 
-export const no_songs = (state = initialState.no_songs, action) => {
+export const noSongs = (state = initialState.noSongs, action) => {
   switch (action.type) {
     case types.NO_SONGS:
       return action.payload;

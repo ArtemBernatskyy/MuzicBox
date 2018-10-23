@@ -32,6 +32,10 @@ class App extends Component {
     this.handleScroll = debounce(this.handleScroll, 200);
   }
 
+  scrollToTop = () => {
+    this.mainDiv.scrollTop = 0;
+  }
+
   handleScroll() {
     if (this.mainDiv.scrollTop > 300) {
       this.setState({
@@ -47,10 +51,6 @@ class App extends Component {
   toggleMenu(bool) {
     const { toggleMenu } = this.props;
     toggleMenu(bool);
-  }
-
-  scrollToTop() {
-    this.mainDiv.scrollTop = 0;
   }
 
   render() {
@@ -109,9 +109,7 @@ class App extends Component {
               type="button"
               title="Back to top"
               className={scrollClass}
-              onClick={() => {
-                this.scrollToTop();
-              }}
+              onClick={this.scrollToTop}
             >
               <span className="arrow-up glyphicon fa fa-chevron-up" />
             </button>

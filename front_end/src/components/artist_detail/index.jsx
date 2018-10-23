@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import CSSModules from 'react-css-modules';
 
 import ArtistApi from 'api/artist_api';
 import styles from './artist_detail.css';
 
-class ArtistsDetail extends Component {
+class ArtistsDetail extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

@@ -23,7 +23,7 @@ const filterState = state => {
 export const loadState = () => {
   try {
     let state = {};
-    const serializedState = localStorage.getItem("reduxState");
+    const serializedState = localStorage.getItem("mboxState");
     if (serializedState !== null) {
       state = JSON.parse(serializedState);
     }
@@ -55,7 +55,7 @@ export const saveState = state => {
   try {
     const filteredState = filterState(state);
     const serializedState = JSON.stringify(filteredState);
-    localStorage.setItem("reduxState", serializedState);
+    localStorage.setItem("mboxState", serializedState);
   } catch (err) {
     Raven.captureException(err);
   }

@@ -170,9 +170,9 @@ class Player extends Component {
   }
 
   handleScrollIntoView() {
-    const current_url = this.props.history.location.pathname;
+    const currentUrl = this.props.history.location.pathname;
     const song_in_playlist_id = this.props.songs["results"].findIndex(song => song.id == this.props.active_song.id);
-    if (song_in_playlist_id !== -1 && current_url === "/") {
+    if (song_in_playlist_id !== -1 && currentUrl === "/") {
       // it means that active song is in current playlist and we are on playlist page so we can scrollIntoView
       this.props.scrollToSong(this.props.active_song.id);
     } else {

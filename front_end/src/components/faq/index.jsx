@@ -1,8 +1,8 @@
-import React from "react";
-import CSSModules from "react-css-modules";
-import { Link } from "react-router-dom";
+import React from 'react';
+import CSSModules from 'react-css-modules';
+import { Link } from 'react-router-dom';
 
-import styles from "./faq.css";
+import styles from './faq.css';
 
 const FAQPage = () => (
   <div className="app__container">
@@ -18,7 +18,7 @@ const FAQPage = () => (
     <ul styleName="answer_block">
       <li styleName="answer">
         You should create account and visit&nbsp;
-        <Link to="/upload/">upload page</Link> .
+        <Link to="/upload/">upload page.</Link>
       </li>
     </ul>
     <p styleName="question">WHY SHOULD I CREATE AN ACCOUNT?</p>
@@ -26,7 +26,7 @@ const FAQPage = () => (
       <li styleName="answer">
         MUZICBOX accounts are free and let you save all of your uploaded and favorited songs to one easy-to-find place.
         To create an account, visit&nbsp;
-        <Link to="/auth/">register page</Link> .
+        <Link to="/auth/">register page.</Link>
       </li>
     </ul>
     <p styleName="question">WHAT CAN I UPLOAD?</p>
@@ -37,12 +37,14 @@ const FAQPage = () => (
     <ul styleName="answer_block">
       <li styleName="answer">
         If you see errors like this&nbsp;
-        <span>No name/artist was found in ID3 data or in song file name</span>&nbsp; you need to ensure that song
-        has&nbsp;
+        <span>No name/artist was found in ID3 data or in song file name</span>
+        &nbsp; you need to ensure that song has&nbsp;
         <a rel="noopener noreferrer" target="_blank" href="https://en.wikipedia.org/wiki/ID3">
           ID3
-        </a>&nbsp; metadata, or name song correctly like&nbsp;
-        <span>Artist name - Song name.mp3</span> and we will parse the rest for you.
+        </a>
+        &nbsp; metadata, or name song correctly like&nbsp;
+        <span>Artist name - Song name.mp3 </span>
+        and we will parse the rest for you.
       </li>
     </ul>
     <p styleName="question">WHY THIS PROJECT IS FREE?</p>
@@ -63,6 +65,6 @@ const FAQPage = () => (
   </div>
 );
 
-let FAQPageWithStyles = CSSModules(FAQPage, styles, { allowMultiple: true });
+const FAQPageWithStyles = CSSModules(FAQPage, styles, { allowMultiple: true });
 
 export default FAQPageWithStyles;

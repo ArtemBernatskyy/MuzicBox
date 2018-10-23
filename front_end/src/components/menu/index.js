@@ -50,7 +50,7 @@ class Menu extends Component {
 
             {window.opts.is_authenticated ? (
               <a
-                href={`/api/v0/accounts/logout/?next_page=${this.props.location.pathname}`}
+                href={`/api/v0/accounts/logout/?nextPage=${this.props.location.pathname}`}
                 onClick={this.props.toggleMenu.bind(this, false)}
                 styleName="menu"
               >

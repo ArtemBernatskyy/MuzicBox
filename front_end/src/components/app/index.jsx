@@ -48,13 +48,8 @@ class App extends Component {
     }
   }
 
-  toggleMenu(bool) {
-    const { toggleMenu } = this.props;
-    toggleMenu(bool);
-  }
-
   render() {
-    const { isMenuOpen } = this.props;
+    const { isMenuOpen, toggleMenu } = this.props;
     const { scrollVisible } = this.state;
     const backgroundClass = cx({
       menu__background: true,
@@ -74,11 +69,11 @@ class App extends Component {
             <Hammer
               options={{
                 recognizers: {
-                  swipe: { direction: Hammer.DIRECTION_LEFT },
+                  swipe: { direction: window.Hammer.DIRECTION_LEFT },
                 },
               }}
-              onTap={() => this.toggleMenu(false)}
-              onSwipe={() => this.toggleMenu(false)}
+              onTap={() => toggleMenu(false)}
+              onSwipe={() => toggleMenu(false)}
             >
               <div className={backgroundClass} />
             </Hammer>
@@ -87,10 +82,10 @@ class App extends Component {
             <Hammer
               options={{
                 recognizers: {
-                  swipe: { direction: Hammer.DIRECTION_RIGHT },
+                  swipe: { direction: window.Hammer.DIRECTION_RIGHT },
                 },
               }}
-              onSwipe={() => this.toggleMenu(true)}
+              onSwipe={() => toggleMenu(true)}
             >
               <div ref={(ref) => { this.mainDiv = ref; }} className="app__center scrollbar-custom bg-white">
                 <Switch>

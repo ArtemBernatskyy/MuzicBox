@@ -121,7 +121,7 @@ const Menu = (props) => {
             <a
               href={`/api/v0/accounts/logout/?nextPage=${location.pathname}`}
               onClick={() => toggleMenu(false)}
-              styleName="menu"
+              styleName="menu menu--hidden-sm"
             >
               <i styleName="menu__border" />
               <div styleName="menu__container">
@@ -136,7 +136,7 @@ const Menu = (props) => {
               exact
               to="/auth/"
               onClick={() => toggleMenu(false)}
-              styleName="menu"
+              styleName="menu menu--hidden-sm"
               activeClassName={styles['menu--active']}
             >
               <i styleName="menu__border" />
@@ -167,7 +167,5 @@ export default withRouter(
   connect(
     mapStateToProps,
     mapDispatchToProps,
-    null,
-    { pure: false },
   )(CSSModules(Menu, styles, { allowMultiple: true })),
 );

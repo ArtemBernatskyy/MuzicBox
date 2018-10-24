@@ -78,9 +78,9 @@ class Song extends Component {
       // if song is active then toggle isPlaying
       this.props.setIsPlaying(!this.props.isPlaying);
     }
-    // remove item from play_next_list if we clicked on it
-    const song_in_playlist_id = this.props.play_next_list.findIndex(song => song.id == this.props.song.id);
-    if (song_in_playlist_id !== -1) {
+    // remove item from playNextList if we clicked on it
+    const songInPlaylistId = this.props.playNextList.findIndex(song => song.id == this.props.song.id);
+    if (songInPlaylistId !== -1) {
       this.props.togglePlayNextItem(this.props.song);
     }
   }
@@ -112,7 +112,7 @@ class Song extends Component {
   }
 
   render() {
-    let isNextPlaySong = this.props.play_next_list.findIndex(song => song.id == this.props.song.id) !== -1;
+    let isNextPlaySong = this.props.playNextList.findIndex(song => song.id == this.props.song.id) !== -1;
     let listClass = cx({
       pointer: true,
       "playlist--border": true,
@@ -393,7 +393,7 @@ class Playlist extends Component {
                     song={song}
                     songs={this.props.songs}
                     scroll_to_song={this.props.scroll_to_song}
-                    play_next_list={this.props.play_next_list}
+                    playNextList={this.props.playNextList}
                     isPlaying={this.props.isPlaying}
                     isLoading={this.props.isLoading}
                     activeSong={this.props.activeSong}
@@ -433,7 +433,7 @@ function mapStateToProps(state) {
     filterTagValue: state.filterTagValue,
     noSongs: state.noSongs,
     orderingType: state.orderingType,
-    play_next_list: state.play_next_list,
+    playNextList: state.playNextList,
     is_search_song_loading: state.is_search_song_loading,
     scroll_to_song: state.scroll_to_song,
   };

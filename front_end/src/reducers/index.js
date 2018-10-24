@@ -1,12 +1,12 @@
 import { combineReducers } from "redux";
 import { songs, activeSong, noSongs } from "./song";
-import { isPlaying, isLoading, is_repeat, progress } from "./player";
+import { isPlaying, isLoading, isRepeat, progress } from "./player";
 import {
   playlist,
   searchSongValue,
   filterTagValue,
   orderingType,
-  play_next_list,
+  playNextList,
   isAuthorSearch,
   is_search_song_loading,
   scroll_to_song,
@@ -16,7 +16,7 @@ import { artists, searchArtistValue, isSearchArtistLoading } from "./artist";
 
 const rootReducer = combineReducers({
   filterTagValue,
-  play_next_list,
+  playNextList,
   orderingType,
   artists,
   noSongs,
@@ -27,7 +27,7 @@ const rootReducer = combineReducers({
   activeSong,
   isPlaying,
   isLoading,
-  is_repeat,
+  isRepeat,
   isMenuOpen,
   isAuthorSearch,
   is_search_song_loading,

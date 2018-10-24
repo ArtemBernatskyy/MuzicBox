@@ -19,7 +19,7 @@ export const isLoading = (state = initialState.isLoading, action) => {
   }
 };
 
-export const is_repeat = (state = initialState.is_repeat, action) => {
+export const isRepeat = (state = initialState.isRepeat, action) => {
   switch (action.type) {
     case types.TOGGLE_REPEAT:
       return action.payload;

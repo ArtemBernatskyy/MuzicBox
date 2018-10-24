@@ -19,7 +19,7 @@ export const togglePlayNextItemAction = (song, oldPlayNext) => ({
 
 export function togglePlayNextItem(song) {
   return (dispatch, getState) => {
-    const oldPlayNext = getState().play_next_list;
+    const oldPlayNext = getState().playNextList;
     dispatch(togglePlayNextItemAction(song, oldPlayNext));
   };
 }

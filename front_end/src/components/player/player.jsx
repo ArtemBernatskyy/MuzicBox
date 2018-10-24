@@ -1,15 +1,27 @@
 import Raven from 'raven-js';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
 import CSSModules from 'react-css-modules';
+import { Link, withRouter } from 'react-router-dom';
 import NotificationSystem from 'react-notification-system';
 
-import * as orderingTypes from 'constants/ordering_types';
+import {
+  playNext,
+  setIsPlaying,
+  mergeNextPlaylist,
+  togglePlayNextItem,
+  orderSongByValue,
+  scrollToSong,
+  emitIsLoading,
+  toggleRepeat,
+  setProgress,
+} from 'actions';
 import {
   roundUp, formatTime, offsetLeft, isTouchDevice,
 } from 'utils/misc';
+import * as orderingTypes from 'constants/ordering_types';
 
 import styles from './player.css';
 
@@ -20,20 +32,21 @@ class Player extends Component {
     super(props);
     this.state = {
       volume: 1,
-      in_set_progress_mode: false,
-      in_set_volume_mode: false,
-      is_muted: false,
-      is_remaining_time: false,
-      is_touch: isTouchDevice(),
+      inSetProgressMode: false,
+      inSetVolumeMode: false,
+      isMuted: false,
+      isRemainingTime: false,
+      isTouch: isTouchDevice(),
     };
     this.notificationSystem = null;
-    this.is_progress_mouse = false;
+    this.isProgressMouse = false;
+    this.player = React.createRef();
   }
 
   componentDidMount() {
     const { activeSong } = this.props;
-    if (activeSong.id !== '' && this.player.readyState === 0) {
-      this.player.load(); // this is a case when we are loading song from localStorage
+    if (activeSong.id !== '' && this.player.current.readyState === 0) {
+      this.player.current.load(); // this is a case when we are loading song from localStorage
     }
     // capturing mouse up everywhere and stopping setting song progress
     document.addEventListener('mouseup', e => this.stopSetProgress(e, true));
@@ -43,6 +56,17 @@ class Player extends Component {
     document.addEventListener('touchcancel', e => this.stopSetProgress(e, true));
   }
 
+  componentDidUpdate(prevProps) {
+    const { activeSong, isLoading } = this.props;
+    if (isLoading !== prevProps.isLoading && isLoading) {
+      this.player.current.load(); // loading song from song has changed
+    }
+    if (activeSong.id !== prevProps.activeSong.id) {
+      this.songEnded();
+      this.player.current.load(); // loading song after previous has ended
+    }
+  }
+
   componentWillUnmount() {
     document.removeEventListener('mouseup', e => this.stopSetProgress(e, true));
     document.removeEventListener('mouseup', e => this.stopSetVolume(e, true));
@@ -50,81 +74,129 @@ class Player extends Component {
     document.removeEventListener('touchcancel', e => this.stopSetProgress(e, true));
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    // checking for first load and loading first song
-    if (this.props.activeSong.id !== nextProps.activeSong.id) {
-      this.songEnded();
-      this.player.load();
-    }
-
-    // toggling play/pause based on props.isPlaying
-    // this also allows to control player outside of this component
-    if (this.props.isPlaying !== nextProps.isPlaying) {
-      if (!this.props.isLoading) {
-        if (nextProps.isPlaying) {
-          this.safePlay();
-        } else {
-          this.player.pause();
-        }
-      }
-    }
-  }
-
-  safePlay() {
-    // method for handling Safari 11 blocking with message
-    let play_promise = this.player.play();
-    // In browsers that don’t yet support this functionality,
-    // play_promise won’t be defined.
-    if (play_promise !== undefined) {
-      play_promise.catch(error => {
-        if (error.name == 'NotAllowedError') {
-          // Automatic playback failed.
-          this.props.setIsPlaying(false);
-        }
-        Raven.captureException(error);
-      });
-    }
-  }
-
   onCanPlay() {
-    this.props.emitIsLoading(false);
-    if (this.props.isPlaying) {
+    const { emitIsLoading, isPlaying } = this.props;
+    emitIsLoading(false);
+    if (isPlaying) {
       // this fires when we set progress or load song
       this.safePlay();
     }
   }
 
-  handlePlayNextList() {
-    const next_song = this.props.play_next_list[0];
-    this.props.playNext(next_song);
-    this.props.togglePlayNextItem(next_song);
+  onPause() {
+    // used when Safari uses pause from touchbar
+    // here we need to ignore onEnded callback and props isLoading
+    const { progress, setIsPlaying, isLoading } = this.props;
+    if (progress < 1 && !isLoading) {
+      setIsPlaying(false);
+    }
   }
 
-  handleRepeat() {
-    this.player.currentTime = 0;
-    this.player.play();
+  onPlay() {
+    // used when Safari uses play from touchbar
+    const { setIsPlaying } = this.props;
+    setIsPlaying(true);
   }
+
+  onLoadedData() {
+    const { progress } = this.props;
+    this.player.current.currentTime = this.player.current.duration * progress; // setting progress from localStorage
+  }
+
+  getSnapshotBeforeUpdate(prevProps) {
+    const { isPlaying, isLoading } = this.props;
+    const isPlayerPlaying = !this.player.current.paused;
+    if (isPlaying !== prevProps.isPlaying) {
+      if (!isLoading && !isPlayerPlaying && isPlaying) {
+        this.safePlay();
+      } else {
+        this.player.current.pause();
+      }
+    }
+    return null;
+  }
+
+  setProgress(evt, working = true) {
+    const { noSongs, isLoading, setProgress } = this.props;
+    const { inSetProgressMode } = this.state;
+    if (inSetProgressMode && !noSongs && !isLoading && working) {
+      const elem = evt.target;
+      let clientX = null;
+      try {
+        // for touch devices
+        // eslint-disable-next-line
+        clientX = evt.nativeEvent.changedTouches[0].clientX;
+      } catch (e) {
+        // fallback for non touch devices
+        // eslint-disable-next-line
+        clientX = evt.clientX;
+      }
+      let progress = (clientX - offsetLeft(elem)) / elem.clientWidth;
+      if (progress >= 1) {
+        progress = 0.98; // hack to prevent reaching the end of the media to prevent firing onEnded
+      } else if (progress <= 0) {
+        progress = 0; // preventing from progress being negative because it will incorrectly display on FE
+      }
+      this.player.current.currentTime = this.player.current.duration * progress;
+      setProgress(progress);
+      this.isProgressMouse = true;
+    }
+  }
+
+  setVolume(evt) {
+    const { inSetVolumeMode, isMuted } = this.state;
+    if (inSetVolumeMode) {
+      const elem = evt.target;
+      let newIsMuted = isMuted;
+      let newVolume = (evt.clientX - offsetLeft(elem)) / elem.clientWidth;
+      if (newVolume <= 0.05) {
+        newVolume = 0;
+        newIsMuted = true;
+      } else {
+        newIsMuted = false;
+      }
+      this.player.current.volume = newVolume;
+      this.setState({
+        volume: newVolume,
+        isMuted: newIsMuted,
+      });
+    }
+  }
+
+  stopSetVolume = (evt, force = false) => {
+    if (!force) {
+      this.setVolume(evt);
+    }
+    this.setState({
+      inSetVolumeMode: false,
+    });
+  };
 
   handlePreloadPlaylist(force) {
-    let total = this.props.playlist.results.length;
-    let current = this.props.playlist.results.findIndex(song => song.id === this.props.activeSong.id);
+    const {
+      playlist, activeSong, mergeNextPlaylist,
+      isRepeat, setIsPlaying, playNext,
+    } = this.props;
+    const total = playlist.results.length;
+    const current = playlist.results.findIndex(song => song.id === activeSong.id);
     // checking if playlist is at nearly end
     // because we'll load pagination and use it for next life cycle
     if (current + 2 === total) {
       // checking if playlist has next pagination
-      if (this.props.playlist.next) {
-        this.props.mergeNextPlaylist(this.props.playlist.next);
+      if (playlist.next) {
+        mergeNextPlaylist(playlist.next);
       }
     }
-    let next_playlist_id = !force && this.props.is_repeat ? current : current < total - 1 ? current + 1 : 0;
+    const nextSongInPlaylist = current < total - 1 ? current + 1 : 0;
+    const nextPlaylistId = !force && isRepeat ? current : nextSongInPlaylist;
     // when we have only 1 song in playlist we'll pause and not use loader
     if (total === 1) {
-      this.props.setIsPlaying(false);
+      setIsPlaying(false);
     } else {
       this.songEnded();
     }
-    let next_song = this.props.playlist.results[next_playlist_id];
-    this.props.playNext(next_song);
+    const nextSong = playlist.results[nextPlaylistId];
+    playNext(nextSong);
   }
 
   next(evt, force = false) {
@@ -137,12 +209,14 @@ class Player extends Component {
       - Preload Playlist
     */
 
-    if (this.props.noSongs) {
+    const { noSongs, isRepeat, playNextList } = this.props;
+
+    if (noSongs) {
       // passing because of no songs
-    } else if (!force && this.props.is_repeat) {
+    } else if (!force && isRepeat) {
       this.handleRepeat();
-    } else if (this.props.play_next_list.length > 0) {
-      // checking if play_next_list isn't empty and picking up songs from it
+    } else if (playNextList.length > 0) {
+      // checking if playNextList isn't empty and picking up songs from it
       // handle 'Play Next list' and exit to skip Preloading playlist
       this.handlePlayNextList();
     } else {
@@ -151,127 +225,98 @@ class Player extends Component {
   }
 
   prev() {
-    if (!this.props.noSongs) {
-      let total = this.props.playlist.results.length;
-      let current = this.props.playlist.results.findIndex(song => song.id === this.props.activeSong.id);
-      let prev_id = current > 0 ? current - 1 : total - 1;
-      let previous = this.props.playlist.results[prev_id];
+    const {
+      noSongs, playlist, activeSong, playNext,
+    } = this.props;
+    if (!noSongs) {
+      const total = playlist.results.length;
+      const current = playlist.results.findIndex(song => song.id === activeSong.id);
+      const prevId = current > 0 ? current - 1 : total - 1;
+      const previous = playlist.results[prevId];
       // checking if song is single in playlist and ignoring action
-      if (total == 1) {
-        return;
-      } else {
+      if (total !== 1) {
         this.songEnded();
-        this.props.playNext(previous);
+        playNext(previous);
       }
     }
   }
 
   handleScrollIntoView() {
-    const currentUrl = this.props.history.location.pathname;
-    const song_in_playlist_id = this.props.songs['results'].findIndex(song => song.id == this.props.activeSong.id);
-    if (song_in_playlist_id !== -1 && currentUrl === '/') {
+    const {
+      history, songs, activeSong, scrollToSong,
+    } = this.props;
+    const currentUrl = history.location.pathname;
+    const songInPlaylistId = songs.results.findIndex(song => song.id === activeSong.id);
+    if (songInPlaylistId !== -1 && currentUrl === '/') {
       // it means that active song is in current playlist and we are on playlist page so we can scrollIntoView
-      this.props.scrollToSong(this.props.activeSong.id);
-    } else {
+      scrollToSong(activeSong.id);
+    } else if (this.notificationSystem) {
       // showing warning instead
-      if (this.notificationSystem) {
-        this.notificationSystem.addNotification({
-          message: "This song isn't visible or you aren't on playlist page",
-          level: 'warning',
-          autoDismiss: 4,
-          dismissible: 'none',
-        });
-      }
-    }
-  }
-
-  randomize() {
-    this.props.orderingType == orderingTypes.RANDOM
-      ? this.props.orderSongByValue(orderingTypes.UPLOADED_DATE)
-      : this.props.orderSongByValue(orderingTypes.RANDOM);
-  }
-
-  songEnded() {
-    this.player.pause();
-    this.props.setProgress(0);
-  }
-
-  togglePlay() {
-    if (!this.props.noSongs) {
-      this.props.setIsPlaying(!this.props.isPlaying);
-    }
-  }
-
-  onPause() {
-    // used when Safari uses pause from touchbar
-    // here we need to ignore onEnded callback and props isLoading
-    if (this.props.progress < 1 && !this.props.isLoading) {
-      this.props.setIsPlaying(false);
-    }
-  }
-
-  onPlay() {
-    // used when Safari uses play from touchbar
-    this.props.setIsPlaying(true);
-  }
-
-  onLoadedData() {
-    this.player.currentTime = this.player.duration * this.props.progress; // setting progress from localStorage
-  }
-
-  toggleMute() {
-    let is_muted = this.state.is_muted;
-    let new_volume = is_muted ? this.state.volume : 0;
-    this.player.volume = new_volume;
-    this.setState({ is_muted: !this.state.is_muted });
-  }
-
-  listenProgress() {
-    if (!this.props.isLoading) {
-      this.props.setProgress(this.player.currentTime / this.player.duration);
-    }
-  }
-
-  startSetProgress(evt, working = true) {
-    if (!this.props.isLoading && working) {
-      this.is_progress_mouse = false;
-      this.setProgress(evt);
-      this.setState({
-        in_set_progress_mode: true,
+      this.notificationSystem.addNotification({
+        message: "This song isn't visible or you aren't on playlist page",
+        level: 'warning',
+        autoDismiss: 4,
+        dismissible: 'none',
       });
     }
   }
 
-  setProgress(evt, working = true) {
-    if (this.state.in_set_progress_mode && !this.props.noSongs && !this.props.isLoading && working) {
-      let elem = evt.target;
-      let clientX = null;
-      try {
-        // for touch devices
-        clientX = evt.nativeEvent.changedTouches[0].clientX;
-      } catch (e) {
-        // fallback for non touch devices
-        clientX = evt.clientX;
-      }
-      let progress = (clientX - offsetLeft(elem)) / elem.clientWidth;
-      if (progress >= 1) {
-        progress = 0.98; // hack to prevent reaching the end of the media to prevent firing onEnded
-      } else if (progress <= 0) {
-        progress = 0; // preventing from progress being negative because it will incorrectly display on FE
-      }
-      this.player.currentTime = this.player.duration * progress;
-      this.props.setProgress(progress);
-      this.is_progress_mouse = true;
+  randomize() {
+    const { orderingType, orderSongByValue } = this.props;
+    if (orderingType === orderingTypes.RANDOM) {
+      orderSongByValue(orderingTypes.UPLOADED_DATE);
+    } else {
+      orderSongByValue(orderingTypes.RANDOM);
+    }
+  }
+
+  songEnded() {
+    const { setProgress } = this.props;
+    this.player.current.pause();
+    setProgress(0);
+  }
+
+  togglePlay() {
+    const { noSongs, setIsPlaying, isPlaying } = this.props;
+    if (!noSongs) {
+      setIsPlaying(!isPlaying);
+    }
+  }
+
+  toggleMute() {
+    const { isMuted, volume } = this.state;
+    const newIsMuted = isMuted;
+    const newVolume = isMuted ? volume : 0;
+    this.player.current.volume = newVolume;
+    this.setState({ isMuted: !newIsMuted });
+  }
+
+  listenProgress() {
+    const { isLoading, setProgress } = this.props;
+    if (!isLoading) {
+      setProgress(this.player.current.currentTime / this.player.current.duration);
+    }
+  }
+
+  startSetProgress(evt, working = true) {
+    const { isLoading } = this.props;
+    if (!isLoading && working) {
+      this.isProgressMouse = false;
+      this.setProgress(evt);
+      this.setState({
+        inSetProgressMode: true,
+      });
     }
   }
 
   stopSetProgress(evt, force = false, working = true) {
-    if (!this.props.isLoading && working) {
-      if (!force && this.is_progress_mouse !== true) {
+    const { isLoading } = this.props;
+    if (!isLoading && working) {
+      if (!force && this.isProgressMouse !== true) {
         this.setProgress(evt);
       }
       this.setState({
-        in_set_progress_mode: false,
+        inSetProgressMode: false,
       });
     }
   }
@@ -279,113 +324,127 @@ class Player extends Component {
   startSetVolume(evt) {
     this.setVolume(evt);
     this.setState({
-      in_set_volume_mode: true,
+      inSetVolumeMode: true,
     });
   }
 
-  setVolume(evt) {
-    if (this.state.in_set_volume_mode) {
-      let elem = evt.target;
-      let is_muted = this.state.is_muted;
-      let new_volume = (evt.clientX - offsetLeft(elem)) / elem.clientWidth;
-      if (new_volume <= 0.05) {
-        new_volume = 0;
-        is_muted = true;
-      } else {
-        is_muted = false;
-      }
-      this.player.volume = new_volume;
-      this.setState({
-        volume: new_volume,
-        is_muted: is_muted,
+  listenWheelVolume(evt) {
+    const { isMuted } = this.state;
+    let newVolume = 0;
+    const changeSpeed = 0.1;
+    let newIsMuted = isMuted;
+    const oldVolume = this.player.current.volume;
+    if (evt.deltaY > 0) {
+      newVolume = oldVolume - changeSpeed;
+    } else {
+      newVolume = oldVolume + changeSpeed;
+    }
+    if (newVolume > 1) {
+      newVolume = 1;
+    } else if (newVolume <= 1 && newVolume >= 0.05) {
+      this.player.current.volume = newVolume;
+      newIsMuted = false;
+    } else {
+      newVolume = 0;
+      newIsMuted = true;
+    }
+    this.player.current.volume = newVolume;
+    this.setState({
+      volume: newVolume,
+      isMuted: newIsMuted,
+    });
+  }
+
+  handleRepeat() {
+    this.player.current.currentTime = 0;
+    this.player.current.play();
+  }
+
+  handlePlayNextList() {
+    const { playNextList, playNext, togglePlayNextItem } = this.props;
+    const nextSong = playNextList[0];
+    playNext(nextSong);
+    togglePlayNextItem(nextSong);
+  }
+
+  safePlay() {
+    const { setIsPlaying } = this.props;
+    // method for handling Safari 11 blocking with message
+    const playPromise = this.player.current.play();
+    // In browsers that don’t yet support this functionality,
+    // playPromise won’t be defined.
+    if (playPromise !== undefined) {
+      playPromise.catch((error) => {
+        if (error.name === 'NotAllowedError') {
+          // Automatic playback failed.
+          setIsPlaying(false);
+        }
+        Raven.captureException(error);
       });
     }
   }
 
-  listenWheelVolume(evt) {
-    let new_volume = 0;
-    let change_speed = 0.1;
-    let is_muted = this.state.is_muted;
-    let old_volume = this.player.volume;
-
-    if (evt.deltaY > 0) {
-      new_volume = old_volume - change_speed;
-    } else {
-      new_volume = old_volume + change_speed;
-    }
-
-    if (new_volume > 1) {
-      new_volume = 1;
-    } else if (1 >= new_volume && new_volume >= 0.05) {
-      this.player.volume = new_volume;
-      is_muted = false;
-    } else {
-      new_volume = 0;
-      is_muted = true;
-    }
-    this.player.volume = new_volume;
-
-    this.setState({
-      volume: new_volume,
-      is_muted: is_muted,
-    });
-  }
-
-  stopSetVolume = (evt, force = false) => {
-    if (!force) {
-      this.setVolume(evt);
-    }
-    this.setState({
-      in_set_volume_mode: false,
-    });
-  };
-
   repeat() {
-    this.props.toggleRepeat(!this.props.is_repeat);
+    const { isRepeat, toggleRepeat } = this.props;
+    toggleRepeat(!isRepeat);
   }
 
   toggleRemainingTime() {
-    this.setState({ is_remaining_time: !this.state.is_remaining_time });
+    const { isRemainingTime } = this.state;
+    this.setState({ isRemainingTime: !isRemainingTime });
   }
 
   render() {
-    let songDuration = this.player ? this.player.duration : 0;
-    let playerClsName = cx({
+    const {
+      isPlaying, isLoading, orderingType, isRepeat,
+      progress, activeSong,
+    } = this.props;
+    const {
+      isMuted, isTouch, isRemainingTime, volume,
+    } = this.state;
+    const songDuration = this.player.current ? this.player.current.duration : 0;
+    const playerClsName = cx({
       fa: true,
-      'fa-play-circle-o': !this.props.isPlaying && !this.props.isLoading,
-      'fa-pause-circle-o': this.props.isPlaying && !this.props.isLoading,
-      'fa-circle-o-notch fa-spin': this.props.isLoading,
+      'fa-play-circle-o': !isPlaying && !isLoading,
+      'fa-pause-circle-o': isPlaying && !isLoading,
+      'fa-circle-o-notch fa-spin': isLoading,
     });
-    let randomClass = cx({
+    const randomClass = cx({
       'control-button': true,
-      active: this.props.orderingType == orderingTypes.RANDOM,
+      active: orderingType === orderingTypes.RANDOM,
     });
-    let repeatClass = cx({
+    const repeatClass = cx({
       'control-button': true,
-      active: this.props.is_repeat,
+      active: isRepeat,
     });
-    let volumeClass = cx({
+    const volumeClass = cx({
       fa: true,
-      'fa-volume-up': !this.state.is_muted,
-      'fa-volume-off': this.state.is_muted,
+      'fa-volume-up': !isMuted,
+      'fa-volume-off': isMuted,
     });
     let progressBarSliderLeft = '0px'; // this is done to allow better user experience
-    if (this.props.progress >= 0 && this.props.progress < 0.1 && this.state.is_touch) {
+    if (progress >= 0 && progress < 0.1 && isTouch) {
       progressBarSliderLeft = '6px'; // we are allowing slider to be slightly to the right (only touch devices)
-    } else if (this.props.progress >= 0.978 && this.state.is_touch) {
+    } else if (progress >= 0.978 && isTouch) {
       progressBarSliderLeft = '-2px'; // or to the left to allow user to better drag slider (only touch devices)
     }
     return (
       <footer styleName="player">
-        <NotificationSystem ref={n => (this.notificationSystem = n)} />
+        <NotificationSystem ref={(n) => { this.notificationSystem = n; }} />
         <div styleName="player__bar">
           <div styleName="player__bar__left">
             <div styleName="now-playing">
               <div styleName="cover-art shadow now-playing__cover-art">
-                <div onClick={this.handleScrollIntoView.bind(this)}>
+                <div
+                  role="button"
+                  tabIndex={0}
+                  onClick={this.handleScrollIntoView.bind(this)}
+                  onKeyDown={this.handleScrollIntoView.bind(this)}
+                >
                   <img
                     styleName="cover-art-image cover-art-image-loaded"
-                    src={this.props.activeSong.small_image_thumbnail || '/static/img/song_default_small.png'}
+                    src={activeSong.small_image_thumbnail || '/static/img/song_default_small.png'}
+                    alt="cover for current artist"
                   />
                 </div>
               </div>
@@ -394,16 +453,16 @@ class Player extends Component {
                 <div styleName="track-info__name ellipsis-one-line">
                   <div styleName="track-info__name ellipsis-one-line">
                     <div styleName="react-contextmenu-wrapper">
-                      {this.props.activeSong.album ? (
+                      {activeSong.album ? (
                         <Link
-                          to={`/artist/${this.props.activeSong.artist.slug}/${this.props.activeSong.album.slug}/`}
+                          to={`/artist/${activeSong.artist.slug}/${activeSong.album.slug}/`}
                           className="a-underlined"
                         >
-                          {this.props.activeSong.name}
+                          {activeSong.name}
                         </Link>
                       ) : (
-                        <Link to={`/artist/${this.props.activeSong.artist.slug}/`} className="a-underlined">
-                          {this.props.activeSong.name}
+                        <Link to={`/artist/${activeSong.artist.slug}/`} className="a-underlined">
+                          {activeSong.name}
                         </Link>
                       )}
                     </div>
@@ -412,8 +471,8 @@ class Player extends Component {
                 <div className="link-subtle" styleName="track-info__artists ellipsis-one-line">
                   <span>
                     <span styleName="react-contextmenu-wrapper">
-                      <Link to={`/artist/${this.props.activeSong.artist.slug}/`} className="a-underlined">
-                        {this.props.activeSong.artist.name}
+                      <Link to={`/artist/${activeSong.artist.slug}/`} className="a-underlined">
+                        {activeSong.artist.name}
                       </Link>
                     </span>
                   </span>
@@ -426,30 +485,35 @@ class Player extends Component {
             <div styleName="player-controls">
               <div styleName="player-controls__buttons">
                 <button
+                  type="submit"
                   onClick={this.randomize.bind(this)}
                   className="fa fa-random"
                   styleName={randomClass}
                   title="Randomize"
                 />
                 <button
+                  type="button"
                   onClick={this.prev.bind(this)}
                   className="fa fa-backward"
                   styleName="control-button"
                   title="Previous"
                 />
                 <button
+                  type="button"
                   onClick={this.togglePlay.bind(this)}
                   className={playerClsName}
                   styleName="control-button control-button--circled"
                   title="Play"
                 />
                 <button
+                  type="submit"
                   onClick={e => this.next(e, true)}
                   className="fa fa-forward"
                   styleName="control-button"
                   title="Next"
                 />
                 <button
+                  type="button"
                   onClick={this.repeat.bind(this)}
                   className="fa fa-repeat"
                   styleName={repeatClass}
@@ -458,44 +522,54 @@ class Player extends Component {
               </div>
 
               <div styleName="playback-bar">
-                <div styleName="playback-bar__progress-time">{formatTime(this.props.progress * songDuration)}</div>
+                <div styleName="playback-bar__progress-time">{formatTime(progress * songDuration)}</div>
                 <div
-                  ref={ref => (this._progress_bar = ref)}
-                  onTouchStart={e => this.startSetProgress(e, this.state.is_touch)}
-                  onTouchMove={e => this.setProgress(e, this.state.is_touch)}
-                  onTouchEnd={e => this.stopSetProgress(e, false, this.state.is_touch)}
-                  onTouchCancel={e => this.stopSetProgress(e, false, this.state.is_touch)}
-                  onMouseDown={e => this.startSetProgress(e, !this.state.is_touch)}
-                  onMouseMove={e => this.setProgress(e, !this.state.is_touch)}
-                  onMouseUp={e => this.stopSetProgress(e, false, !this.state.is_touch)}
+                  role="slider"
+                  aria-valuemin="0"
+                  aria-valuemax="1"
+                  aria-valuenow={progress}
+                  tabIndex={0}
+                  onTouchStart={e => this.startSetProgress(e, isTouch)}
+                  onTouchMove={e => this.setProgress(e, isTouch)}
+                  onTouchEnd={e => this.stopSetProgress(e, false, isTouch)}
+                  onTouchCancel={e => this.stopSetProgress(e, false, isTouch)}
+                  onMouseDown={e => this.startSetProgress(e, !isTouch)}
+                  onMouseMove={e => this.setProgress(e, !isTouch)}
+                  onMouseUp={e => this.stopSetProgress(e, false, !isTouch)}
                   styleName="progress-bar"
                 >
                   <div styleName="middle-align progress-bar__bg">
                     <div
                       styleName="progress-bar__fg"
                       style={{
-                        width: `${roundUp(this.props.progress * 100, 100)}%`,
+                        width: `${roundUp(progress * 100, 100)}%`,
                       }}
                     />
                     <div
                       styleName="middle-align progress-bar__slider"
                       style={{
-                        left: `calc(${progressBarSliderLeft} + ${roundUp(this.props.progress * 100, 100)}%)`,
+                        left: `calc(${progressBarSliderLeft} + ${roundUp(progress * 100, 100)}%)`,
                       }}
                     />
                   </div>
                 </div>
-                <div styleName="playback-bar__progress-time" onClick={this.toggleRemainingTime.bind(this)}>
-                  {!this.state.is_remaining_time
-                    ? formatTime(this.props.activeSong.length)
-                    : `- ${formatTime(this.props.activeSong.length - this.props.progress * songDuration)}`}
+                <div
+                  role="progressbar"
+                  tabIndex={0}
+                  styleName="playback-bar__progress-time"
+                  onClick={this.toggleRemainingTime.bind(this)}
+                  onKeyDown={this.toggleRemainingTime.bind(this)}
+                >
+                  {!isRemainingTime
+                    ? formatTime(activeSong.length)
+                    : `- ${formatTime(activeSong.length - progress * songDuration)}`}
                 </div>
               </div>
             </div>
           </div>
 
           <audio
-            ref={ref => (this.player = ref)}
+            ref={this.player}
             onEnded={() => this.next()}
             onCanPlayThrough={this.onCanPlay.bind(this)}
             onTimeUpdate={this.listenProgress.bind(this)}
@@ -505,24 +579,31 @@ class Player extends Component {
             autoPlay={false}
             preload="none"
           >
-            <source src={this.props.activeSong.audio_file} type="audio/mp3" />
+            <source src={activeSong.audio_file} type="audio/mp3" />
+            <track kind="captions" src="" srcLang="en" />
           </audio>
 
           <div styleName="player__bar__right">
             <div styleName="now-playing-bar__right__inner">
               <div styleName="extra-controls">
                 <span styleName="connect-device-picker" style={{ display: 'none' }}>
-                  <button className="fa fa-heart" styleName="control-button" />
+                  <button type="button" className="fa fa-heart" styleName="control-button" />
                 </span>
 
                 <div onWheel={this.listenWheelVolume.bind(this)} styleName="volume-bar">
                   <button
+                    type="button"
                     onClick={this.toggleMute.bind(this)}
                     className={volumeClass}
                     styleName="control-button volume-bar__icon"
                   />
 
                   <div
+                    role="slider"
+                    aria-valuemin="0"
+                    aria-valuemax="1"
+                    aria-valuenow={volume}
+                    tabIndex={0}
                     onMouseDown={this.startSetVolume.bind(this)}
                     onMouseMove={this.setVolume.bind(this)}
                     onMouseUp={this.stopSetVolume}
@@ -532,13 +613,13 @@ class Player extends Component {
                       <div
                         styleName="progress-bar__fg"
                         style={{
-                          width: this.state.is_muted > 0 ? 0 : `${roundUp(this.state.volume * 100, 100)}%`,
+                          width: isMuted > 0 ? 0 : `${roundUp(volume * 100, 100)}%`,
                         }}
                       />
                       <div
                         styleName="middle-align progress-bar__slider"
                         style={{
-                          left: this.state.is_muted > 0 ? 0 : `${roundUp(this.state.volume * 100, 100)}%`,
+                          left: isMuted > 0 ? 0 : `${roundUp(volume * 100, 100)}%`,
                         }}
                       />
                     </div>
@@ -553,9 +634,41 @@ class Player extends Component {
   }
 }
 
-Player.propTypes = {
-  playlist: PropTypes.object,
-  song: PropTypes.object,
-};
+function mapStateToProps(state) {
+  return {
+    activeSong: state.activeSong,
+    isPlaying: state.isPlaying,
+    playlist: state.playlist,
+    songs: state.songs,
+    noSongs: state.noSongs,
+    playNextList: state.playNextList,
+    orderingType: state.orderingType,
+    isLoading: state.isLoading,
+    isRepeat: state.isRepeat,
+    progress: state.progress,
+  };
+}
 
-export default CSSModules(Player, styles, { allowMultiple: true });
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      playNext,
+      setIsPlaying,
+      mergeNextPlaylist,
+      togglePlayNextItem,
+      orderSongByValue,
+      scrollToSong,
+      emitIsLoading,
+      toggleRepeat,
+      setProgress,
+    },
+    dispatch,
+  );
+}
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(CSSModules(Player, styles, { allowMultiple: true })),
+);

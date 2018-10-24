@@ -6,7 +6,7 @@ const filterState = state => {
   return {
     songs: state.songs,
     playlist: state.playlist,
-    play_next_list: state.play_next_list,
+    playNextList: state.playNextList,
     searchSongValue: state.searchSongValue,
     searchArtistValue: state.searchArtistValue,
     artists: state.artists,
@@ -15,7 +15,7 @@ const filterState = state => {
     orderingType: state.orderingType,
     activeSong: state.activeSong,
     isAuthorSearch: state.isAuthorSearch,
-    is_repeat: state.is_repeat,
+    isRepeat: state.isRepeat,
     progress: state.progress,
   };
 };

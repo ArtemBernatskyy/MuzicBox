@@ -58,16 +58,16 @@ export const is_search_song_loading = (state = initialState.is_search_song_loadi
   }
 };
 
-export const play_next_list = (state = initialState.play_next_list, action) => {
+export const playNextList = (state = initialState.playNextList, action) => {
   switch (action.type) {
     case types.TOGGLE_PLAYNEXT_ITEM: {
       let new_play_next = [...action.oldPlayNext];
-      let song_in_playlist_id = new_play_next.findIndex(song => song.id == action.song.id);
-      if (song_in_playlist_id !== -1) {
-        // removing item if it present in play_next_list
-        new_play_next.splice(song_in_playlist_id, 1);
+      let songInPlaylistId = new_play_next.findIndex(song => song.id == action.song.id);
+      if (songInPlaylistId !== -1) {
+        // removing item if it present in playNextList
+        new_play_next.splice(songInPlaylistId, 1);
       } else {
-        // if no such item in play_next_list then adding it
+        // if no such item in playNextList then adding it
         new_play_next.push(action.song);
       }
       return new_play_next;

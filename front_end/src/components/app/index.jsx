@@ -8,17 +8,17 @@ import { bindActionCreators } from 'redux';
 import { DIRECTION_LEFT, DIRECTION_RIGHT } from 'hammerjs';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 
-import Menu from 'components/menu';
 import { toggleMenu } from 'actions';
-import FAQPage from 'components/faq';
-import NotFound from 'components/404';
+import Menu from 'components/menu';
 import Header from 'components/header';
 import Player from 'components/player';
-import Upload from 'components/upload';
-import Playlist from 'components/playlist';
-import ArtistsPage from 'components/artists';
-import AuthPage from 'components/registration';
-import ArtistsDetail from 'components/artist_detail';
+import FAQPage from 'containers/faq';
+import NotFound from 'containers/404';
+import Upload from 'containers/upload';
+import Playlist from 'containers/playlist';
+import ArtistsPage from 'containers/artists';
+import AuthPage from 'containers/registration';
+import ArtistsDetail from 'containers/artist_detail';
 
 import styles from './base.css';
 

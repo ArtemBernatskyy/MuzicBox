@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import debounce from 'lodash/debounce';
 
 import SongApi from 'api/song_api';
+import Song from 'components/song';
 import { Loader, BottomLoader } from 'components/common';
 import * as orderingTypes from 'constants/filter_types';
 import {
@@ -17,7 +18,6 @@ import {
   orderSongByValue,
 } from 'actions';
 
-import Song from './song';
 import styles from './playlist.css';
 
 const cx = classNames.bind(styles);

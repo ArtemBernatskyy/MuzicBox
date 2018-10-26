@@ -49,7 +49,7 @@ export const orderingType = (state = initialState.orderingType, action) => {
   }
 };
 
-export const is_search_song_loading = (state = initialState.is_search_song_loading, action) => {
+export const isSearchSongLoading = (state = initialState.isSearchSongLoading, action) => {
   switch (action.type) {
     case types.TOGGLE_SEARCH_SONG_LOADING:
       return action.payload;
@@ -77,7 +77,7 @@ export const playNextList = (state = initialState.playNextList, action) => {
   }
 };
 
-export const scroll_to_song = (state = initialState.scroll_to_song, action) => {
+export const scrollIntoViewSong = (state = initialState.scrollIntoViewSong, action) => {
   switch (action.type) {
     case types.SCROLL_TO_SONG:
       return action.payload;

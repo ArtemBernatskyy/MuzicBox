@@ -291,6 +291,12 @@ input[type='search']:hover {
   flex-direction: column;
 }
 
+:global .marked {
+  background-color: rgba(216, 216, 216, 0.78);
+  color: #060606;
+  pointer-events: none;
+}
+
 /* buttons */
 :global .btn {
   padding: 12px 38px;

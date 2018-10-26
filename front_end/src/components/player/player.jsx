@@ -21,7 +21,7 @@ import {
 import {
   roundUp, formatTime, offsetLeft, isTouchDevice,
 } from 'utils/misc';
-import * as orderingTypes from 'constants/ordering_types';
+import * as orderingTypes from 'constants/filter_types';
 
 import styles from './player.css';
 
@@ -57,13 +57,20 @@ class Player extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { activeSong, isLoading } = this.props;
-    if (isLoading !== prevProps.isLoading && isLoading) {
-      this.player.current.load(); // loading song from song has changed
-    }
+    const { activeSong, isLoading, isPlaying } = this.props;
+    const isPlayerPlaying = !this.player.current.paused;
+    // handling song loading
     if (activeSong.id !== prevProps.activeSong.id) {
       this.songEnded();
       this.player.current.load(); // loading song after previous has ended
+    }
+    // handling play/pause
+    if (isPlaying !== prevProps.isPlaying) {
+      if (!isLoading && !isPlayerPlaying && isPlaying) {
+        this.safePlay();
+      } else {
+        this.player.current.pause();
+      }
     }
   }
 
@@ -101,19 +108,6 @@ class Player extends Component {
   onLoadedData() {
     const { progress } = this.props;
     this.player.current.currentTime = this.player.current.duration * progress; // setting progress from localStorage
-  }
-
-  getSnapshotBeforeUpdate(prevProps) {
-    const { isPlaying, isLoading } = this.props;
-    const isPlayerPlaying = !this.player.current.paused;
-    if (isPlaying !== prevProps.isPlaying) {
-      if (!isLoading && !isPlayerPlaying && isPlaying) {
-        this.safePlay();
-      } else {
-        this.player.current.pause();
-      }
-    }
-    return null;
   }
 
   setProgress(evt, working = true) {

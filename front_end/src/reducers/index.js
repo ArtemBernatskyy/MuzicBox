@@ -8,8 +8,8 @@ import {
   orderingType,
   playNextList,
   isAuthorSearch,
-  is_search_song_loading,
-  scroll_to_song,
+  isSearchSongLoading,
+  scrollIntoViewSong,
 } from "./playlist";
 import { isMenuOpen } from "./menu";
 import { artists, searchArtistValue, isSearchArtistLoading } from "./artist";
@@ -30,9 +30,9 @@ const rootReducer = combineReducers({
   isRepeat,
   isMenuOpen,
   isAuthorSearch,
-  is_search_song_loading,
+  isSearchSongLoading,
   isSearchArtistLoading,
-  scroll_to_song,
+  scrollIntoViewSong,
   progress,
 });
 

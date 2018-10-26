@@ -43,7 +43,7 @@ export default {
   isRepeat: false,
   isMenuOpen: false,
   isAuthorSearch: false,
-  is_search_song_loading: false,
+  isSearchSongLoading: false,
   isSearchArtistLoading: false,
-  scroll_to_song: null,
+  scrollIntoViewSong: null,
 };

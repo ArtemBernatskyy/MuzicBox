@@ -1,7 +1,7 @@
-import * as types from "actions/action_types";
-import initialState from "constants/initial_state";
+import * as types from 'actions/action_types';
+import initialState from 'constants/initial_state';
 
-export const isMenuOpen = (state = initialState.isMenuOpen, action) => {
+const isMenuOpen = (state = initialState.isMenuOpen, action) => {
   switch (action.type) {
     case types.TOGGLE_MENU:
       return action.payload;
@@ -9,3 +9,5 @@ export const isMenuOpen = (state = initialState.isMenuOpen, action) => {
       return state;
   }
 };
+
+export default isMenuOpen;

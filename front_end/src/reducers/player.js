@@ -1,5 +1,5 @@
-import * as types from "actions/action_types";
-import initialState from "constants/initial_state";
+import * as types from 'actions/action_types';
+import initialState from 'constants/initial_state';
 
 export const isPlaying = (state = initialState.isPlaying, action) => {
   switch (action.type) {

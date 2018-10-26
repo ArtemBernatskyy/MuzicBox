@@ -1,36 +1,34 @@
-import Raven from "raven-js";
+import Raven from 'raven-js';
 
-import { getParameterByName } from "utils/misc";
+import { getParameterByName } from 'utils/misc';
 
-const filterState = state => {
-  return {
-    songs: state.songs,
-    playlist: state.playlist,
-    playNextList: state.playNextList,
-    searchSongValue: state.searchSongValue,
-    searchArtistValue: state.searchArtistValue,
-    artists: state.artists,
-    noSongs: state.noSongs,
-    filterTagValue: state.filterTagValue,
-    orderingType: state.orderingType,
-    activeSong: state.activeSong,
-    isAuthorSearch: state.isAuthorSearch,
-    isRepeat: state.isRepeat,
-    progress: state.progress,
-  };
-};
+const filterState = state => ({
+  songs: state.songs,
+  playlist: state.playlist,
+  playNextList: state.playNextList,
+  searchSongValue: state.searchSongValue,
+  searchArtistValue: state.searchArtistValue,
+  artists: state.artists,
+  noSongs: state.noSongs,
+  filterTagValue: state.filterTagValue,
+  orderingType: state.orderingType,
+  activeSong: state.activeSong,
+  isAuthorSearch: state.isAuthorSearch,
+  isRepeat: state.isRepeat,
+  progress: state.progress,
+});
 
 export const loadState = () => {
   try {
     let state = {};
-    const serializedState = localStorage.getItem("mboxState");
+    const serializedState = localStorage.getItem('mboxState');
     if (serializedState !== null) {
       state = JSON.parse(serializedState);
     }
-    const search = getParameterByName("search");
-    const isAuthorSearch = getParameterByName("author");
-    const tagSlug = getParameterByName("tag");
-    const ordering = getParameterByName("o");
+    const search = getParameterByName('search');
+    const isAuthorSearch = getParameterByName('author');
+    const tagSlug = getParameterByName('tag');
+    const ordering = getParameterByName('o');
     // if we have url params then injecting them in state
     if (search) {
       state.searchSongValue = search;
@@ -51,11 +49,11 @@ export const loadState = () => {
   }
 };
 
-export const saveState = state => {
+export const saveState = (state) => {
   try {
     const filteredState = filterState(state);
     const serializedState = JSON.stringify(filteredState);
-    localStorage.setItem("mboxState", serializedState);
+    localStorage.setItem('mboxState', serializedState);
   } catch (err) {
     Raven.captureException(err);
   }

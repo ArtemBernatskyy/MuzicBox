@@ -1,58 +1,15 @@
-import * as types from "actions/action_types";
-import initialState from "constants/initial_state";
+import * as types from 'actions/action_types';
+import initialState from 'constants/initial_state';
 
 export const playlist = (state = initialState.playlist, action) => {
   switch (action.type) {
     case types.SET_PLAYLIST:
       return action.payload;
-    case types.MERGE_PLAYLIST:
-      action.playlistObject.results = action.oldPlaylistObject.results.concat(action.playlistObject.results);
-      return action.playlistObject;
-    default:
-      return state;
-  }
-};
-
-export const searchSongValue = (state = initialState.searchSongValue, action) => {
-  switch (action.type) {
-    case types.SET_SEARCH_SONG_VALUE:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-export const filterTagValue = (state = initialState.filterTagValue, action) => {
-  switch (action.type) {
-    case types.SET_FILTER_TAG_VALUE:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-export const isAuthorSearch = (state = initialState.isAuthorSearch, action) => {
-  switch (action.type) {
-    case types.IS_AUTHOR_SEARCH:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-export const orderingType = (state = initialState.orderingType, action) => {
-  switch (action.type) {
-    case types.SET_ORDER_TYPE:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-export const isSearchSongLoading = (state = initialState.isSearchSongLoading, action) => {
-  switch (action.type) {
-    case types.TOGGLE_SEARCH_SONG_LOADING:
-      return action.payload;
+    case types.MERGE_PLAYLIST: {
+      const newPlaylistObject = { ...action.playlistObject };
+      newPlaylistObject.results = action.oldPlaylistObject.results.concat(action.playlistObject.results);
+      return newPlaylistObject;
+    }
     default:
       return state;
   }
@@ -61,16 +18,16 @@ export const isSearchSongLoading = (state = initialState.isSearchSongLoading, ac
 export const playNextList = (state = initialState.playNextList, action) => {
   switch (action.type) {
     case types.TOGGLE_PLAYNEXT_ITEM: {
-      let new_play_next = [...action.oldPlayNext];
-      let songInPlaylistId = new_play_next.findIndex(song => song.id == action.song.id);
+      const newPlayNext = [...action.oldPlayNext];
+      const songInPlaylistId = newPlayNext.findIndex(song => song.id === action.song.id);
       if (songInPlaylistId !== -1) {
         // removing item if it present in playNextList
-        new_play_next.splice(songInPlaylistId, 1);
+        newPlayNext.splice(songInPlaylistId, 1);
       } else {
         // if no such item in playNextList then adding it
-        new_play_next.push(action.song);
+        newPlayNext.push(action.song);
       }
-      return new_play_next;
+      return newPlayNext;
     }
     default:
       return state;

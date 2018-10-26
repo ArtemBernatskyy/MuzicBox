@@ -1,39 +1,36 @@
-import { combineReducers } from "redux";
-import { songs, activeSong, noSongs } from "./song";
-import { isPlaying, isLoading, isRepeat, progress } from "./player";
+import { combineReducers } from 'redux';
+
+import isMenuOpen from './menu';
 import {
-  playlist,
-  searchSongValue,
-  filterTagValue,
-  orderingType,
-  playNextList,
-  isAuthorSearch,
-  isSearchSongLoading,
-  scrollIntoViewSong,
-} from "./playlist";
-import { isMenuOpen } from "./menu";
-import { artists, searchArtistValue, isSearchArtistLoading } from "./artist";
+  songs, activeSong, noSongs, searchSongValue, filterTagValue,
+  orderingType, isAuthorSearch, isSearchSongLoading,
+} from './song';
+import {
+  isPlaying, isLoading, isRepeat, progress,
+} from './player';
+import { playlist, scrollIntoViewSong, playNextList } from './playlist';
+import { artists, searchArtistValue, isSearchArtistLoading } from './artist';
 
 const rootReducer = combineReducers({
-  filterTagValue,
-  playNextList,
-  orderingType,
-  artists,
-  noSongs,
   songs,
-  searchArtistValue,
-  searchSongValue,
+  noSongs,
+  artists,
+  progress,
   playlist,
-  activeSong,
+  isRepeat,
   isPlaying,
   isLoading,
-  isRepeat,
+  activeSong,
   isMenuOpen,
+  playNextList,
+  orderingType,
   isAuthorSearch,
+  filterTagValue,
+  searchSongValue,
+  searchArtistValue,
+  scrollIntoViewSong,
   isSearchSongLoading,
   isSearchArtistLoading,
-  scrollIntoViewSong,
-  progress,
 });
 
 export default rootReducer;

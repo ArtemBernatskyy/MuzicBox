@@ -44,7 +44,7 @@ module.exports = {
   appBuild: resolveApp('../muzicbox/static/build'),
   appPublic: resolveApp('../muzicbox/static/build'),
   appHtml: resolveApp('../muzicbox/templates/index.html'),
-  appIndexJs: resolveApp('src/index.js'),
+  appIndexJs: resolveApp('src/index.jsx'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
   yarnLockFile: resolveApp('yarn.lock'),

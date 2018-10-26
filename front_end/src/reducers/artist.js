@@ -1,13 +1,15 @@
-import * as types from "actions/action_types";
-import initialState from "constants/initial_state";
+import * as types from 'actions/action_types';
+import initialState from 'constants/initial_state';
 
 export const artists = (state = initialState.artists, action) => {
   switch (action.type) {
     case types.SET_ARTISTS:
       return action.artistsObject;
-    case types.MERGE_ARTISTS:
-      action.artistsObject.results = action.oldArtistsObject.results.concat(action.artistsObject.results);
-      return action.artistsObject;
+    case types.MERGE_ARTISTS: {
+      const newArtistsObject = { ...action.artistsObject };
+      newArtistsObject.results = action.oldArtistsObject.results.concat(action.artistsObject.results);
+      return newArtistsObject;
+    }
     default:
       return state;
   }

@@ -1,3 +1,6 @@
+/*eslint-disable */
+// this module has many external functions which is out of our realm )
+
 function offsetLeft(el) {
   let left = 0;
   while (el && el !== document) {
@@ -73,7 +76,7 @@ function getParameterByName(name, url) {
 }
 
 function getCookie(name) {
-  let match = document.cookie.match(new RegExp(name + '=([^;]+)'));
+  const match = document.cookie.match(new RegExp(name + '=([^;]+)'));
   if (match) {
     return match[1];
   }

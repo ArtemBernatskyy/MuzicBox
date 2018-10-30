@@ -38,13 +38,20 @@ class Header extends PureComponent {
     return (
       <div styleName="header">
         <div styleName="header__wrapper">
-          <button onClick={() => toggleMenu(!isMenuOpen)} type="button" styleName="sidebar">
+          <div
+            role="menuitemcheckbox"
+            tabIndex={0}
+            aria-checked={!isMenuOpen}
+            onKeyDown={() => toggleMenu(!isMenuOpen)}
+            onClick={() => toggleMenu(!isMenuOpen)}
+            styleName="sidebar"
+          >
             <div styleName={sidebarClass}>
               <span styleName="icon-bar" />
               <span styleName="icon-bar" />
               <span styleName="icon-bar" />
             </div>
-          </button>
+          </div>
 
           <div styleName="logo-container">
             <Link to="/" styleName="logo" className="common-link">

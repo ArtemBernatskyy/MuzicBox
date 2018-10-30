@@ -56,7 +56,7 @@
 .track-info__artists {
   font-size: 11px;
   font-weight: 400;
-  color: hsla(0, 0%, 100%, 0.6);
+  color: hsla(0, 0%, 100%, .6);
 }
 
 .react-contextmenu-wrapper {
@@ -65,7 +65,7 @@
 
 .control-button {
   background-color: transparent;
-  border: none;
+  border: 0;
   color: #a9a9a9;
   cursor: pointer;
   width: 32px;
@@ -88,7 +88,7 @@
 }
 
 .cover-art.shadow {
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .3);
 }
 
 .cover-art {
@@ -114,7 +114,7 @@
   background-size: cover !important;
   background-position: 50%;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity .3s ease;
 }
 
 .cover-art .cover-art-image-loaded {
@@ -154,11 +154,10 @@
 
 .playback-bar__progress-time {
   font-weight: 400;
-  color: hsla(0, 0%, 100%, 0.6);
+  color: hsla(0, 0%, 100%, .6);
   font-size: 11px;
   min-width: 40px;
   text-align: center;
-  cursor: default;
   user-select: none;
   cursor: pointer;
 }
@@ -177,8 +176,31 @@
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+.progress-bar__fg {
+  pointer-events: none;
+  background-color: #a0a0a0;
+  border-radius: 2px;
+  height: 4px;
+  width: 0;
+  transition: background-color .1s cubic-bezier(.3, 0, .7, 1);
+}
+
 .progress-bar:hover .progress-bar__fg {
   background-color: #1db954;
+}
+
+.progress-bar__slider {
+  pointer-events: none;
+  background-color: #fff;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: -6px;
+  z-index: 100;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .5);
+  transform: scale(0);
+  transition: transform .1s cubic-bezier(.3, 0, .7, 1);
 }
 
 .progress-bar:hover .progress-bar__slider {
@@ -197,30 +219,6 @@
 .middle-align {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-}
-
-.progress-bar__fg {
-  pointer-events: none;
-  background-color: #a0a0a0;
-  border-radius: 2px;
-  height: 4px;
-  width: 0;
-  transition: background-color 0.1s cubic-bezier(0.3, 0, 0.7, 1);
-}
-
-.progress-bar__slider {
-  pointer-events: none;
-  background-color: #fff;
-  border-radius: 50%;
-  width: 12px;
-  height: 12px;
-  margin-left: -6px;
-  margin-top: -6px;
-  z-index: 100;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
-  transform: scale(0);
-  transition: transform 0.1s cubic-bezier(0.3, 0, 0.7, 1);
 }
 
 /* -------------------------------------------------- right panel */
@@ -272,6 +270,7 @@
 
 /* Medium screens */
 @media (max-width: 640px) {
+
   .player__bar__left {
     display: none;
   }
@@ -312,6 +311,7 @@
   .control-button.control-button--circled:hover {
     transform: none;
   }
+
   .progress-bar:hover .progress-bar__slider {
     transform: none;
   }
@@ -319,6 +319,7 @@
 
 /* Small screens */
 @media (max-width: 415px) {
+
   .playback-bar {
     width: 100%;
   }

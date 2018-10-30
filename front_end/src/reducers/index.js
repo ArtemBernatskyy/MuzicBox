@@ -1,39 +1,36 @@
-import { combineReducers } from "redux";
-import { songs, active_song, no_songs } from "./song";
-import { is_playing, is_loading, is_repeat, progress } from "./player";
+import { combineReducers } from 'redux';
+
+import isMenuOpen from './menu';
 import {
-  playlist,
-  search_song_value,
-  filter_tag_value,
-  ordering_type,
-  play_next_list,
-  is_author_search,
-  is_search_song_loading,
-  scroll_to_song,
-} from "./playlist";
-import { is_menu_open } from "./menu";
-import { artists, search_artist_value, is_search_artist_loading } from "./artist";
+  songs, activeSong, noSongs, searchSongValue, filterTagValue,
+  orderingType, isAuthorSearch, isSearchSongLoading,
+} from './song';
+import {
+  isPlaying, isLoading, isRepeat, progress,
+} from './player';
+import { playlist, scrollIntoViewSong, playNextList } from './playlist';
+import { artists, searchArtistValue, isSearchArtistLoading } from './artist';
 
 const rootReducer = combineReducers({
-  filter_tag_value,
-  play_next_list,
-  ordering_type,
-  artists,
-  no_songs,
   songs,
-  search_artist_value,
-  search_song_value,
-  playlist,
-  active_song,
-  is_playing,
-  is_loading,
-  is_repeat,
-  is_menu_open,
-  is_author_search,
-  is_search_song_loading,
-  is_search_artist_loading,
-  scroll_to_song,
+  noSongs,
+  artists,
   progress,
+  playlist,
+  isRepeat,
+  isPlaying,
+  isLoading,
+  activeSong,
+  isMenuOpen,
+  playNextList,
+  orderingType,
+  isAuthorSearch,
+  filterTagValue,
+  searchSongValue,
+  searchArtistValue,
+  scrollIntoViewSong,
+  isSearchSongLoading,
+  isSearchArtistLoading,
 });
 
 export default rootReducer;

@@ -1,9 +1,13 @@
-import * as types from "./action_types";
-import { loadSongDetailsSuccess } from "./song";
+import * as types from './action_types';
 
 export const emitIsPlaying = bool => ({
   type: types.SET_IS_PLAYING,
   payload: bool,
+});
+
+export const loadSongDetailsSuccess = song => ({
+  type: types.PLAY_NEXT,
+  payload: song,
 });
 
 export const emitIsLoading = bool => ({
@@ -21,20 +25,20 @@ export const setProgress = unitInterval => ({
   payload: unitInterval,
 });
 
-export function setIsPlaying(is_playing) {
+export function setIsPlaying(isPlaying) {
   return (dispatch, getState) => {
-    const is_loading = getState().is_loading;
+    const { isLoading } = getState();
     // not playing if we are loading
-    if (!is_loading) {
-      dispatch(emitIsPlaying(is_playing));
+    if (!isLoading) {
+      dispatch(emitIsPlaying(isPlaying));
     }
   };
 }
 
-export function playNext(song_object, playing = false) {
-  return dispatch => {
+export function playNext(songObject, playing = false) {
+  return (dispatch) => {
     dispatch(emitIsLoading(true));
-    dispatch(loadSongDetailsSuccess(song_object));
+    dispatch(loadSongDetailsSuccess(songObject));
     if (playing) {
       dispatch(emitIsPlaying(true));
     }

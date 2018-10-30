@@ -1,28 +1,28 @@
-import ArtistApi from "api/artist_api";
-import * as types from "./action_types";
+import ArtistApi from 'api/artist_api';
+import * as types from './action_types';
 
-export const mergeArtists = (artists_object, old_artists_object) => ({
+export const mergeArtists = (artistsObject, oldArtistsObject) => ({
   type: types.MERGE_ARTISTS,
-  artists_object: artists_object,
-  old_artists_object: old_artists_object,
+  artistsObject,
+  oldArtistsObject,
 });
 
-export function mergeNextArtists(page_url) {
+export function mergeNextArtists(pageUrl) {
   return (dispatch, getState) => {
-    const old_artists_object = getState().artists;
-    ArtistApi.getNextArtists(page_url)
-      .then(artists_object => {
-        dispatch(mergeArtists(artists_object, old_artists_object));
+    const oldArtistsObject = getState().artists;
+    ArtistApi.getNextArtists(pageUrl)
+      .then((artistsObject) => {
+        dispatch(mergeArtists(artistsObject, oldArtistsObject));
       })
-      .catch(error => {
+      .catch((error) => {
         throw error;
       });
   };
 }
 
-export const setArtists = artists_object => ({
+export const setArtists = artistsObject => ({
   type: types.SET_ARTISTS,
-  artists_object: artists_object,
+  artistsObject,
 });
 
 export const setSearchArtistValue = value => ({
@@ -36,14 +36,14 @@ export const setSearchArtistLoading = bool => ({
 });
 
 export function searchArtists(artist) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(setSearchArtistLoading(true)); // setting search artist loading to ON
     dispatch(setSearchArtistValue(artist));
     ArtistApi.searchArtist(artist)
-      .then(artists => {
+      .then((artists) => {
         dispatch(setArtists(artists));
       })
-      .catch(error => {
+      .catch((error) => {
         throw error;
       })
       .finally(() => {

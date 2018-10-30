@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import classNames from 'classnames';
 
 import SongApi from 'api/song_api';
-import { Loader } from 'components/common';
+import { Loader } from 'components/loaders';
 import Highlighter from 'utils/highlighter';
 import { formatTime, roundDown } from 'utils/misc';
 import {

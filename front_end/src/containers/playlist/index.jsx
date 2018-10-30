@@ -9,7 +9,7 @@ import debounce from 'lodash/debounce';
 
 import SongApi from 'api/song_api';
 import Song from 'components/song';
-import { Loader, BottomLoader } from 'components/common';
+import { Loader, BottomLoader } from 'components/loaders';
 import * as orderingTypes from 'constants/filter_types';
 import {
   searchSong,

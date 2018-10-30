@@ -38,6 +38,7 @@
 }
 
 @media (max-width: 640px) {
+
   .answer_block {
     list-style: initial;
     margin: 10px 18px;

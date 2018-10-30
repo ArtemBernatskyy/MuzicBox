@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import debounce from 'lodash/debounce';
 
 import Highlighter from 'utils/highlighter';
-import { BottomLoader } from 'components/common';
+import { BottomLoader } from 'components/loaders';
 import { mergeNextArtists, searchArtists } from 'actions';
 
 import styles from './artists.css';

@@ -83,11 +83,11 @@ div {
 }
 
 :global .link-dark {
-  color: hsla(0, 0%, 0%, 0.71);
+  color: hsla(0, 0%, 0%, .71);
 }
 
 :global .link-light {
-  color: rgba(0, 0, 0, 0.65);
+  color: rgba(0, 0, 0, .65);
 }
 
 :global .link-blue {
@@ -95,8 +95,8 @@ div {
 }
 
 :global .link-subtle {
-  color: hsla(0, 0%, 100%, 0.6);
-  transition: color 0.2s;
+  color: hsla(0, 0%, 100%, .6);
+  transition: color .2s;
 }
 
 :global .active {
@@ -121,7 +121,7 @@ input[type='search']:focus {
 
 input[type='search']:hover {
   border: 2px solid silver;
-  transition: all 0.5s cubic-bezier(0, 0, 0, 2.41);
+  transition: all .5s cubic-bezier(0, 0, 0, 2.41);
 }
 
 :global .common-link {
@@ -166,7 +166,7 @@ input[type='search']:hover {
 :global .font-small {
   font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
-  font-size: 0.88rem;
+  font-size: .88rem;
   font-stretch: normal;
   font-style: normal;
   font-variant-caps: normal;
@@ -218,6 +218,7 @@ input[type='search']:hover {
 
 /* Small screens */
 @media (max-width: 640px) {
+
   html {
     font-size: 15px;
   }
@@ -253,7 +254,7 @@ input[type='search']:hover {
   flex: 5;
   color: rgb(0, 0, 0);
   background-color: #fafafa;
-  transition: transform 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  transition: transform 450ms cubic-bezier(.23, 1, .32, 1) 0ms;
   font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
@@ -265,9 +266,9 @@ input[type='search']:hover {
 }
 
 :global .app__left {
-  transition: transform 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  transition: transform 450ms cubic-bezier(.23, 1, .32, 1) 0ms;
   flex: 1;
-  box-shadow: rgba(0, 0, 0, 0.16) 0 3px 10px, rgba(0, 0, 0, 0.23) 0 3px 10px;
+  box-shadow: rgba(0, 0, 0, .16) 0 3px 10px, rgba(0, 0, 0, .23) 0 3px 10px;
   overflow-y: auto;
   overflow-x: hidden;
   background-color: white;
@@ -277,7 +278,7 @@ input[type='search']:hover {
 
 :global .search-error-text {
   text-align: center;
-  font-size: 0.9rem;
+  font-size: .9rem;
 }
 
 :global .app__left--open {
@@ -292,7 +293,7 @@ input[type='search']:hover {
 }
 
 :global .marked {
-  background-color: rgba(216, 216, 216, 0.78);
+  background-color: rgba(216, 216, 216, .78);
   color: #060606;
   pointer-events: none;
 }
@@ -314,7 +315,7 @@ input[type='search']:hover {
   border-radius: 4px;
   border-width: 2px;
   text-transform: capitalize;
-  letter-spacing: 0.25px;
+  letter-spacing: .25px;
   outline: none;
   -webkit-font-smoothing: antialiased;
 }
@@ -324,7 +325,7 @@ input[type='search']:hover {
 }
 
 :global .btn--success:hover {
-  box-shadow: 0 1px 2px 0 rgba(26, 115, 232, 0.451), 0 1px 3px 1px rgba(26, 115, 232, 0.302);
+  box-shadow: 0 1px 2px 0 rgba(26, 115, 232, .451), 0 1px 3px 1px rgba(26, 115, 232, .302);
   background-color: #297be6;
 }
 
@@ -346,7 +347,7 @@ input[type='search']:hover {
 /* scroll button */
 :global .scroll {
   color: #fdfdfd;
-  opacity: 0.2;
+  opacity: .2;
   background-color: #313131;
   width: 23px;
   height: 44px;
@@ -354,9 +355,9 @@ input[type='search']:hover {
   bottom: 79px;
   right: 10px;
   border-radius: 2px;
-  border: none;
+  border: 0;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: opacity .2s;
 }
 
 :global .scroll:hover {
@@ -369,7 +370,7 @@ input[type='search']:hover {
 
 /* Custom scrollbar */
 :global .scrollbar-custom::-webkit-scrollbar-track {
-  background-color: rgba(229, 229, 229, 0.62);
+  background-color: rgba(229, 229, 229, .62);
 }
 
 :global .scrollbar-custom::-webkit-scrollbar {
@@ -378,13 +379,14 @@ input[type='search']:hover {
 
 :global .scrollbar-custom::-webkit-scrollbar-thumb {
   border-radius: 7px;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, .3);
   box-shadow: 0 0 1px #fff;
 }
 
 /* Medium screens */
 
 @media (max-width: 992px) {
+
   :global .app__left {
     width: 230px;
     left: 0;
@@ -402,6 +404,7 @@ input[type='search']:hover {
 
 /* Small screens */
 @media (max-width: 640px) {
+
   :global .app__container {
     margin-left: 3px;
     margin-right: 3px;

@@ -1,5 +1,5 @@
 {
-  "extends": "stylelint-config-standard",
+  "extends": "stylelint-config-airbnb",
   "rules": {
     "indentation": 2,
     "string-quotes": "single",

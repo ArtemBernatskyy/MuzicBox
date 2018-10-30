@@ -33,7 +33,7 @@
   width: 146px;
   height: 146px;
   margin-right: 23px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 10px rgba(0, 0, 0, .3);
 }
 
 .artist__description {
@@ -48,6 +48,7 @@
 }
 
 @media (max-width: 640px) {
+
   .artist__background {
     height: 150px;
   }

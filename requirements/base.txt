@@ -16,7 +16,7 @@ psycopg2-binary==2.7.5
 redis==2.10.6
 beautifulsoup4==4.6.1
 mutagen==1.41.0
-requests==2.19.1
+requests==2.20.0
 django-cleanup==2.1.0
 textile==3.0.3
 social-auth-app-django==2.1.0

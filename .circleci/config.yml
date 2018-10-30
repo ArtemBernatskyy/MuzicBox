@@ -15,8 +15,8 @@ defaults: &DEFAULT
         CELERY_RESULT_SERIALIZER: json
         CELERY_RESULT_BACKEND: redis://localhost:6379/0
         LAST_FM_KEY: 0f2856278668f93529ad7e611f55b7c3 # throwaway key which allows community builds
-    - image: circleci/postgres:9.6.2
     - image: redis:3.2-alpine
+    - image: circleci/postgres:9.6.2
 
 
 version: 2
@@ -26,7 +26,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: deps1-{{ .Branch }}-{{ checksum "requirements/circle.txt" }}
+          key: deps1-{{ .Branch }}-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/circle.txt" }}
       - run:
           name: Installing requirements
           command: |
@@ -34,7 +34,7 @@ jobs:
             source env/bin/activate
             pip install -r requirements/circle.txt
       - save_cache:
-          key: deps1-{{ .Branch }}-{{ checksum "requirements/circle.txt" }}
+          key: deps1-{{ .Branch }}-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/circle.txt" }}
           paths:
             - env
       - persist_to_workspace:

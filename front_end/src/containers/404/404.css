@@ -1,0 +1,25 @@
+.error {
+  text-shadow: 0 0 80px #fff, 0 0 30px #949494, 0 0 6px #ababab;
+  color: rgb(255, 255, 255) !important;
+}
+
+.error-page span,
+.error-page p,
+.error-page a {
+  font-family: 'Monoton', cursive;
+}
+
+.code span:nth-of-type(1) {
+  text-shadow: none;
+  opacity: .4;
+}
+
+.error-page {
+  font-size: 9vw;
+  text-align: center;
+  text-transform: uppercase;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

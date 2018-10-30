@@ -1,126 +1,43 @@
-import SongApi from "api/song_api";
-import * as types from "./action_types";
-import { setSongs } from "./song";
+import SongApi from 'api/song_api';
+import * as types from './action_types';
 
 export const setPlaylist = songs => ({
   type: types.SET_PLAYLIST,
   payload: songs,
 });
 
-export const setSearchSongValue = value => ({
-  type: types.SET_SEARCH_SONG_VALUE,
-  payload: value,
-});
-
-export const setSearchSongLoading = bool => ({
-  type: types.TOGGLE_SEARCH_SONG_LOADING,
-  payload: bool,
-});
-
-export const setAuthorSearchValue = bool => ({
-  type: types.IS_AUTHOR_SEARCH,
-  payload: bool,
-});
-
-export const setFilterTagValue = value => ({
-  type: types.SET_FILTER_TAG_VALUE,
-  payload: value,
-});
-
-export const setOrderingType = value => ({
-  type: types.SET_ORDER_TYPE,
-  payload: value,
-});
-
-export const scrollToSong = song_id => ({
+export const scrollToSong = songId => ({
   type: types.SCROLL_TO_SONG,
-  payload: song_id,
+  payload: songId,
 });
 
-export const togglePlayNextItemAction = (song, old_play_next) => ({
+export const togglePlayNextItemAction = (song, oldPlayNext) => ({
   type: types.TOGGLE_PLAYNEXT_ITEM,
-  song: song,
-  old_play_next: old_play_next,
+  song,
+  oldPlayNext,
 });
 
 export function togglePlayNextItem(song) {
   return (dispatch, getState) => {
-    const old_play_next = getState().play_next_list;
-    dispatch(togglePlayNextItemAction(song, old_play_next));
+    const oldPlayNext = getState().playNextList;
+    dispatch(togglePlayNextItemAction(song, oldPlayNext));
   };
 }
 
-export function orderSongByValue(ordering_type) {
-  return (dispatch, getState) => {
-    const search_song_value = getState().search_song_value;
-    const filterTagObject = getState().filter_tag_value;
-    const is_author_search = getState().is_author_search;
-    dispatch(setSearchSongLoading(true)); // setting search loading to ON
-    dispatch(setOrderingType(ordering_type));
-    SongApi.fetchSongs(ordering_type, search_song_value, filterTagObject, is_author_search)
-      .then(songs => {
-        dispatch(setSongs(songs));
-      })
-      .finally(() => {
-        dispatch(setSearchSongLoading(false)); // setting search loading to OFF
-      });
-  };
-}
-
-export function searchSong(song, is_author_search) {
-  return (dispatch, getState) => {
-    const filterTagObject = getState().filter_tag_value;
-    const ordering_type = getState().ordering_type;
-    dispatch(setSearchSongLoading(true)); // setting search loading to ON
-    dispatch(setSearchSongValue(song));
-    dispatch(setAuthorSearchValue(is_author_search));
-    SongApi.fetchSongs(ordering_type, song, filterTagObject, is_author_search)
-      .then(songs => {
-        dispatch(setSongs(songs));
-      })
-      .catch(error => {
-        throw error;
-      })
-      .finally(() => {
-        dispatch(setSearchSongLoading(false)); // setting search loading to OFF
-      });
-  };
-}
-
-export function filterSongByTag(filterTagObject) {
-  return (dispatch, getState) => {
-    const search_song_value = getState().search_song_value;
-    const ordering_type = getState().ordering_type;
-    const is_author_search = getState().is_author_search;
-    dispatch(setSearchSongLoading(true)); // setting search loading to ON
-    dispatch(setFilterTagValue(filterTagObject));
-    SongApi.fetchSongs(ordering_type, search_song_value, filterTagObject, is_author_search)
-      .then(songs => {
-        dispatch(setSongs(songs));
-      })
-      .catch(error => {
-        throw error;
-      })
-      .finally(() => {
-        dispatch(setSearchSongLoading(false)); // setting search loading to OFF
-      });
-  };
-}
-
-export const mergePlaylist = (playlist_object, old_playlist_object) => ({
+export const mergePlaylist = (playlistObject, oldPlaylistObject) => ({
   type: types.MERGE_PLAYLIST,
-  playlist_object: playlist_object,
-  old_playlist_object: old_playlist_object,
+  playlistObject,
+  oldPlaylistObject,
 });
 
-export function mergeNextPlaylist(page_url) {
+export function mergeNextPlaylist(pageUrl) {
   return (dispatch, getState) => {
-    const old_playlist_object = getState().playlist;
-    SongApi.getNextSongs(page_url)
-      .then(playlist_object => {
-        dispatch(mergePlaylist(playlist_object, old_playlist_object));
+    const oldPlaylistObject = getState().playlist;
+    SongApi.getNextSongs(pageUrl)
+      .then((playlistObject) => {
+        dispatch(mergePlaylist(playlistObject, oldPlaylistObject));
       })
-      .catch(error => {
+      .catch((error) => {
         throw error;
       });
   };

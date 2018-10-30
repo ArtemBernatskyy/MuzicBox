@@ -1,14 +1,14 @@
-import Raven from "raven-js";
-import thunk from "redux-thunk";
-import throttle from "lodash/throttle";
-import createRavenMiddleware from "raven-for-redux";
-import { applyMiddleware, createStore } from "redux";
+import Raven from 'raven-js';
+import thunk from 'redux-thunk';
+import throttle from 'lodash/throttle';
+import createRavenMiddleware from 'raven-for-redux';
+import { applyMiddleware, createStore } from 'redux';
 
-import rootReducer from "reducers";
-import { loadState, saveState } from "store/localStorage";
+import rootReducer from 'reducers';
+import { loadState, saveState } from 'store/localStorage';
 
 export default function configureStore() {
-  Raven.config("https://666cbcf624ac42a6936a96f8507dbf5e@sentry.io/1259461").install();
+  Raven.config('https://666cbcf624ac42a6936a96f8507dbf5e@sentry.io/1259461').install();
   const persistedState = loadState();
   const ravenMiddleware = createRavenMiddleware(Raven);
 
@@ -19,7 +19,7 @@ export default function configureStore() {
   store.subscribe(
     throttle(() => {
       saveState(store.getState());
-    }, 1000)
+    }, 1000),
   );
   return store;
 }

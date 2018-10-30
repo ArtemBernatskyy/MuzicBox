@@ -1,0 +1,59 @@
+.loginbox__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loginbox__inner {
+  margin-top: 12vh;
+}
+
+.loginbox__inner h1 {
+  margin-top: 2vh;
+  text-align: center;
+  font-weight: 500;
+  font-family: 'Monoton', cursive;
+  word-spacing: 1rem;
+  font-size: 46px;
+}
+
+.login__inner__buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  width: 300px;
+  flex-direction: column;
+}
+
+.login__inner__buttons small {
+  font-size: 9px;
+  display: block;
+}
+
+a.facebook__button {
+  width: 100%;
+  background-color: #3894fc;
+  color: white;
+  font-weight: 800;
+  text-transform: none;
+}
+
+button.twitter__button {
+  width: 100%;
+  background-color: #1da1f2;
+  color: white;
+  font-weight: 800;
+  text-transform: none;
+  margin-top: 7px;
+  max-height: 42px;
+}
+
+button.google__button {
+  width: 100%;
+  background-color: #ea4335;
+  color: white;
+  font-weight: 800;
+  text-transform: none;
+  margin-top: 7px;
+  max-height: 42px;
+}

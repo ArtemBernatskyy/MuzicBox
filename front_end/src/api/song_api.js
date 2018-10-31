@@ -35,6 +35,10 @@ class SongApi {
     if (filterObject && filterObject.slug) {
       fetchUrl += `tag=${filterObject.slug}&`;
     }
+    // clearing & symbol
+    if (fetchUrl.endsWith('&')) {
+      fetchUrl = fetchUrl.slice(0, -1);
+    }
     // keep url in sync to allow loading state from Url
     window.history.pushState(null, '', `?${fetchUrl}`);
     fetchUrl = `/api/v0/audio/?${fetchUrl}`;

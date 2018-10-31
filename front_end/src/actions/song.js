@@ -1,10 +1,10 @@
 import SongApi from 'api/song_api';
 import { getParameterByName } from 'utils/misc';
-import { playNext } from './player';
+import { playNext, emitIsLoading } from './player';
 import * as types from './action_types';
 import { setPlaylist } from './playlist';
 
-export const setNoSongs = bool => ({
+export const emitNoSongs = bool => ({
   type: types.NO_SONGS,
   payload: bool,
 });
@@ -45,6 +45,16 @@ export const mergeSongs = (songObjects, oldSongObjects) => ({
   oldSongObjects,
 });
 
+export function setNoSongs(bool) {
+  return (dispatch) => {
+    dispatch(emitNoSongs(bool));
+    // if we don't have ANY songs then we will set all loaders to false
+    if (bool === true) {
+      dispatch(emitIsLoading(false));
+    }
+  };
+}
+
 export function initialLoadSongs() {
   return (dispatch, getState) => {
     const oldActiveSong = getState().activeSong;
@@ -57,39 +67,56 @@ export function initialLoadSongs() {
     const isLocalStorage = oldActiveSong ? oldActiveSong.id !== '' : false;
 
     if (hasUrlParams) {
-      // because we don't know name of tag then we will populate it with slug )
+      // have SEARCH PARAMS -> trying to load from that params
       SongApi.fetchSongs(ordering, search, { name: tagSlug, slug: tagSlug }, isAuthorSearch)
         .then((songObjects) => {
           dispatch(setSongs(songObjects));
           if (songObjects.results.length > 0) {
-            // checking if user has at least one song
-            dispatch(setPlaylist(songObjects)); // loading songs in to playlist
+            // have SEARCH RESULTS -> setting them
+            dispatch(setPlaylist(songObjects)); // loading songs into playlist
             dispatch(playNext(songObjects.results[0])); // setting active first song during onLoad
-          } else {
-            dispatch(setNoSongs(true));
+          } else if (!isLocalStorage) {
+            // no SEARCH RESULTS AND no localStorage -> loading DEFAULT PLAYLIST
+            SongApi.getNextSongs()
+              .then((songObjects) => {
+                if (songObjects.results.length > 0) {
+                  // have DEFAULT PLAYLIST -> setting songs from it
+                  dispatch(setPlaylist(songObjects)); // loading songs into playlist
+                  dispatch(playNext(songObjects.results[0])); // setting active first song during onLoad
+                } else {
+                  // no DEFAULT PLAYLIST -> signaling setNoSongs
+                  dispatch(setNoSongs(true));
+                }
+              });
           }
+          // else {
+          //   no SEARCH RESULTS AND have localStorage -> loaded from localStorage during initialisation
+          // }
         })
         .catch((error) => {
           throw error;
         });
     } else if (!isLocalStorage) {
+      // no SEARCH PARAMS AND no localStorage -> loading DEFAULT PLAYLIST
       SongApi.getNextSongs()
         .then((songObjects) => {
           dispatch(setSongs(songObjects));
           if (songObjects.results.length > 0) {
-            // checking if user has at least one song
-            dispatch(setPlaylist(songObjects)); // loading songs in to playlist
+            // have DEFAULT PLAYLIST -> setting songs from it
+            dispatch(setPlaylist(songObjects)); // loading songs into playlist
             dispatch(playNext(songObjects.results[0])); // setting active first song during onLoad
           } else {
+            // no DEFAULT PLAYLIST -> signaling setNoSongs
             dispatch(setNoSongs(true));
           }
         })
         .catch((error) => {
           throw error;
         });
-    } else {
-      dispatch(playNext(oldActiveSong)); // setting song from localStorage
     }
+    // else {
+    //   no SEARCH PARAMS AND have localStorage -> loaded from localStorage during initialisation
+    // }
   };
 }
 

@@ -244,7 +244,7 @@ class Playlist extends Component {
         </div>
 
         <div className="m-3vh" styleName="playlist">
-          {noSongs ? (
+          {noSongs && !searchSongValue ? (
             <h3 className="default-center">
               You&#39;ve got no songs yet, &nbsp;
               <Link className="default-link" to="/upload/">

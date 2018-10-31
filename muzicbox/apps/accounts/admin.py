@@ -12,7 +12,7 @@ class ProfileInline(admin.StackedInline):
     fields = ['user', 'admin_image_thumb', 'profile_image', 'sex', 'slug', 'address_line1',
               'address_line2', 'city', 'state', 'postal', 'dob', 'phone', 'cell',
               'created_date', 'modified_date']
-    readonly_fields = ['admin_image_thumb', 'created_date', 'modified_date']
+    readonly_fields = ['admin_image_thumb', 'slug', 'created_date', 'modified_date']
     inline_classes = ['grp-open']
 
 

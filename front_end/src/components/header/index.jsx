@@ -6,31 +6,15 @@ import CSSModules from 'react-css-modules';
 import { Link, withRouter } from 'react-router-dom';
 
 import { toggleMenu } from 'actions';
+import { handleLogout } from 'utils/misc';
 
 import styles from './header.css';
 
 const cx = classNames.bind(styles);
 
 class Header extends PureComponent {
-  static handleLogout() {
-    localStorage.clear();
-  }
-
-  handleLogoutUrl() {
-    const { history, location } = this.props;
-    const currentUrl = history.location.pathname;
-    let nextPage = location.pathname;
-    // we are checking if we are on artst's detail page
-    // and redirecting to the root url
-    // because there could be hidden artists
-    if (currentUrl.indexOf('/artist/') >= 0) {
-      nextPage = '/';
-    }
-    return `/api/v0/accounts/logout/?next_page=${nextPage}`;
-  }
-
   render() {
-    const { isMenuOpen, toggleMenu } = this.props;
+    const { isMenuOpen, toggleMenu, location } = this.props;
     const sidebarClass = cx({
       sidebar__icon: true,
       open: isMenuOpen,
@@ -62,9 +46,15 @@ class Header extends PureComponent {
           <div styleName="auth">
             <div styleName="auth__links-container">
               {window.opts.is_authenticated ? (
-                <a onClick={Header.handleLogout} href={this.handleLogoutUrl()}>
+                <div
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={() => handleLogout(location)}
+                  onClick={() => handleLogout(location)}
+                  className="pointer"
+                >
                   <span>Logout</span>
-                </a>
+                </div>
               ) : (
                 <div>
                   <Link to="/auth/" styleName="auth__link auth--white-link  auth--transition">

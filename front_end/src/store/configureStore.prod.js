@@ -19,7 +19,7 @@ export default function configureStore() {
   store.subscribe(
     throttle(() => {
       saveState(store.getState());
-    }, 1000),
+    }, 2000),
   );
   return store;
 }

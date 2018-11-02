@@ -3,10 +3,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import classNames from 'classnames';
 import CSSModules from 'react-css-modules';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-import { toggleMenu } from 'actions';
-import { handleLogout } from 'utils/misc';
+import { toggleMenu, handleLogout } from 'actions';
 
 import styles from './header.css';
 
@@ -14,7 +13,7 @@ const cx = classNames.bind(styles);
 
 class Header extends PureComponent {
   render() {
-    const { isMenuOpen, toggleMenu, location } = this.props;
+    const { isMenuOpen, toggleMenu, handleLogout } = this.props;
     const sidebarClass = cx({
       sidebar__icon: true,
       open: isMenuOpen,
@@ -49,8 +48,8 @@ class Header extends PureComponent {
                 <div
                   role="button"
                   tabIndex={0}
-                  onKeyDown={() => handleLogout(location)}
-                  onClick={() => handleLogout(location)}
+                  onKeyDown={handleLogout}
+                  onClick={handleLogout}
                   className="pointer"
                 >
                   <span>Logout</span>
@@ -81,12 +80,10 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ toggleMenu }, dispatch);
+  return bindActionCreators({ toggleMenu, handleLogout }, dispatch);
 }
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(CSSModules(Header, styles, { allowMultiple: true })),
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CSSModules(Header, styles, { allowMultiple: true }));

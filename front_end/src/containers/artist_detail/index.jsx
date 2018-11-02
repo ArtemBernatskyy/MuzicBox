@@ -82,8 +82,6 @@ function mapStateToProps(state) {
   return { artists: state.artists };
 }
 
-const ArtistsPageWithStyles = CSSModules(ArtistsDetail, styles, {
-  allowMultiple: true,
-});
-
-export default connect(mapStateToProps)(ArtistsPageWithStyles);
+export default connect(
+  mapStateToProps,
+)(CSSModules(ArtistsDetail, styles, { allowMultiple: true }));

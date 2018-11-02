@@ -18,7 +18,11 @@ export default function configureStore() {
   const store = createStore(rootReducer, persistedState, middlewareEnhancer);
   store.subscribe(
     throttle(() => {
-      saveState(store.getState());
+      const currentState = store.getState();
+      // if we allowing state to sync with localStorage
+      if (currentState.isStorageSync) {
+        saveState(currentState);
+      }
     }, 2000),
   );
   return store;

@@ -7,19 +7,6 @@ export const mergeArtists = (artistsObject, oldArtistsObject) => ({
   oldArtistsObject,
 });
 
-export function mergeNextArtists(pageUrl) {
-  return (dispatch, getState) => {
-    const oldArtistsObject = getState().artists;
-    ArtistApi.getNextArtists(pageUrl)
-      .then((artistsObject) => {
-        dispatch(mergeArtists(artistsObject, oldArtistsObject));
-      })
-      .catch((error) => {
-        throw error;
-      });
-  };
-}
-
 export const setArtists = artistsObject => ({
   type: types.SET_ARTISTS,
   artistsObject,
@@ -34,6 +21,19 @@ export const setSearchArtistLoading = bool => ({
   type: types.TOGGLE_SEARCH_ARTIST_LOADING,
   payload: bool,
 });
+
+export function mergeNextArtists(pageUrl) {
+  return (dispatch, getState) => {
+    const oldArtistsObject = getState().artists;
+    ArtistApi.getNextArtists(pageUrl)
+      .then((artistsObject) => {
+        dispatch(mergeArtists(artistsObject, oldArtistsObject));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+}
 
 export function searchArtists(artist) {
   return (dispatch) => {

@@ -84,23 +84,6 @@ function getCookie(name) {
   return null;
 }
 
-function handleLogin() {
-  localStorage.clear();
-  window.location.replace('/oauth/login/facebook/');
-}
-
-function handleLogout(location) {
-  let nextPage = location.pathname;
-  // we are checking if we are on artst's detail page
-  // and redirecting to the root url
-  // because there could be hidden artists
-  if (location.pathname.indexOf('/artist/') >= 0) {
-    nextPage = '/';
-  }
-  localStorage.clear();
-  window.location.replace(`/api/v0/accounts/logout/?next_page=${nextPage}`);
-}
-
 export {
   offsetLeft,
   format2Number,
@@ -111,6 +94,4 @@ export {
   handleErrors,
   getParameterByName,
   getCookie,
-  handleLogout,
-  handleLogin,
 };

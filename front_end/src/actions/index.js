@@ -1,4 +1,5 @@
 import toggleMenu from './menu';
+import { setIsStorageSync, handleLogin, handleLogout } from './system';
 import {
   setPlaylist, togglePlayNextItem, mergeNextPlaylist, scrollToSong,
 } from './playlist';
@@ -22,7 +23,9 @@ export {
   setArtists,
   setProgress,
   setPlaylist,
+  handleLogin,
   setIsPlaying,
+  handleLogout,
   scrollToSong,
   toggleRepeat,
   searchArtists,
@@ -32,6 +35,7 @@ export {
   orderSongByValue,
   mergeNextArtists,
   initialLoadSongs,
+  setIsStorageSync,
   mergeNextPlaylist,
   togglePlayNextItem,
   setSearchSongValue,

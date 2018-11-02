@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 
 import isMenuOpen from './menu';
+import isStorageSync from './system';
 import {
   songs, activeSong, noSongs, searchSongValue, filterTagValue,
   orderingType, isAuthorSearch, isSearchSongLoading,
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   isMenuOpen,
   playNextList,
   orderingType,
+  isStorageSync,
   isAuthorSearch,
   filterTagValue,
   searchSongValue,

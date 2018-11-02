@@ -46,4 +46,5 @@ export default {
   isSearchSongLoading: false,
   isSearchArtistLoading: false,
   scrollIntoViewSong: null,
+  isStorageSync: true,
 };

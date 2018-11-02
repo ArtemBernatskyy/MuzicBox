@@ -7,14 +7,13 @@ import { bindActionCreators } from 'redux';
 import CSSModules from 'react-css-modules';
 import { NavLink, withRouter } from 'react-router-dom';
 
-import { handleLogout } from 'utils/misc';
-import { toggleMenu } from 'actions';
+import { toggleMenu, handleLogout } from 'actions';
 import styles from './menu.css';
 
 const cx = classNames.bind(styles);
 
 const Menu = (props) => {
-  const { isMenuOpen, toggleMenu, location } = props;
+  const { isMenuOpen, toggleMenu, handleLogout } = props;
   const appLeftClass = cx({
     'scrollbar-custom': true,
     app__left: true,
@@ -122,8 +121,8 @@ const Menu = (props) => {
             <div
               role="button"
               tabIndex={0}
-              onKeyDown={() => toggleMenu(false) && handleLogout(location)}
-              onClick={() => toggleMenu(false) && handleLogout(location)}
+              onKeyDown={() => toggleMenu(false) && handleLogout()}
+              onClick={() => toggleMenu(false) && handleLogout()}
               styleName="menu menu--hidden-sm"
               className="pointer"
             >
@@ -164,7 +163,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ toggleMenu }, dispatch);
+  return bindActionCreators({ toggleMenu, handleLogout }, dispatch);
 }
 
 export default withRouter(

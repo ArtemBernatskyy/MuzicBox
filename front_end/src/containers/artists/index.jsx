@@ -174,11 +174,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({ mergeNextArtists, searchArtists }, dispatch);
 }
 
-const ArtistsPageWithStyles = CSSModules(ArtistsPage, styles, {
-  allowMultiple: true,
-});
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(ArtistsPageWithStyles);
+)(CSSModules(ArtistsPage, styles, { allowMultiple: true }));

@@ -21,3 +21,4 @@ export const SCROLL_TO_SONG = 'SCROLL_TO_SONG'; // scrolling in to view provided
 export const SET_IS_LOADING = 'SET_IS_LOADING'; // toggles true/false, controls if is loading or not
 export const TOGGLE_REPEAT = 'TOGGLE_REPEAT'; // toggles true/false, controls if is repeat or not
 export const SET_PROGRESS = 'SET_PROGRESS'; // sets progress of activeSong
+export const SET_STORAGE_SYNC = 'SET_STORAGE_SYNC'; // enables/disables state to localStorage sync

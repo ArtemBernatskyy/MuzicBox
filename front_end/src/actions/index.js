@@ -1,42 +1,43 @@
 import toggleMenu from './menu';
+import { setIsStorageSync, handleLogin, handleLogout } from './system';
 import {
-  setPlaylist,
-  togglePlayNextItem,
-  mergeNextPlaylist,
-  scrollToSong,
+  setPlaylist, togglePlayNextItem, mergeNextPlaylist, scrollToSong,
 } from './playlist';
 import {
   setIsPlaying, playNext, emitIsLoading, toggleRepeat, setProgress,
 } from './player';
 import {
+  mergeNextArtists, searchArtists, setSearchArtistValue, setArtists,
+} from './artist';
+import {
   initialLoadSongs, setSongs, mergeNextSongs, setNoSongs,
   orderSongByValue, filterSongByTag, searchSong, setSearchSongValue,
 } from './song';
-import {
-  mergeNextArtists, searchArtists, setSearchArtistValue, setArtists,
-} from './artist';
 
 export {
-  initialLoadSongs,
-  setSongs,
-  setIsPlaying,
   playNext,
+  setSongs,
   toggleMenu,
   searchSong,
-  togglePlayNextItem,
-  setPlaylist,
-  setSearchSongValue,
-  mergeNextArtists,
-  mergeNextPlaylist,
-  mergeNextSongs,
-  searchArtists,
-  setSearchArtistValue,
-  filterSongByTag,
   setNoSongs,
   setArtists,
-  orderSongByValue,
-  scrollToSong,
-  emitIsLoading,
-  toggleRepeat,
   setProgress,
+  setPlaylist,
+  handleLogin,
+  setIsPlaying,
+  handleLogout,
+  scrollToSong,
+  toggleRepeat,
+  searchArtists,
+  emitIsLoading,
+  mergeNextSongs,
+  filterSongByTag,
+  orderSongByValue,
+  mergeNextArtists,
+  initialLoadSongs,
+  setIsStorageSync,
+  mergeNextPlaylist,
+  togglePlayNextItem,
+  setSearchSongValue,
+  setSearchArtistValue,
 };

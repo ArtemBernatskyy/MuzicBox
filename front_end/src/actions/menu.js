@@ -1,4 +1,4 @@
-import * as types from './action_types';
+import * as types from 'constants/action_types';
 
 const toggleMenu = bool => ({
   type: types.TOGGLE_MENU,

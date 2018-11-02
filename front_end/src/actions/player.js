@@ -1,4 +1,4 @@
-import * as types from './action_types';
+import * as types from 'constants/action_types';
 
 export const emitIsPlaying = bool => ({
   type: types.SET_IS_PLAYING,

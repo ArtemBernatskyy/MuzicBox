@@ -65,6 +65,4 @@ const FAQPage = () => (
   </div>
 );
 
-const FAQPageWithStyles = CSSModules(FAQPage, styles, { allowMultiple: true });
-
-export default FAQPageWithStyles;
+export default CSSModules(FAQPage, styles, { allowMultiple: true });

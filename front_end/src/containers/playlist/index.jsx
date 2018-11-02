@@ -303,9 +303,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-const PlaylistWithStyles = CSSModules(Playlist, styles, { allowMultiple: true });
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(PlaylistWithStyles);
+)(CSSModules(Playlist, styles, { allowMultiple: true }));

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import CSSModules from 'react-css-modules';
-import { Link, withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import NotificationSystem from 'react-notification-system';
 
 import {
@@ -237,9 +237,9 @@ class Player extends Component {
 
   handleScrollIntoView() {
     const {
-      history, songs, activeSong, scrollToSong,
+      songs, activeSong, scrollToSong,
     } = this.props;
-    const currentUrl = history.location.pathname;
+    const currentUrl = window.location.pathname;
     const songInPlaylistId = songs.results.findIndex(song => song.id === activeSong.id);
     if (songInPlaylistId !== -1 && currentUrl === '/') {
       // it means that active song is in current playlist and we are on playlist page so we can scrollIntoView
@@ -660,9 +660,7 @@ function mapDispatchToProps(dispatch) {
   );
 }
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(CSSModules(Player, styles, { allowMultiple: true })),
-);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CSSModules(Player, styles, { allowMultiple: true }));

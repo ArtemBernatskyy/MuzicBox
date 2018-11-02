@@ -1,24 +1,11 @@
 import ArtistApi from 'api/artist_api';
-import * as types from './action_types';
+import * as types from 'constants/action_types';
 
 export const mergeArtists = (artistsObject, oldArtistsObject) => ({
   type: types.MERGE_ARTISTS,
   artistsObject,
   oldArtistsObject,
 });
-
-export function mergeNextArtists(pageUrl) {
-  return (dispatch, getState) => {
-    const oldArtistsObject = getState().artists;
-    ArtistApi.getNextArtists(pageUrl)
-      .then((artistsObject) => {
-        dispatch(mergeArtists(artistsObject, oldArtistsObject));
-      })
-      .catch((error) => {
-        throw error;
-      });
-  };
-}
 
 export const setArtists = artistsObject => ({
   type: types.SET_ARTISTS,
@@ -34,6 +21,19 @@ export const setSearchArtistLoading = bool => ({
   type: types.TOGGLE_SEARCH_ARTIST_LOADING,
   payload: bool,
 });
+
+export function mergeNextArtists(pageUrl) {
+  return (dispatch, getState) => {
+    const oldArtistsObject = getState().artists;
+    ArtistApi.getNextArtists(pageUrl)
+      .then((artistsObject) => {
+        dispatch(mergeArtists(artistsObject, oldArtistsObject));
+      })
+      .catch((error) => {
+        throw error;
+      });
+  };
+}
 
 export function searchArtists(artist) {
   return (dispatch) => {

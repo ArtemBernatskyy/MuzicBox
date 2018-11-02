@@ -1,5 +1,5 @@
 import SongApi from 'api/song_api';
-import * as types from './action_types';
+import * as types from 'constants/action_types';
 
 export const setPlaylist = songs => ({
   type: types.SET_PLAYLIST,

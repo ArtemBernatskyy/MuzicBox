@@ -1,5 +1,5 @@
 import ArtistApi from 'api/artist_api';
-import * as types from './action_types';
+import * as types from 'constants/action_types';
 
 export const mergeArtists = (artistsObject, oldArtistsObject) => ({
   type: types.MERGE_ARTISTS,

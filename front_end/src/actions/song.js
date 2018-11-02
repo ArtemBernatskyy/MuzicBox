@@ -1,7 +1,7 @@
 import SongApi from 'api/song_api';
 import { getParameterByName } from 'utils/misc';
+import * as types from 'constants/action_types';
 import { playNext, emitIsLoading } from './player';
-import * as types from './action_types';
 import { setPlaylist } from './playlist';
 
 export const emitNoSongs = bool => ({

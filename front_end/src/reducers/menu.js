@@ -1,4 +1,4 @@
-import * as types from 'actions/action_types';
+import * as types from 'constants/action_types';
 import initialState from 'constants/initial_state';
 
 const isMenuOpen = (state = initialState.isMenuOpen, action) => {

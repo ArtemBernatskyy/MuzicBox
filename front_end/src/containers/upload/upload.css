@@ -19,7 +19,7 @@
 }
 
 .dropzone--disabled {
-  opacity: .6;
+  opacity: 0.6;
   cursor: default;
 }
 
@@ -54,12 +54,11 @@
   background: #1db954;
   border-radius: inherit;
   width: 0%;
-  transition: width .3s linear;
+  transition: width 0.3s linear;
 }
 
 /* Small screens */
 @media (max-width: 640px) {
-
   .dropzone__upload-text {
     margin: 1vh;
   }

@@ -40,7 +40,7 @@
 }
 
 .logo__icon:hover {
-  opacity: .8;
+  opacity: 0.8;
 }
 
 .auth {
@@ -60,7 +60,7 @@
 }
 
 .auth--transition {
-  transition: all .45s cubic-bezier(.23, 1, .32, 1) 0ms;
+  transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1) 0ms;
 }
 
 .auth__link {
@@ -93,7 +93,7 @@
   display: block;
   background: #fff;
   transform-origin: 50% 50%;
-  transition: transform .1s ease-in;
+  transition: transform 0.1s ease-in;
 }
 
 .sidebar__icon .icon-bar:nth-child(2) {
@@ -117,7 +117,6 @@
 /* media queries */
 
 @media (min-width: 415px) {
-
   .logo-container {
     justify-content: flex-start;
   }
@@ -128,7 +127,6 @@
 }
 
 @media (min-width: 768px) {
-
   .header {
     padding-left: 12px;
   }
@@ -139,14 +137,12 @@
 }
 
 @media (min-width: 992px) {
-
   .sidebar {
     display: none;
   }
 }
 
 @media (max-width: 992px) {
-
   .app__left {
     display: none;
   }

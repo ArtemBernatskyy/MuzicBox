@@ -3,7 +3,7 @@
 }
 
 :global .playlist--hover:hover {
-  background-color: rgba(105, 103, 103, .06);
+  background-color: rgba(105, 103, 103, 0.06);
 }
 
 :global .playlist--active {
@@ -103,7 +103,7 @@
 }
 
 :global .playlist__song__artist__image--full {
-  box-shadow: rgba(0, 0, 0, .1) 0 0 0 1px inset;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 0 0 1px inset;
   text-align: center;
   position: relative;
   background-repeat: no-repeat;
@@ -202,10 +202,8 @@
   min-height: 100px;
 }
 
-
-
 :global .playlist__lyrics__inner {
-  font-size: .9rem;
+  font-size: 0.9rem;
   -webkit-font-smoothing: antialiased;
   max-height: 435px;
   overflow-x: hidden;
@@ -216,7 +214,7 @@
 }
 
 :global .verse {
-  color: rgba(0, 0, 0, .79);
+  color: rgba(0, 0, 0, 0.79);
   margin-top: 10px;
 }
 
@@ -226,7 +224,6 @@
 
 /* Small screens */
 @media (max-width: 640px) {
-
   :global .playlist__song__content span.a-underlined:nth-child(3) {
     text-decoration: underline;
   }

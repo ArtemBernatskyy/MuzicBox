@@ -163,22 +163,22 @@ class Upload extends Component {
             {` ${accepted.length} `}
             {accepted.length === 1 ? 'file' : 'files'}
           </p>
-          {!sending ? (
+          {!sending && (
             <div styleName="button__cotainer">
               <button type="submit" disabled={disabled} className={sendButtonCls} onClick={this.send.bind(this)}>
                 <i className={loadingCls} />
                 Send files
               </button>
             </div>
-          ) : null}
-          {sending ? (
+          )}
+          {sending && (
             <div>
               <div styleName="seconds">
                 <div id="bar" style={{ width: `${percentage}%` }} styleName="bar" />
               </div>
               <h3 className="default-center m-3vh">Uploading ...</h3>
             </div>
-          ) : null}
+          )}
         </div>
       </div>
     );

@@ -90,17 +90,8 @@ class Song extends PureComponent {
 
   handleClick(evt) {
     const { target } = evt;
-    const { togglePlayNextItem, song } = this.props;
-    if (target.tagName.toLowerCase() === 'span') {
-      // checking if target isn't span or a because we have different listener for them
-    } else if (
-      target.className === 'playlist__right__play_next'
-      || target.className === 'fa fa-indent'
-      || target.className === 'playlist__right__play_next playlist__right__play_next--active'
-    ) {
-      // checking if target isn't play next and ignoring click and handling it manually
-      togglePlayNextItem(song);
-    } else {
+    if (!target.getAttribute('role')) {
+      // if element have a role attribute then it will handle onClick himself
       this.handlePlay();
     }
   }
@@ -120,19 +111,16 @@ class Song extends PureComponent {
 
   render() {
     const {
-      playNextList, song, activeSong, searchSongValue,
+      playNextList, song, activeSong,
+      searchSongValue, togglePlayNextItem,
     } = this.props;
     const { isLyricsOpen, lyrics } = this.state;
     const isNextPlaySong = playNextList.findIndex(tSong => tSong.id === song.id) !== -1;
     const listClass = cx({
       pointer: true,
-      'playlist--border': true,
       'playlist--hover': true,
+      'playlist--border': true,
       'playlist--active': song.id === activeSong.id,
-    });
-    const lyricsCls = cx({
-      playlist__lyrics: true,
-      hidden: !isLyricsOpen,
     });
     const songNameCls = cx({
       'font-medium': true,
@@ -140,7 +128,10 @@ class Song extends PureComponent {
       'a-underlined': song.has_lyrics,
     });
     const playNextCls = cx({
+      fa: true,
+      'fa-indent': true,
       playlist__right__play_next: true,
+      'playlist__right__play_next--span': true,
       'playlist__right__play_next--active': isNextPlaySong,
     });
     const playlistTimeCls = cx({
@@ -157,14 +148,12 @@ class Song extends PureComponent {
       >
         <div className="font-small playlist__song">
           <div className="playlist__song__image">
-            <div className="playlist__song__image__container">
-              <i className={this.playClass(song)} aria-hidden="true" />
-              <img
-                className="playlist__song__artist__image playlist__song__artist__image--full playlist__song__artwork"
-                src={song.extra_sm_image_thumbnail || '/static/img/song_default.png'}
-                alt="artist small thumbnail in playlist"
-              />
-            </div>
+            <i className={this.playClass(song)} aria-hidden="true" />
+            <img
+              className="playlist__song__artist__image playlist__song__artist__image--full playlist__song__artwork"
+              src={song.extra_sm_image_thumbnail || '/static/img/song_default.png'}
+              alt="artist small thumbnail in playlist"
+            />
           </div>
 
           <div className="content--truncate playlist__song__content">
@@ -219,27 +208,31 @@ class Song extends PureComponent {
               </span>
             </div>
           </div>
-          <div className={playNextCls}>
-            <span title="Add to Play next queue" className="playlist__right__play_next--span">
-              <i className="fa fa-indent" aria-hidden="true" />
-            </span>
+          <div
+            className={playNextCls}
+            title="Add to Play next queue"
+            role="button"
+            tabIndex={0}
+            onKeyDown={togglePlayNextItem.bind(this, song)}
+            onClick={togglePlayNextItem.bind(this, song)}
+          />
+        </div>
+        {isLyricsOpen && (
+          <div className="playlist__lyrics">
+            {lyrics ? (
+              <div
+                className="playlist__lyrics__inner scrollbar-custom"
+                // it's safe because our backend parses songs
+                // eslint-disable-next-line
+                dangerouslySetInnerHTML={{
+                  __html: lyrics,
+                }}
+              />
+            ) : (
+              <Loader />
+            )}
           </div>
-        </div>
-
-        <div className={lyricsCls}>
-          {lyrics ? (
-            <div
-              className="playlist__lyrics__inner scrollbar-custom"
-              // it's safe because our backend parses songs
-              // eslint-disable-next-line
-              dangerouslySetInnerHTML={{
-                __html: lyrics,
-              }}
-            />
-          ) : (
-            <Loader />
-          )}
-        </div>
+        )}
       </li>
     );
   }

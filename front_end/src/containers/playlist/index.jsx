@@ -244,27 +244,27 @@ class Playlist extends Component {
         </div>
 
         <div className="m-3vh" styleName="playlist">
-          {noSongs && !searchSongValue ? (
+          {noSongs && !searchSongValue && (
             <h3 className="default-center">
               You&#39;ve got no songs yet, &nbsp;
               <Link className="default-link" to="/upload/">
                 upload some
               </Link>
             </h3>
-          ) : null}
+          )}
           <ul styleName="playlist--nostyle" role="table">
             {!isSearchSongLoading
-              ? songs.results.map(song => (
+              && songs.results.map(song => (
                 <Song
                   key={song.id}
                   song={song}
                   setLocalSearch={this.setLocalSearch}
                 />
               ))
-              : null}
-            {songs.next || isSearchSongLoading ? <BottomLoader /> : null}
+            }
+            {(songs.next || isSearchSongLoading) && <BottomLoader />}
             <Waypoint bottomOffset="-200px" onEnter={this.getNextSongs} />
-            {searchSongValue && !songs.results.length && !isSearchSongLoading ? (
+            {searchSongValue && !songs.results.length && !isSearchSongLoading && (
               <p className="search-error-text">
                 The search for
                 <strong>{` ${searchSongValue} `}</strong>
@@ -272,7 +272,7 @@ class Playlist extends Component {
                 {' '}
                 <strong>{filterTagValue ? filterTagValue.name : 'your audios'}</strong>
               </p>
-            ) : null}
+            )}
           </ul>
         </div>
       </div>

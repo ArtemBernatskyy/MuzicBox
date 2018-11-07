@@ -43,11 +43,7 @@
 
 /* song image */
 :global .playlist__song__image {
-  position: relative;
   margin: 7px;
-}
-
-:global .playlist__song__image__container {
   height: 30px;
   width: 30px;
   text-align: center;
@@ -141,20 +137,15 @@
   color: #999;
 }
 
-:global .playlist__right__time--span i {
-  margin-right: 10px;
-}
-
-:global .playlist--active .playlist__right i,
 :global .playlist--active .playlist__right span {
   color: #0037ff;
 }
 
-:global .playlist__right__play_next:hover i {
+:global .playlist__right__play_next:hover {
   color: #0037ff;
 }
 
-:global .playlist--hover:hover .playlist__right__play_next--active i {
+:global .playlist--hover:hover .playlist__right__play_next--active {
   color: #0037ff;
 }
 
@@ -211,6 +202,8 @@
   min-height: 100px;
 }
 
+
+
 :global .playlist__lyrics__inner {
   font-size: .9rem;
   -webkit-font-smoothing: antialiased;
@@ -252,7 +245,7 @@
     display: none;
   }
 
-  :global .playlist__right__play_next--active .playlist__right__play_next--span {
+  :global .playlist__right__play_next--active {
     color: #0037ff;
   }
 
@@ -274,12 +267,12 @@
     background-color: inherit;
   }
 
-  :global .playlist__right__play_next:hover i {
-    color: inherit;
+  :global .playlist__right__play_next:hover {
+    color: #8a8a8a;
   }
 
-  :global .playlist--hover:hover .playlist__right__play_next--active i {
-    color: inherit;
+  :global .playlist--hover:hover .playlist__right__play_next--active {
+    color: #0037ff;
   }
 
   :global .playlist--hover:hover .playlist__right__kbs {

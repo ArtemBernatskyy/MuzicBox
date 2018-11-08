@@ -45,7 +45,7 @@
   background-repeat: no-repeat;
   height: 100%;
   width: 100%;
-  transition: .1s;
+  transition: 0.1s;
 }
 
 .image__span {
@@ -54,13 +54,13 @@
   height: 100%;
   opacity: 1;
   display: block;
-  box-shadow: rgba(0, 0, 0, .1) 0 0 0 1px inset;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 0 0 1px inset;
 }
 
 .artwork__play-button {
   visibility: hidden;
   opacity: 0;
-  transition: all .3s cubic-bezier(0, 0, 0, 2.41);
+  transition: all 0.3s cubic-bezier(0, 0, 0, 2.41);
   position: absolute;
   z-index: 1;
   width: 62px;
@@ -96,7 +96,7 @@
 }
 
 .artwork:hover .image {
-  filter: brightness(.3);
+  filter: brightness(0.3);
 }
 
 .description__heading {
@@ -187,14 +187,12 @@
 }
 
 @media (max-width: 768px) {
-
   .item {
     width: 33.333%;
   }
 }
 
 @media (max-width: 640px) {
-
   .artwork__play-button {
     display: none;
   }
@@ -205,7 +203,6 @@
 }
 
 @media (max-width: 415px) {
-
   .item {
     width: 100%;
   }

@@ -1,4 +1,27 @@
 <style>
+  .no-js {
+    z-index: 99999;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }
+  .no-js h1 {
+    background-color: #333333;
+    padding: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 2em;
+    text-align: center;
+  }
   .sk-folding-cube {
     position: absolute;
     left: calc(50% - 25px);
@@ -110,17 +133,11 @@
     background: #ffffff;
   }
 </style>
-<script>
-   window.onload = function() {
-     document.getElementById("overlay_loader").style.display = "none";
-   }
-</script>
-
-<div id="overlay_loader">
-  <div class="sk-folding-cube">
-    <div class="sk-cube1 sk-cube"></div>
-    <div class="sk-cube2 sk-cube"></div>
-    <div class="sk-cube4 sk-cube"></div>
-    <div class="sk-cube3 sk-cube"></div>
-  </div>
-</div>
+<noscript>
+  <style>
+    /* hiding loader when js is disabled */
+    #overlay_loader {
+      display: none;
+    }
+  </style>
+</noscript>

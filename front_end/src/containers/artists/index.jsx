@@ -78,16 +78,16 @@ class ArtistsPage extends Component {
           </div>
 
           <ul className="list-nostyle">
-            {noSongs ? (
+            {noSongs && (
               <h3 className="default-center">
                 You&#39;ve got no artists yet, &nbsp;
                 <Link className="default-link" to="/upload/">
                   upload some songs
                 </Link>
               </h3>
-            ) : null}
+            )}
             {!isSearchArtistLoading
-              ? artists.results.map(artist => (
+              && artists.results.map(artist => (
                 <li key={artist.id} styleName="item">
                   <div styleName="item__inner">
                     <div styleName="artwork">
@@ -140,20 +140,20 @@ class ArtistsPage extends Component {
                   </div>
                 </li>
               ))
-              : null}
-            {artists.next || isSearchArtistLoading ? <BottomLoader /> : null}
+            }
+            {(artists.next || isSearchArtistLoading) && <BottomLoader />}
             <div styleName="item">
               <Waypoint styleName="item" bottomOffset="-250px" onEnter={this.getNextArtists} />
             </div>
             {searchArtistValue
               && !artists.results.length
-              && !isSearchArtistLoading ? (
+              && !isSearchArtistLoading && (
                 <p className="search-error-text">
                   The search for
                   <strong>{` ${searchArtistValue} `}</strong>
                   returned no matches in your artists
                 </p>
-              ) : null}
+            )}
           </ul>
         </div>
       </div>

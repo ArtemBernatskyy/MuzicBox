@@ -93,7 +93,7 @@
   display: block;
   background: #fff;
   transform-origin: 50% 50%;
-  transition: transform 0.1s ease-in;
+  transition: transform 0.2s ease-in;
 }
 
 .sidebar__icon .icon-bar:nth-child(2) {
@@ -116,7 +116,7 @@
 
 /* media queries */
 
-@media (min-width: 415px) {
+@media (min-width: 641px) {
   .logo-container {
     justify-content: flex-start;
   }

@@ -100,11 +100,11 @@ class Song extends PureComponent {
     const {
       song, activeSong, isLoading, isPlaying,
     } = this.props;
-    let returnCls = 'fa fa-play-circle playlist__song__overlay';
+    let returnCls = 'fa fa-play-circle';
     if (song.id === activeSong.id && isLoading) {
-      returnCls = 'fa fa-circle-o-notch fa-spin playlist__song__overlay playlist__song__overlay--loading';
+      returnCls = 'fa fa-circle-o-notch fa-spin playlist__song__overlay--loading';
     } else if (song.id === activeSong.id && isPlaying) {
-      returnCls = 'fa fa-pause-circle playlist__song__overlay';
+      returnCls = 'fa fa-pause-circle';
     }
     return returnCls;
   }
@@ -117,99 +117,94 @@ class Song extends PureComponent {
     const { isLyricsOpen, lyrics } = this.state;
     const isNextPlaySong = playNextList.findIndex(tSong => tSong.id === song.id) !== -1;
     const listClass = cx({
-      pointer: true,
       'playlist--hover': true,
       'playlist--border': true,
       'playlist--active': song.id === activeSong.id,
     });
     const songNameCls = cx({
-      'font-medium': true,
-      'link-dark': true,
-      'a-underlined': song.has_lyrics,
+      playlist__song__title: true,
+      'playlist__song__title--has-lyrics': song.has_lyrics,
     });
     const playNextCls = cx({
-      fa: true,
-      'fa-indent': true,
       playlist__right__play_next: true,
-      'playlist__right__play_next--span': true,
       'playlist__right__play_next--active': isNextPlaySong,
     });
     const playlistTimeCls = cx({
       hidden: isNextPlaySong,
-      playlist__right__time: true,
     });
     return (
       <li
         role="row"
         onClick={this.handleClick.bind(this)}
         onKeyDown={this.handleClick.bind(this)}
-        className={listClass}
+        className="pointer"
+        styleName={listClass}
         ref={this.songRef}
       >
-        <div className="font-small playlist__song">
-          <div className="playlist__song__image">
-            <i className={this.playClass(song)} aria-hidden="true" />
+        <div className="font-small" styleName="playlist__song">
+          <div styleName="playlist__song__image">
+            <i className={this.playClass()} styleName="playlist__song__overlay" aria-hidden="true" />
             <img
-              className="playlist__song__artist__image playlist__song__artist__image--full playlist__song__artwork"
+              styleName="playlist__song__artist__image"
               src={song.extra_sm_image_thumbnail || '/static/img/song_default.png'}
               alt="artist small thumbnail in playlist"
             />
           </div>
 
-          <div className="content--truncate playlist__song__content">
-            <span
-              role="button"
-              tabIndex={0}
-              onClick={this.handleClickAuthor.bind(this, song.artist.name)}
-              onKeyDown={this.handleClickAuthor.bind(this, song.artist.name)}
-              className="link-light a-underlined"
-            >
-              {searchSongValue ? (
-                <Highlighter
-                  highlightClassName="marked"
-                  searchWords={searchSongValue.split(/[, ]+/)}
-                  textToHighlight={song.artist.name}
-                />
-              ) : (
-                song.artist.name
-              )}
-            </span>
-            <span className="playlist__separator">•</span>
-            <span
-              role="button"
-              tabIndex={0}
-              onClick={this.handleClickName.bind(this)}
-              onKeyDown={this.handleClickName.bind(this)}
-              className={songNameCls}
-            >
-              {searchSongValue ? (
-                <Highlighter
-                  highlightClassName="marked"
-                  searchWords={searchSongValue.split(/[, ]+/)}
-                  textToHighlight={song.name}
-                />
-              ) : (
-                song.name
-              )}
-            </span>
-          </div>
-
-          <div className="playlist__right">
-            <div className="playlist__right__kbs">
-              <span title="Song bitrate" className="playlist__right__kbs--span">
-                {roundDown(song.bitrate / 1000)}
-                /kbps
-              </span>
-            </div>
-
-            <div className={playlistTimeCls}>
-              <span title="Song length" className="playlist__right__time--span">
-                {formatTime(song.length)}
-              </span>
-            </div>
-          </div>
           <div
-            className={playNextCls}
+            role="button"
+            tabIndex={0}
+            onClick={this.handleClickAuthor.bind(this, song.artist.name)}
+            onKeyDown={this.handleClickAuthor.bind(this, song.artist.name)}
+            className="link-light a-underlined content--truncate"
+            styleName="playlist__song__author__name"
+          >
+            {searchSongValue ? (
+              <Highlighter
+                highlightClassName="marked"
+                className="cant-touch"
+                searchWords={searchSongValue.split(/[, ]+/)}
+                textToHighlight={song.artist.name}
+              />
+            ) : (
+              song.artist.name
+            )}
+          </div>
+          <div className="content--truncate" styleName="playlist__separator">•</div>
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={this.handleClickName.bind(this)}
+            onKeyDown={this.handleClickName.bind(this)}
+            className="content--truncate font-medium link-dark"
+            styleName={songNameCls}
+          >
+            {searchSongValue ? (
+              <Highlighter
+                highlightClassName="marked"
+                className="cant-touch"
+                searchWords={searchSongValue.split(/[, ]+/)}
+                textToHighlight={song.name}
+              />
+            ) : (
+              song.name
+            )}
+          </div>
+
+          <div styleName="playlist__right">
+            <div styleName="playlist__right__kbs" title="Song bitrate">
+              {roundDown(song.bitrate / 1000)}
+              /kbps
+            </div>
+
+            <div className={playlistTimeCls} title="Song length" styleName="playlist__right__time">
+              {formatTime(song.length)}
+            </div>
+          </div>
+
+          <div
+            className="fa fa-indent"
+            styleName={playNextCls}
             title="Add to Play next queue"
             role="button"
             tabIndex={0}
@@ -218,10 +213,11 @@ class Song extends PureComponent {
           />
         </div>
         {isLyricsOpen && (
-          <div className="playlist__lyrics">
+          <div styleName="playlist__lyrics">
             {lyrics ? (
               <div
-                className="playlist__lyrics__inner scrollbar-custom"
+                className="scrollbar-custom"
+                styleName="playlist__lyrics__inner"
                 // it's safe because our backend parses songs
                 // eslint-disable-next-line
                 dangerouslySetInnerHTML={{

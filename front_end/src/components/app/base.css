@@ -297,6 +297,10 @@ input[type='search']:hover {
   pointer-events: none;
 }
 
+:global .cant-touch {
+  pointer-events: none;
+}
+
 /* buttons */
 :global .btn {
   padding: 12px 38px;
@@ -365,6 +369,16 @@ input[type='search']:hover {
 
 :global .arrow-up {
   color: white;
+}
+
+/* overwriting classes for parsed lyrics */
+:global .verse {
+  color: rgba(0, 0, 0, 0.79);
+  margin-top: 10px;
+}
+
+:global .verse:first-child {
+  margin-top: 0;
 }
 
 /* Custom scrollbar */

@@ -40,21 +40,37 @@
   <!-- end splash screens for PWA -->
   <title>MuzicBox</title>
   <script>
+      // showing super quick inline loader
+      window.onload = function() {
+        document.getElementById("overlay_loader").style.display = "none";
+      }
+      // injecting values from backend
+      // TODO rewrite this to be fully SPA
       if (!window.hasOwnProperty('opts')) {
-          window.opts = {};
+        window.opts = {};
       }
       window.opts.is_authenticated = {{ request.user.is_authenticated|yesno:'true,false' }};
       if (window.opts.is_authenticated) {
         window.opts.user_container = JSON.parse('{{  request.user.profile.user_container | safe }}');
       }
   </script>
+  {% include 'includes/inline_css.html' %}
 </head>
 
 <body>
   <noscript>
-    <h1 style="z-index: 99999;position: fixed;color: black;">Hey, it seems that you've disabled javascript, plz enable it )</h1>
+    <div class="no-js">
+      <h1>♬ It seems that you've disabled javascript, enable it to view website ♬</h1>
+    </div>
   </noscript>
-  {% include 'includes/loader.html' %}
+  <div id="overlay_loader">
+    <div class="sk-folding-cube">
+      <div class="sk-cube1 sk-cube"></div>
+      <div class="sk-cube2 sk-cube"></div>
+      <div class="sk-cube4 sk-cube"></div>
+      <div class="sk-cube3 sk-cube"></div>
+    </div>
+  </div>
 
   <div id="root">
   </div>

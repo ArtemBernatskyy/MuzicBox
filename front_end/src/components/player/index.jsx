@@ -185,12 +185,21 @@ class Player extends Component {
     const nextPlaylistId = !force && isRepeat ? current : nextSongInPlaylist;
     // when we have only 1 song in playlist we'll pause and not use loader
     if (total === 1) {
+      if (this.notificationSystem) {
+        // showing info message
+        this.notificationSystem.addNotification({
+          message: 'Playlist has ended',
+          level: 'info',
+          autoDismiss: 4,
+          dismissible: 'none',
+        });
+      }
       setIsPlaying(false);
     } else {
       this.songEnded();
+      const nextSong = playlist.results[nextPlaylistId];
+      playNext(nextSong);
     }
-    const nextSong = playlist.results[nextPlaylistId];
-    playNext(nextSong);
   }
 
   next(evt, force = false) {

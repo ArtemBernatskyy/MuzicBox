@@ -116,7 +116,7 @@
 
 /* media queries */
 
-@media (min-width: 641px) {
+@media (min-width: 640px) {
   .logo-container {
     justify-content: flex-start;
   }
@@ -138,12 +138,6 @@
 
 @media (min-width: 992px) {
   .sidebar {
-    display: none;
-  }
-}
-
-@media (max-width: 992px) {
-  .app__left {
     display: none;
   }
 }

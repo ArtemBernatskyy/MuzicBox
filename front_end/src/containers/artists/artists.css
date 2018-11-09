@@ -186,13 +186,13 @@
   background-size: 19px 19px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .item {
     width: 33.333%;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 639px) {
   .artwork__play-button {
     display: none;
   }
@@ -202,7 +202,7 @@
   }
 }
 
-@media (max-width: 415px) {
+@media (max-width: 414px) {
   .item {
     width: 100%;
   }

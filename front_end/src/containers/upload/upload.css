@@ -58,7 +58,7 @@
 }
 
 /* Small screens */
-@media (max-width: 640px) {
+@media (max-width: 639px) {
   .dropzone__upload-text {
     margin: 1vh;
   }

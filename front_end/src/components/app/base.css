@@ -217,7 +217,7 @@ input[type='search']:hover {
 }
 
 /* Small screens */
-@media (max-width: 640px) {
+@media (max-width: 639px) {
   html {
     font-size: 15px;
   }
@@ -398,7 +398,7 @@ input[type='search']:hover {
 
 /* Medium screens */
 
-@media (max-width: 992px) {
+@media (max-width: 991px) {
   :global .app__left {
     width: 230px;
     left: 0;
@@ -415,7 +415,7 @@ input[type='search']:hover {
 }
 
 /* Small screens */
-@media (max-width: 640px) {
+@media (max-width: 639px) {
   :global .app__container {
     margin-left: 3px;
     margin-right: 3px;

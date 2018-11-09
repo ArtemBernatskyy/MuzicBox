@@ -146,7 +146,7 @@
 }
 
 /* Small screens */
-@media (max-width: 640px) {
+@media (max-width: 639px) {
   .playlist__controls__search {
     flex-basis: 100%;
   }

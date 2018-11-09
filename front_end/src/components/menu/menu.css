@@ -104,7 +104,7 @@
 }
 
 /* Small screens */
-@media (max-width: 640px) {
+@media (max-width: 639px) {
   /* disabling hover for small devices */
   .menu__container:hover {
     background-color: initial;

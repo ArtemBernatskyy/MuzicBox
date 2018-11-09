@@ -83,10 +83,6 @@
   color: #fff !important;
 }
 
-.control-button:hover {
-  color: #fff;
-}
-
 .cover-art.shadow {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
@@ -178,15 +174,11 @@
 
 .progress-bar__fg {
   pointer-events: none;
-  background-color: #a0a0a0;
+  background-color: #1db954;
   border-radius: 2px;
   height: 4px;
   width: 0;
   transition: background-color 0.1s cubic-bezier(0.3, 0, 0.7, 1);
-}
-
-.progress-bar:hover .progress-bar__fg {
-  background-color: #1db954;
 }
 
 .progress-bar__slider {
@@ -199,12 +191,8 @@
   margin-top: -6px;
   z-index: 100;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
-  transform: scale(0);
-  transition: transform 0.1s cubic-bezier(0.3, 0, 0.7, 1);
-}
-
-.progress-bar:hover .progress-bar__slider {
   transform: scale(1);
+  transition: transform 0.1s cubic-bezier(0.3, 0, 0.7, 1);
 }
 
 .progress-bar__bg {
@@ -247,7 +235,7 @@
 .volume-bar {
   align-items: center;
   width: 136px;
-  display: flex;
+  display: none;
 }
 
 .volume-bar__icon {
@@ -262,10 +250,6 @@
   font-size: 32px;
 }
 
-.control-button.control-button--circled:hover {
-  transform: scale(1.125);
-}
-
 /* --------------- repsonsive player */
 
 /* Small screens */
@@ -275,7 +259,7 @@
   }
 }
 
-/* Medium screens */
+/* Between Medium and Small screens */
 @media (min-width: 415px) and (max-width: 639px) {
   .playback-bar {
     width: 375px;
@@ -300,28 +284,42 @@
     min-width: initial;
   }
 
-  .progress-bar .progress-bar__fg {
-    background-color: #1db954;
-  }
-
-  .progress-bar .progress-bar__slider {
-    transform: scale(1);
-  }
-
   .control-button {
     font-size: 20px;
   }
+}
 
-  /* disabling hover for small devices */
+/*
+styles for 'hover' devices aka laptops/computers
+here we are enabling hover styles etc
+*/
+@media (hover: hover) {
+  .progress-bar__slider {
+    transform: scale(0);
+  }
+
   .control-button:hover {
-    color: #a9a9a9;
+    color: #fff;
+  }
+
+  .progress-bar__fg {
+    background-color: #a0a0a0;
+  }
+
+  .progress-bar:hover .progress-bar__fg {
+    background-color: #1db954;
   }
 
   .control-button.control-button--circled:hover {
-    transform: none;
+    transform: scale(1.125);
   }
 
   .progress-bar:hover .progress-bar__slider {
-    transform: none;
+    transform: scale(1);
+  }
+
+  /* volume menu have no sense for mobiles and tablets */
+  .volume-bar {
+    display: flex;
   }
 }

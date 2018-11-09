@@ -70,10 +70,6 @@
   opacity: 1;
 }
 
-.menu__container:hover {
-  background-color: #e5e5e5;
-}
-
 .menu__icon {
   color: #afafaf;
   position: absolute;
@@ -96,17 +92,13 @@
   }
 }
 
-/* Medium screens */
-@media (min-width: 768px) {
-  .menu--hidden-sm {
-    display: none;
-  }
-}
-
-/* Small screens */
-@media (max-width: 639px) {
-  /* disabling hover for small devices */
+/*
+styles for 'hover' devices aka laptops/computers
+here we are enabling hover styles etc
+*/
+@media (hover: hover) {
+  /* enabling hover for hover devices */
   .menu__container:hover {
-    background-color: initial;
+    background-color: #e5e5e5;
   }
 }

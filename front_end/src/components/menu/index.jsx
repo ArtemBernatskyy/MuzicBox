@@ -123,8 +123,8 @@ const Menu = (props) => {
               tabIndex={0}
               onKeyDown={() => toggleMenu(false) && handleLogout()}
               onClick={() => toggleMenu(false) && handleLogout()}
-              styleName="menu menu--hidden-sm"
-              className="pointer"
+              styleName="menu"
+              className="pointer hidden-sm"
             >
               <i styleName="menu__border" />
               <div styleName="menu__container">
@@ -139,7 +139,8 @@ const Menu = (props) => {
               exact
               to="/auth/"
               onClick={() => toggleMenu(false)}
-              styleName="menu menu--hidden-sm"
+              styleName="menu"
+              className="hidden-sm"
               activeClassName={styles['menu--active']}
             >
               <i styleName="menu__border" />

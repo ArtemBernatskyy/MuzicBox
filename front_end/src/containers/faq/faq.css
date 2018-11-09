@@ -1,13 +1,19 @@
+.faq-wrapper {
+  margin-right: 30px;
+  margin-left: 30px;
+}
+
 .h3-custom {
   text-align: left;
   font-size: 16px;
   text-transform: uppercase;
-  margin: 15px 0 10px 0;
+  margin: 15px 0 10px 6px;
   font-weight: 700;
 }
 
 .question {
-  margin: 10px 0;
+  margin-top: 10px;
+  margin-left: 6px;
   text-align: left;
   color: #464646;
   font-weight: 800;
@@ -40,6 +46,11 @@
 @media (max-width: 639px) {
   .answer_block {
     list-style: initial;
-    margin: 10px 18px;
+    margin: 10px 8px 15px 24px;
+  }
+
+  .faq-wrapper {
+    margin-right: 6px;
+    margin-left: 6px;
   }
 }

@@ -45,11 +45,6 @@
   background-color: #282828 !important;
 }
 
-.playlist__controls__button:hover {
-  color: white;
-  background-color: #282828;
-}
-
 .playlist__controls__button::after {
   content: ' ';
   border-right: 1px solid #282828;
@@ -60,12 +55,6 @@
   position: absolute;
   right: 10px;
   top: 10px;
-}
-
-.playlist__controls__button--active::after,
-.playlist__controls__button:hover::after {
-  border-right: 1px solid #fff;
-  border-bottom: 1px solid #fff;
 }
 
 .playlist__controls__options {
@@ -111,8 +100,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-.playlist__controls__options__item--active,
-.playlist__controls__options__item:hover {
+.playlist__controls__options__item--active {
   color: #0037ff;
 }
 
@@ -168,18 +156,26 @@
   .playlist__controls__button {
     width: 100%;
   }
+}
 
+/*
+styles for 'hover' devices aka laptops/computers
+here we are enabling hover styles etc
+*/
+@media (hover: hover) {
+  /* enabling hover for hover devices */
   .playlist__controls__button:hover {
-    color: inherit;
-    background-color: inherit;
+    color: white;
+    background-color: #282828;
   }
 
+  .playlist__controls__button--active::after,
   .playlist__controls__button:hover::after {
-    border-right: inherit;
-    border-bottom: inherit;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
   }
 
   .playlist__controls__options__item:hover {
-    color: inherit;
+    color: #0037ff;
   }
 }

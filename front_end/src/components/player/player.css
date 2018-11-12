@@ -1,4 +1,5 @@
 .player {
+  -webkit-user-select: none;
   position: fixed;
   bottom: 0;
   height: 70px;
@@ -83,10 +84,6 @@
   color: #fff !important;
 }
 
-.control-button:hover {
-  color: #fff;
-}
-
 .cover-art.shadow {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
@@ -136,7 +133,8 @@
 }
 
 .player-controls__buttons {
-  margin-bottom: 4px;
+  /* on touch tablets it allow more easily to grab scroller */
+  margin-bottom: 8px;
   cursor: default;
   display: flex;
   width: 224px;
@@ -178,15 +176,11 @@
 
 .progress-bar__fg {
   pointer-events: none;
-  background-color: #a0a0a0;
+  background-color: #1db954;
   border-radius: 2px;
   height: 4px;
   width: 0;
   transition: background-color 0.1s cubic-bezier(0.3, 0, 0.7, 1);
-}
-
-.progress-bar:hover .progress-bar__fg {
-  background-color: #1db954;
 }
 
 .progress-bar__slider {
@@ -199,12 +193,10 @@
   margin-top: -6px;
   z-index: 100;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
-  transform: scale(0);
-  transition: transform 0.1s cubic-bezier(0.3, 0, 0.7, 1);
-}
-
-.progress-bar:hover .progress-bar__slider {
   transform: scale(1);
+  transition: transform 0.1s cubic-bezier(0.3, 0, 0.7, 1);
+  position: absolute;
+  top: 2px;
 }
 
 .progress-bar__bg {
@@ -214,11 +206,8 @@
   display: flex;
   height: 4px;
   width: 100%;
-}
-
-.middle-align {
   position: absolute;
-  top: 50%;
+  top: 4px;
 }
 
 /* -------------------------------------------------- right panel */
@@ -247,7 +236,7 @@
 .volume-bar {
   align-items: center;
   width: 136px;
-  display: flex;
+  display: none;
 }
 
 .volume-bar__icon {
@@ -262,24 +251,30 @@
   font-size: 32px;
 }
 
-.control-button.control-button--circled:hover {
-  transform: scale(1.125);
-}
-
 /* --------------- repsonsive player */
 
+/* Small screens */
+@media (max-width: 414px) {
+  .playback-bar {
+    width: 100%;
+  }
+}
+
+/* Between Medium and Small screens */
+@media (min-width: 415px) and (max-width: 639px) {
+  .playback-bar {
+    width: 375px;
+  }
+}
+
 /* Medium screens */
-@media (max-width: 640px) {
+@media (max-width: 639px) {
   .player__bar__left {
     display: none;
   }
 
   .player__bar__center {
     width: 100%;
-  }
-
-  .playback-bar {
-    width: calc(75% - 80px);
   }
 
   .player__bar__right {
@@ -290,35 +285,46 @@
     min-width: initial;
   }
 
-  .progress-bar .progress-bar__fg {
-    background-color: #1db954;
-  }
-
-  .progress-bar .progress-bar__slider {
-    transform: scale(1);
-  }
-
   .control-button {
     font-size: 20px;
   }
+}
 
-  /* disabling hover for small devices */
+/*
+styles for 'hover' devices aka laptops/computers
+here we are enabling hover styles etc
+*/
+@media (hover: hover) {
+  .player-controls__buttons {
+    margin-bottom: 4px;
+  }
+
+  .progress-bar__slider {
+    transform: scale(0);
+  }
+
   .control-button:hover {
-    color: #a9a9a9;
+    color: #fff;
+  }
+
+  .progress-bar__fg {
+    background-color: #a0a0a0;
+  }
+
+  .progress-bar:hover .progress-bar__fg {
+    background-color: #1db954;
   }
 
   .control-button.control-button--circled:hover {
-    transform: none;
+    transform: scale(1.125);
   }
 
   .progress-bar:hover .progress-bar__slider {
-    transform: none;
+    transform: scale(1);
   }
-}
 
-/* Small screens */
-@media (max-width: 415px) {
-  .playback-bar {
-    width: 100%;
+  /* volume menu have no sense for mobiles and tablets */
+  .volume-bar {
+    display: flex;
   }
 }

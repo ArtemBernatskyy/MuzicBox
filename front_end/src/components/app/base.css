@@ -78,10 +78,6 @@ div {
   border-bottom: 1px solid transparent;
 }
 
-:global .a-underlined:hover {
-  text-decoration: underline;
-}
-
 :global .link-dark {
   color: hsla(0, 0%, 0%, 0.71);
 }
@@ -111,17 +107,12 @@ input[type='search'] {
   color: #666;
   outline: 0;
   padding: 5px 7px;
-  border: 2px solid #f8f8f8;
+  border: 2px solid silver;
   background-color: #f8f8f8;
 }
 
 input[type='search']:focus {
   border: 2px solid silver;
-}
-
-input[type='search']:hover {
-  border: 2px solid silver;
-  transition: all 0.5s cubic-bezier(0, 0, 0, 2.41);
 }
 
 :global .common-link {
@@ -217,7 +208,7 @@ input[type='search']:hover {
 }
 
 /* Small screens */
-@media (max-width: 640px) {
+@media (max-width: 639px) {
   html {
     font-size: 15px;
   }
@@ -327,19 +318,10 @@ input[type='search']:hover {
   background-color: #1a73e8;
 }
 
-:global .btn--success:hover {
-  box-shadow: 0 1px 2px 0 rgba(26, 115, 232, 0.451), 0 1px 3px 1px rgba(26, 115, 232, 0.302);
-  background-color: #297be6;
-}
-
 :global .btn:disabled {
-  cursor: default;
-  background-color: #91caf5b0;
-  box-shadow: none;
-}
-
-:global .btn:disabled:hover {
-  opacity: 1;
+  cursor: default !important;
+  background-color: #91caf5b0 !important;
+  box-shadow: none !important;
 }
 
 :global .list-nostyle {
@@ -349,6 +331,7 @@ input[type='search']:hover {
 
 /* scroll button */
 :global .scroll {
+  display: none;
   color: #fdfdfd;
   opacity: 0.2;
   background-color: #313131;
@@ -361,10 +344,6 @@ input[type='search']:hover {
   border: 0;
   cursor: pointer;
   transition: opacity 0.2s;
-}
-
-:global .scroll:hover {
-  opacity: 1;
 }
 
 :global .arrow-up {
@@ -397,8 +376,7 @@ input[type='search']:hover {
 }
 
 /* Medium screens */
-
-@media (max-width: 992px) {
+@media (max-width: 991px) {
   :global .app__left {
     width: 230px;
     left: 0;
@@ -408,29 +386,60 @@ input[type='search']:hover {
     display: block;
     transform: translate(-240px, 0);
   }
+}
 
-  :global .app__right {
+/* Medium screens */
+@media (min-width: 768px) {
+  :global .hidden-sm {
     display: none;
   }
 }
 
 /* Small screens */
-@media (max-width: 640px) {
+@media (max-width: 639px) {
   :global .app__container {
     margin-left: 3px;
     margin-right: 3px;
   }
 
-  :global .scroll {
-    display: none;
+  :global .font-big {
+    font-size: 0.8rem;
+  }
+}
+
+/*
+styles for 'hover' devices aka laptops/computers
+here we are enabling hover styles etc
+*/
+@media (hover: hover) {
+  /* enabling hover for hover devices */
+  :global .a-underlined:hover {
+    text-decoration: underline;
   }
 
   input[type='search'] {
-    border: 2px solid silver;
+    border: 2px solid #f8f8f8;
   }
 
-  /* disabling hover for small devices */
-  :global .a-underlined:hover {
-    text-decoration: initial;
+  input[type='search']:hover {
+    border: 2px solid silver;
+    transition: all 0.5s cubic-bezier(0, 0, 0, 2.41);
+  }
+
+  :global .scroll {
+    display: block;
+  }
+
+  :global .scroll:hover {
+    opacity: 1;
+  }
+
+  :global .btn:disabled:hover {
+    opacity: 1;
+  }
+
+  :global .btn--success:hover {
+    box-shadow: 0 1px 2px 0 rgba(26, 115, 232, 0.451), 0 1px 3px 1px rgba(26, 115, 232, 0.302);
+    background-color: #297be6;
   }
 }

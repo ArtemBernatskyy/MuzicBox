@@ -2,16 +2,8 @@
   border-bottom: 2px solid white;
 }
 
-.playlist--hover:hover {
-  background-color: rgba(105, 103, 103, 0.06);
-}
-
 .playlist--active {
   background-color: #f2f2f2 !important;
-}
-
-.playlist--active:hover {
-  background-color: #f2f2f2;
 }
 
 .playlist__song {
@@ -53,22 +45,24 @@
 }
 
 .playlist__right__play_next {
-  display: none;
+  display: flex;
   align-items: center;
-  padding-right: 19px;
-  padding-left: 13px;
+  padding-right: 10px;
+  padding-left: 12px;
   color: #8a8a8a;
   font-size: 17px;
 }
 
 .playlist__right__play_next--active {
-  display: flex;
+  display: flex !important;
+  color: #0037ff;
 }
 
 .playlist__right__kbs {
   display: none;
   margin-left: 2px;
   font-size: 12px;
+  padding-right: 10px;
   -webkit-font-smoothing: antialiased;
   color: #8a8a8a;
   font-weight: normal;
@@ -103,12 +97,9 @@
   max-width: calc(50% - 49px);
 }
 
-.playlist__song__title--has-lyrics:hover {
-  text-decoration: underline;
-}
-
 /* playlist song time */
 .playlist__right__time {
+  display: none;
   padding-left: 5px;
   padding-right: 12px;
   margin-left: 2px;
@@ -126,51 +117,15 @@
   color: #0037ff;
 }
 
-.playlist__right__play_next:hover {
-  color: #0037ff;
-}
-
-.playlist--hover:hover .playlist__right__play_next--active {
-  color: #0037ff;
-}
-
 .playlist--active .playlist__right__kbs {
-  display: block !important;
-}
-
-.playlist--hover:hover .playlist__right__kbs {
-  display: block;
-}
-
-.playlist--hover:hover .playlist__right__play_next {
-  display: flex;
-}
-
-.playlist--active:hover .playlist__right__play_next {
-  display: none !important;
-}
-
-.playlist--hover:hover .playlist__right__time {
-  display: none;
-}
-
-.playlist--active:hover .playlist__right__time {
   display: block;
 }
 
 .playlist--active .playlist__song__overlay {
-  opacity: 1 !important;
-}
-
-.playlist--active .playlist__song__artist__image {
-  filter: brightness(50%) !important;
-}
-
-.playlist--hover:hover .playlist__song__overlay {
   opacity: 1;
 }
 
-.playlist--hover:hover .playlist__song__artist__image {
+.playlist--active .playlist__song__artist__image {
   filter: brightness(50%);
 }
 
@@ -182,7 +137,7 @@
 
 /* song lyrics */
 .playlist__lyrics {
-  padding: 14px 20px 10px 52px;
+  padding: 14px 0 10px 11px;
   position: relative;
   min-height: 100px;
 }
@@ -198,70 +153,81 @@
   color: #444;
 }
 
-/* Small screens */
-@media (max-width: 640px) {
-  .playlist__song__title--has-lyrics {
-    text-decoration: underline;
+.playlist__song__title--has-lyrics {
+  text-decoration: underline;
+}
+
+.playlist--active .playlist__right__play_next {
+  display: none;
+}
+
+.playlist--active .playlist__song__author__name {
+  max-width: calc(50% - 63px);
+}
+
+.playlist--active .playlist__song__title {
+  max-width: calc(50% - 77px);
+}
+
+/*
+styles for 'hover' devices aka laptops/computers
+here we are enabling hover styles etc
+*/
+@media (hover: hover) {
+  /* enabling hover for hover devices */
+  .playlist--hover:hover {
+    background-color: rgba(105, 103, 103, 0.06);
   }
 
-  .playlist__lyrics {
-    padding: 14px 0 10px 11px;
+  .playlist--active .playlist__song__title,
+  .playlist--hover:hover .playlist__song__title {
+    max-width: calc(50% - 108px);
   }
 
   .playlist__right__play_next {
-    display: flex;
-    padding-left: 12px;
-    padding-right: 10px;
-  }
-
-  .playlist--active .playlist__right__play_next {
     display: none;
-  }
-
-  .playlist--active .playlist__song__author__name {
-    max-width: calc(50% - 63px);
-  }
-
-  .playlist--active .playlist__song__title {
-    max-width: calc(50% - 77px);
+    padding-right: 19px;
+    padding-left: 13px;
   }
 
   .playlist__right__play_next--active {
-    color: #0037ff;
+    color: #8a8a8a;
   }
 
-  .playlist__right__time {
-    display: none;
+  .playlist__lyrics {
+    padding: 14px 20px 10px 52px;
   }
 
-  .playlist__right__kbs {
-    padding-right: 10px;
-  }
-
-  /* disabling hover for small devices */
-  .playlist--active:hover,
-  .playlist--hover:hover {
-    background-color: inherit;
+  .playlist--active:hover {
+    background-color: #f2f2f2;
   }
 
   .playlist__right__play_next:hover {
-    color: #8a8a8a;
+    color: #0037ff;
   }
 
   .playlist--hover:hover .playlist__right__play_next--active {
     color: #0037ff;
   }
 
+  .playlist__right__kbs {
+    padding-right: 0;
+  }
+
   .playlist--hover:hover .playlist__right__kbs {
-    display: none;
+    display: block;
   }
 
   .playlist--hover:hover .playlist__right__play_next {
-    display: inherit;
+    display: flex;
   }
 
   .playlist--active:hover .playlist__right__play_next {
-    display: inherit;
+    display: none;
+  }
+
+  .playlist__right__time {
+    display: block;
   }
 
   .playlist--hover:hover .playlist__right__time {
@@ -269,14 +235,22 @@
   }
 
   .playlist--active:hover .playlist__right__time {
-    display: none;
+    display: block;
   }
 
   .playlist--hover:hover .playlist__song__overlay {
-    opacity: 0;
+    opacity: 1;
   }
 
   .playlist--hover:hover .playlist__song__artist__image {
-    filter: inherit;
+    filter: brightness(50%);
+  }
+
+  .playlist__song__title--has-lyrics {
+    text-decoration: initial;
+  }
+
+  .playlist__song__title--has-lyrics:hover {
+    text-decoration: underline;
   }
 }

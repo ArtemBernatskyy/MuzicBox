@@ -47,7 +47,7 @@
   font-weight: 400;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 639px) {
   .artist__background {
     height: 150px;
   }

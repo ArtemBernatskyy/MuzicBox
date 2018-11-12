@@ -39,10 +39,6 @@
   user-select: none;
 }
 
-.logo__icon:hover {
-  opacity: 0.8;
-}
-
 .auth {
   align-self: center;
   display: none;
@@ -116,7 +112,7 @@
 
 /* media queries */
 
-@media (min-width: 641px) {
+@media (min-width: 640px) {
   .logo-container {
     justify-content: flex-start;
   }
@@ -142,8 +138,13 @@
   }
 }
 
-@media (max-width: 992px) {
-  .app__left {
-    display: none;
+/*
+styles for 'hover' devices aka laptops/computers
+here we are enabling hover styles etc
+*/
+@media (hover: hover) {
+  /* enabling hover for hover devices */
+  .logo__icon:hover {
+    opacity: 0.8;
   }
 }

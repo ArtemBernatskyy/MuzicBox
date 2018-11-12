@@ -1,4 +1,5 @@
 .player {
+  -webkit-user-select: none;
   position: fixed;
   bottom: 0;
   height: 70px;
@@ -132,7 +133,8 @@
 }
 
 .player-controls__buttons {
-  margin-bottom: 4px;
+  /* on touch tablets it allow more easily to grab scroller */
+  margin-bottom: 8px;
   cursor: default;
   display: flex;
   width: 224px;
@@ -193,6 +195,8 @@
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
   transform: scale(1);
   transition: transform 0.1s cubic-bezier(0.3, 0, 0.7, 1);
+  position: absolute;
+  top: 2px;
 }
 
 .progress-bar__bg {
@@ -202,11 +206,8 @@
   display: flex;
   height: 4px;
   width: 100%;
-}
-
-.middle-align {
   position: absolute;
-  top: 50%;
+  top: 4px;
 }
 
 /* -------------------------------------------------- right panel */
@@ -294,6 +295,10 @@ styles for 'hover' devices aka laptops/computers
 here we are enabling hover styles etc
 */
 @media (hover: hover) {
+  .player-controls__buttons {
+    margin-bottom: 4px;
+  }
+
   .progress-bar__slider {
     transform: scale(0);
   }

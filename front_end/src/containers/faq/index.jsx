@@ -64,7 +64,7 @@ const FAQPage = () => (
         <a rel="noopener noreferrer" target="_blank" href="https://www.linkedin.com/in/artembernatskyy/">
           LinkedIn
         </a>
-        .&nbsp;Follow&nbsp;
+        ,&nbsp;or follow&nbsp;
         <a rel="noopener noreferrer" target="_blank" href="https://www.linkedin.com/company/muzicbox/">
           our updates.
         </a>

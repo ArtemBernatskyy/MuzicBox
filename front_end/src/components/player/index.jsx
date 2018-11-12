@@ -229,13 +229,18 @@ class Player extends Component {
 
   prev() {
     const {
-      noSongs, playlist, activeSong, playNext,
+      noSongs, playlist, activeSong,
+      playNext, playNextList, togglePlayNextItem,
     } = this.props;
     if (!noSongs) {
       const total = playlist.results.length;
       const current = playlist.results.findIndex(song => song.id === activeSong.id);
-      const prevId = current > 0 ? current - 1 : total - 1;
-      const previous = playlist.results[prevId];
+      const prevIndex = current > 0 ? current - 1 : total - 1;
+      const previous = playlist.results[prevIndex];
+      // if previous song is in playNextList[0] we need to remove it
+      if (playNextList.length > 0 && playNextList[0].id === previous.id) {
+        togglePlayNextItem(playNextList[0]);
+      }
       // checking if song is single in playlist and ignoring action
       if (total !== 1) {
         this.songEnded();
@@ -541,7 +546,7 @@ class Player extends Component {
                   onMouseUp={e => this.stopSetProgress(e, false, !isTouch)}
                   styleName="progress-bar"
                 >
-                  <div styleName="middle-align progress-bar__bg">
+                  <div styleName="progress-bar__bg">
                     <div
                       styleName="progress-bar__fg"
                       style={{
@@ -549,7 +554,7 @@ class Player extends Component {
                       }}
                     />
                     <div
-                      styleName="middle-align progress-bar__slider"
+                      styleName="progress-bar__slider"
                       style={{
                         left: `calc(${progressBarSliderLeft} + ${roundUp(progress * 100, 100)}%)`,
                       }}
@@ -612,7 +617,7 @@ class Player extends Component {
                     onMouseUp={this.stopSetVolume}
                     styleName="progress-bar"
                   >
-                    <div styleName="middle-align progress-bar__bg">
+                    <div styleName="progress-bar__bg">
                       <div
                         styleName="progress-bar__fg"
                         style={{
@@ -620,7 +625,7 @@ class Player extends Component {
                         }}
                       />
                       <div
-                        styleName="middle-align progress-bar__slider"
+                        styleName="progress-bar__slider"
                         style={{
                           left: isMuted > 0 ? 0 : `${roundUp(volume * 100, 100)}%`,
                         }}

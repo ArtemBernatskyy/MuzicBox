@@ -1,0 +1,69 @@
+---
+
+vagrant: 1
+ubuntu_version: 16.04
+
+# - - - ANSIBLE SETTINGS - - -
+ansible_port: 2222
+ansible_user: vagrant
+ansible_host: 127.0.0.1
+ansible_private_key_file: ~/.vagrant.d/insecure_private_key
+# - - - END ANSIBLE SETTINGS - -
+
+branch: develop
+server_port: 80
+server_hostname: 172.16.0.19  # don't edit this
+
+remote_host: github.com
+project_name: muzicbox
+project_group: webapps
+project_settings: local       # what pip requirements to use
+
+# - - - DATABASE SETTINGS - - - - -
+project_database: db_muzicbox
+project_database_url: 127.0.0.1:5432
+project_database_user: db_muzicbox_user
+project_database_user_pass: dev_secret_pass
+# - - - END DATABASE SETTINGS - - - 
+
+project_root: /var/webapps/muzicbox
+project_repo: git@github.com:ArtemBernatskyy/MuzicBox.git
+process_bind: 127.0.0.1:8000
+project_user: muzicbox_user_dev
+# pass: vagrant
+project_user_password: $6$vtfBPg5yv/$cSOOZcmZ5bGxnDmDS6gIjQwYXrOy1Tbv23Juy.vA8NXEZvmG9b8Rbs68coJomiI.imfoROmzAF1cuTGll0XRR/
+super_user_name: muzicbox_super_user
+
+
+# - - - ENVIRONMENT SETTINGS  - - -
+debug: on
+static_root: /var/webapps/muzicbox/www/static
+cache_url: rediscache://127.0.0.1:6379/1?client_class=django_redis.client.DefaultClient
+media_root: /var/webapps/muzicbox/www/media
+broker_url: redis://localhost:6379/1
+celery_accept_content: json
+celery_task_serializer: json
+celery_result_serializer: json
+celery_result_backend: redis://localhost:6379/0
+sentry_dsn: https://e4324708c61040909daaed217fc879f5:0faa5c2545714bc48221c8886e3479e2@sentry.io/1258839
+last_fm_key: 0f2856278668f93529ad7e611f55b7c3
+social_auth_facebook_key: 1867867903482887
+social_auth_facebook_secret: 200074daf90465f73569843d4232b4bc
+# - - - END ENVIRONMENT SETTINGS  - - -
+
+
+# - - - LET'S ENCRYPT - - -
+use_letsencrypt: false
+letsencrypt_email: artem.bernatskyy@gmail.com
+letsencrypt_dir: "{{ project_root }}/home/letsencrypt"
+nginx_client_max_body_size: "20m"
+nginx_use_https: false
+# - - - END LET'S ENCRYPT - - -
+
+
+# - - - PASSLIB - - -
+nginx_use_htpasswd: false
+nginx_htpasswd_file: "{{ project_root }}/home/htpasswd.passwd"
+nginx_htpasswd_user: "{{ project_user }}"
+nginx_htpasswd_password: mamboitaliano737166377
+# - - - END PASSLIB - - -

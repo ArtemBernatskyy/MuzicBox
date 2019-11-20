@@ -47,7 +47,7 @@ class SongParserTestCase(unittest.TestCase):
         self.song_parser.artist = 'Marc Almond'
         self.song_parser.song = 'Tainted Love'
         result = self.song_parser.artist_get_info()
-        self.assertIn('https://lastfm-img2.akamaized.net/i/u/300x300/', result)
+        self.assertIn('https://lastfm.freetls.fastly.net/i/u/300x300/', result)
 
     def test_song_does_not_exist(self):
         """
@@ -66,7 +66,7 @@ class SongParserTestCase(unittest.TestCase):
             'track': {
                 'album': {
                     'image': [
-                        {'size': 'large', '#text': 'https://lastfm-img2.akamaized.net/i/u/174s/92ef83be41694b86ac59165deda8f5e1.png'},  # noqa
+                        {'size': 'large', '#text': 'https://lastfm.freetls.fastly.net/i/u/174s/92ef83be41694b86ac59165deda8f5e1.png'},  # noqa
                     ],
                 },
             }
@@ -76,4 +76,4 @@ class SongParserTestCase(unittest.TestCase):
         self.song_parser.artist = 'Marc Almond'
         self.song_parser.song = 'Tainted Love'
         result = self.song_parser.track_get_info()
-        self.assertIn('https://lastfm-img2.akamaized.net/i/u/', result)
+        self.assertIn('https://lastfm.freetls.fastly.net/i/u/', result)

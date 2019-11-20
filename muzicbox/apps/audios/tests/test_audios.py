@@ -191,7 +191,7 @@ class AudioListCreateViewSetTestCase(APITestCase):
                     {'url': 'https://www.last.fm/tag/60s', 'name': '60s'},
                     {'url': 'https://www.last.fm/tag/pop', 'name': 'pop'},
                 ], 'artist': 'The Beatles', 'playcount': '501772761',
-                'image_url': 'https://lastfm-img2.akamaized.net/i/u/300x300/774177d77ee348e198bee6d223a22ff3.png',
+                'image_url': 'https://lastfm.freetls.fastly.net/i/u/300x300/774177d77ee348e198bee6d223a22ff3.png',
             }
         with open('muzicbox/apps/audios/tests/fixtures/with_id3.mp3', 'rb') as audio_file:
             response = self.client.post(
@@ -248,7 +248,7 @@ class AudioListCreateViewSetTestCase(APITestCase):
         m_art_parser.return_value = {
             'content': None, 'artist': 'Dan Croll', 'mbid': '480801c6-bd47-4d0d-b9fc-c20289529760',
             'playcount': '2689156',
-            'image_url': 'https://lastfm-img2.akamaized.net/i/u/300x300/1622306ea93c4efe9c5ec5842806432e.png',
+            'image_url': 'https://lastfm.freetls.fastly.net/i/u/300x300/1622306ea93c4efe9c5ec5842806432e.png',
             'tags': [
                 {'url': 'https://www.last.fm/tag/indie+pop', 'name': 'indie pop'},
                 {'url': 'https://www.last.fm/tag/indie', 'name': 'indie'},

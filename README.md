@@ -2,7 +2,7 @@
 
 ![static photo](https://bernatskyys.s3-eu-west-1.amazonaws.com/github/Screen+Shot+2017-10-20+at+01.27.54.png)
 
-![gif example](https://bernatskyys.s3-eu-west-1.amazonaws.com/github/muzicbox_in_action.gif)
+![](https://bernatskyys.s3-eu-west-1.amazonaws.com/github/muzicbox_in_action.gif)
 
 [![CircleCI](https://circleci.com/gh/ArtemBernatskyy/MuzicBox/tree/develop.svg?style=shield)](https://circleci.com/gh/ArtemBernatskyy/MuzicBox/tree/develop) [![codecov](https://codecov.io/gh/ArtemBernatskyy/MuzicBox/branch/develop/graph/badge.svg)](https://codecov.io/gh/ArtemBernatskyy/MuzicBox)
 

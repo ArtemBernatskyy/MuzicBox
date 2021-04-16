@@ -2,7 +2,7 @@
 -r circle.txt
 
 django-debug-panel==0.8.3
-django-debug-toolbar==1.9.1
+django-debug-toolbar==1.11.1
 flower==0.9.2
 ipython==6.5.0
 ipdb==0.11
